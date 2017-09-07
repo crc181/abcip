@@ -95,11 +95,11 @@ void UdpProtocol::Checksum (const Packet& p) {
 
     CheckField f[] = {
         // pseudoheader
-        { (uint16_t*)my->ph->GetData(p, ulen), my->ph->GetLength()>>1 },
+        { (uint16_t*)my->ph->GetData(p, ulen), (uint16_t)(my->ph->GetLength()>>1) },
         // udp header
         { (uint16_t*)&my->h, sizeof(my->h)>>1 },
         // padded payload
-        { (uint16_t*)data, dlen>>1 },
+        { (uint16_t*)data, (uint16_t)(dlen>>1) },
         { (uint16_t*)dend, dadj },
         { NULL, 0 }
     };

@@ -92,11 +92,11 @@ void Icmp6Protocol::Checksum (const Packet& p) {
 
     CheckField f[] = {
         // pseudoheader
-        { (uint16_t*)my->ph->GetData(p, ilen), my->ph->GetLength()>>1 },
+        { (uint16_t*)my->ph->GetData(p, ilen), (uint16_t)(my->ph->GetLength()>>1) },
         // icmp6 header
         { (uint16_t*)&my->h, sizeof(my->h)>>1 },
         // padded payload
-        { (uint16_t*)data, dlen>>1 },  // alignment
+        { (uint16_t*)data, (uint16_t)(dlen>>1) },  // alignment
         { (uint16_t*)dend, dadj },
         { NULL, 0 }
     };
