@@ -62,7 +62,7 @@ AM_CONDITIONAL([BUILD_DAQ], [test "x$enable_daq" = xyes])
 # makes
 # Checks for libraries.
 AC_ARG_WITH([daq_includes],
-    [  --with-dpp-includes=DIR    libdpp include directory],
+    [  --with-daq-includes=DIR    libdaq include directory],
     [with_daq_includes="$withval"], [with_daq_includes="no"])
 
 if test "x$with_daq_includes" != "xno"; then
