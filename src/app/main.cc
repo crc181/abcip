@@ -1,6 +1,6 @@
 //--------------------------------------------------------------------- SOL
 // This file is part of abcip, a simple packet crafting tool.
-// Copyright (C) 2010-2013 Charles R. Combs
+// Copyright (C) 2010-2017 Charles R. Combs
 //
 // Abcip is free software: you can redistribute it and/or modify it under
 // the terms of the GNU General Public License as published by the Free
@@ -99,7 +99,7 @@ static const char* version =
 "bugs to:  " PACKAGE_BUGREPORT "\n";
 
 static const char* license =
-"abcip is Copyright (C) 2010-2013 Charles R. Combs" "\n"
+"abcip is Copyright (C) 2010-2017 Charles R. Combs" "\n"
 "Released under GNU General Public License version 3" "\n"
 "See http://www.gnu.org/licenses/gpl.txt"
 " for license, copying, and warranty information." "\n";
