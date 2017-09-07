@@ -1,0 +1,39 @@
+
+a ( syn )
+b ( syn, ack )
+a ( ack )
+
+# exact retrans
+a ( ack, pay="ABCDEFGHIJ" )
+a ( ack, pay="ABCDEFGHIJ", jump=-10 )
+b ( ack )
+
+# different data (and different cksum)
+a ( ack, pay="0123456789" )
+a ( ack, pay="0123456787", jump=-10 )
+b ( ack )
+
+# more data
+a ( ack, pay="abcdefghij" )
+a ( ack, pay="abcdefghijk", jump=-10 )
+b ( ack )
+
+# different seq
+a ( ack, pay="9876543210" )
+a ( ack, pay="9876543210", jump=-9 )
+b ( ack )
+
+# different cksum
+a ( ack, pay="ZYXWVUTSRQ" )
+a ( ack, pay="ZYXWVUTSRQ", jump=-10, cks=0x1234 )
+b ( ack )
+
+# same cksum - different data
+a ( ack, pay="zyxwvutsrq" )
+a ( ack, pay="HACKATTACK", jump=-10, cks=0x823F )
+b ( ack )
+
+a ( fin,ack )
+b ( fin,ack )
+a ( ack )
+

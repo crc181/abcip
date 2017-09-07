@@ -1,0 +1,21 @@
+# applies to all subsequent a and b packets
+c( eth:a="f:e:d:c:b:a", b="9:8:7:6:5:4";
+   ip4:a="192.168.1.2", b="192.168.1.3";
+   tcp:a=46240,         b=80 )
+
+a(syn)
+b(syn, ack)
+a(ack)
+
+d ( stack="eth:ip6:udp" )
+
+# applies to all subsequent a packets
+a ( ip6:src="::1", dst="::2"; tcp:src=3, dst=4, len=16 )
+b ( len=16 )
+a ( len=16 )
+
+# applies to all subsequent b packets
+b ( ip6:src="::6", dst="::7"; 4:src=8, dst=9, len=16 )
+a ( len=16 )
+b ( len=16 )
+

@@ -1,0 +1,9 @@
+d ( stack="eth:ip4:tcp:modbus" )
+c ( tcp:b=502 )
+
+a ( tcp:syn )
+b ( tcp:syn, ack )
+a ( tcp:ack )
+
+a ( tcp:ack, modbus:func=3, pay="|03 00 04 00 01|" )
+

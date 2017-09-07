@@ -1,0 +1,12 @@
+a(syn)
+b(syn, ack)
+a(ack)
+
+c ( phy:seed=1 )
+a(ack, len=2532, max=100, phy:perm=26)
+b(ack)
+
+a(fin,ack)
+b(fin,ack)
+a(ack)
+

@@ -1,0 +1,10 @@
+# phy is the default at layer 1 but we add it
+# to make clear that there is a layer 1 proto
+d ( stack="phy:eth:ip4:udp" )
+
+c ( phy:sec=3.141592654, udp:a=1 )
+
+a ( len=100 )
+b ( len=100 )
+a ( len=100 )
+

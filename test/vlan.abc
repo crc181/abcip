@@ -1,0 +1,5 @@
+d ( stack="eth:vlan:vlan:ip4:tcp" )
+a ( syn, 3:cfi=1, pcp=5, vid=0x048; 4:vid=100 )
+b ( syn, ack, 3:vid=0x49; 4:vid=101 )
+a ( ack, 3:cfi=1, pcp=5 )
+b ( ack, len=16 )

@@ -1,0 +1,16 @@
+a ( syn )
+b ( syn, ack )
+a ( ack )
+
+a ( ack, pay="VWXYZ", jump=21 )
+a ( ack, pay="ABCDEFG", jump=-26 )
+b ( ack )
+
+a ( ack, pay="OPQRSTU", jump=7 )
+a ( ack, pay="HIJKLMN", jump=-14 )
+b ( ack, jack=12 )
+
+a ( fin, ack, jump=12 )
+b ( fin, ack )
+a ( ack )
+

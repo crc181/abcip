@@ -1,0 +1,356 @@
+ABCIP
+=====
+Charles R. Combs <crc181@gmail.com>
+Version 2.1.0, 2013-06-20
+
+
+abcip is named for its use of 'a', 'b', and 'c' statements to generate and
+configure packets.  The name also intimates ease of use.  That depends on your
+level of comfort with protocol control information.  If you use wireshark then
+you should have no problem with abcip.
+
+
+== PACKET STATEMENTS
+
+'a' and 'b' statements specify packets from a to b and b to a respectively.
+Here a and b designate service end points.  They are entirely equivalent;
+either may be client or server and either may appear first or not at all.
+
+Suppose demo.abc contains the following.  It is a typical session with
+a transfer of 16 octets from a to b.  The actual payload, and all other
+values, get defaults since they aren't specified explicitly.
+
+    #-----------------------------------------
+    a(syn)
+    b(syn,ack)
+    a(ack)
+
+    a(ack,len=16)
+
+    a(fin,ack)
+    b(fin,ack)
+    a(ack)
+    #-----------------------------------------
+
+If you run:
+
+    `abcip --pcap demo4.pcap < demo.abc`
+
+you will get a pcap using the default stack (eth:ip4:tcp).  Since demo.abc
+doesn't contain any ip version specific configuration, you could generate an
+eth:ip6:tcp pcap with:
+
+    `abcip --stack eth:ip6:tcp --pcap demo6.pcap < demo.abc`
+
+
+Either way, appropriate default values are provided for addresses and ports,
+etc.  These can be changed with configure and define statements.
+
+For available packet statement options, run:
+
+    `abcip --help-packet`
+
+
+== CONFIG STATEMENTS
+
+If you want to configure packet fields without generating a packet, use the
+'c' statement.  For example:
+
+    c(ip4:a="192.168.1.2", b="192.168.2.3")
+
+will set the ip4 addresses at layer 3 for all following packets until
+overridden.
+
+We could also set ethernet addresses at layer 2 and tcp ports at layer 4:
+
+    c(eth:b="2:1:2:3:4:5", ip4:b="192.168.2.3", tcp:b=80)
+
+In this case we have fully specified the service access point for b.
+
+You can also change the default stream data like this:
+
+    c(a.data="Who are you?  I am the doctor.  ")
+    a(ack, len=36)
+
+This example would produce the following payload:
+
+    "Who are you?  I am the doctor.  Who "
+
+This reveals that the data is iterated over as needed to generate payloads.
+
+For available config statement options, run:
+
+    `abcip --help-config`
+
+
+== DEFINE STATEMENTS
+
+You can also use the 'd' statement to redefine the stack at any point.
+For example, if this statement is the first executed:
+
+    d(stack="eth:ip6:tcp")
+
+it is equivalent to using the command line argument --stack eth:ip6:tcp.
+
+For available define statement options, run:
+
+    `abcip --help-define`
+
+
+== PROTOCOL LAYERS
+
+Attributes are set by layer, which are numbered counting up from phy=1 (phy is
+the physical layer added automatically when you specify a stack that does not
+already include it).  So layers in the default stack, "eth:ip4:tcp", equivalent
+to "phy:eth:ip4:tcp", are numbered phy=1, eth=2, ip4=3, and tcp=4.  In the
+stack "eth:pppoe:ppp:ip4:tcp", the ip4 layer is numbered 5.  Here are some
+examples with the default stack:
+
+* The top layer is the default if not specified.  Both forms below will
+create a tcp syn with data:
+
+    a ( syn, data="hello" )
+    a ( 4:syn, 4:data="hello" )
+
+* Once a layer is specified, that layer remains in effect until a 
+  different layer is specified.  Both forms below will create a 
+  tcp ack with an ip4 ttl of 32:
+
+    a ( 3:ttl=32, 4:ack )
+    a ( ack, 3:ttl=32 )
+
+* A semicolon resets the layer to the top, so this is equivalent to the
+  above:
+
+    a ( 3:ttl=32; ack )
+
+* If a protocol appears only once in a stack, you my use either protocol or
+  layer number, so this is equivalent to the above:
+
+    a ( ip4:ttl=32, tcp:ack )
+
+* If a protocol appears more than once in a stack, parameters specified by
+  protocol refer to the innermost instance of that protocol.  Given the
+  stack below, the two packet statements are equivalent:
+
+    d ( stack="phy:eth:vlan:vlan:ip4:tcp" )
+    a ( vlan:vid=100 )
+    a ( 4:vid=100 )
+
+* You can also specify layers by counting down from the top, eg layer 0
+  is the top and layer -1 is the one below that.  These are equivalent:
+
+    a ( 3:ttl=32, 4:ack )
+    a ( -1:ttl=32, 0:ack )
+
+
+== MULTIPLE SESSIONS
+
+Commands may be preceded by an optional session ID to allow multiple
+simultaneous sessions to be generated.  A new session ID results in 
+a new session based on the default stack and user.
+
+* This will configure two new sessions, named ftp and ftp-data with
+the usual defaults except the host b port:
+
+    ftp:d ( stack="eth:ip4:tcp" )
+    ftp:c ( b=21 )
+
+    data:d ( stack="eth:ip4:tcp" )
+    data:c ( b=20 )
+
+* Any commands without a session ID are applied to the default session.
+These are equivalent:
+
+    a ( syn )
+    default:a ( syn )
+
+* The stack must be defined for non-default sessions before using in other
+  commands.
+
+* Session IDs must be comprised of alphanumeric characters.
+
+
+== SYNTAX DETAILS
+
+Keep these in mind when writing statements:
+
+* The gridlet starts a comment until end of line.
+
+* Whitespace and comments are optional between tokens.  These pairs of
+  statements are equivalent:
+
+    a(syn)b(syn,ack)
+
+    a ( syn  # i like
+    )b(      # weird
+    syn ,ack # formatting
+    )
+
+* Integer values may be entered as hex or decimal.
+
+    a(seq=1, ack=0x123)
+
+* String values must be quoted:
+
+    a(ack, pay="this is an example")
+
+* Strings may contain pipe delimited hex:
+
+    b(ack, pay="this|20|is |61 6e| example")
+    a(ack, pay="GET / HTTP/1.1|d a d a|")
+
+* Strings can be broken up with whitespace and/or comments.  These two
+  statements are equivalent:
+
+    a (pay=
+        "header"
+
+        # comment
+        "+body+"
+
+        "trailer"
+    )
+
+    a ( pay="header+body+trailer" ) 
+
+* Unquoted tokens are not case sensitive so these are equivalent:
+
+    a(syn, ACK)
+    A(sYn, aCK)
+
+
+== OTHER FEATURES
+
+* By default, the packets are generated correctly, but can easily
+  exhibit any desired flaws.  The following generates a packet
+  with ip version of 3 and tcp header length of 24 (4 octets past
+  end of packet):
+
+    a( 3:ver=3, 4:off=6 )
+
+* You can fragment ip4 packets and/or segment tcp streams automatically,
+  and generate multiple packets from a single a or b statement.  This
+  example will generate 3 tcp segments, the first 2 of which are split
+  into 5 fragments each, for a total of 11 packets:
+
+    a ( ip4:max=128; tcp:ack, len=1024, max=500 )
+
+* Acks can be generated automatically if you are segmenting with tcp:max
+  to ensure that generated data segments stay in window by setting the
+  maximum unacknowledged with una.  This example will generate 45 data
+  segments with 15 acks:
+
+    a ( ack, len=65536, max=1460, una=4096 )
+
+* To shuffle the generated packet order, use the phy:perm or phy:rev 
+  attributes.  This example will randomly permute the next 8571 packets:
+
+    a ( phy:perm=8571, ip4:max=8; tcp:ack, len=65495, max=512 )
+
+* len="max" can be used to get the size of the data stream.  This is
+  especially useful if your stream is from file and you are also setting
+  max to segment the data.
+
+* Use the --raw command line argument if you just want to enter payload data.
+  Each new line is the end of one packet and the start of another.
+
+    # raw input:
+    abc 123 xyz
+    abc |31 32 33| xyz
+
+    # equivalent cooked commands:
+    a ( ack, pay="abc 123 xyz" )
+    a ( ack, pay="abc |31 32 33| xyz" )
+
+
+== DAQ RELATED
+
+If you built and installed an ABC DAQ, you can use that with Snort as follows:
+
+* read an abc file:
+
+    snort -c snort.conf -A console:test \
+        --daq-dir /usr/local/lib/abcip --daq abc \
+        -r .abc --daq-var trace
+
+* read a text file:
+
+    snort -c snort.conf -A cmg \
+        --daq-dir /usr/local/lib/abcip --daq abc \
+        --daq-var stack="eth:ip6:tcp" \
+        -i tty --daq-var raw < .txt
+
+* read console input:
+
+    snort -c snort.conf -A console:test \
+        --daq-dir /usr/local/lib/abcip --daq abc \
+        -i tty --daq-var raw
+
+* generate abc from a script:
+
+    ./script.sh | snort -c snort.conf -A console:test \
+        --daq-dir /usr/local/lib/abcip --daq abc \
+        -i tty
+
+The arguments are for:
+
+* --daq-dir: tells Snort where to find daq_abc.so.
+
+* --daq abc: tells Snort which DAQ to use.
+
+* -i tty: tells the DAQ to get input from stdin instead of a file.
+
+* -r .abc : tells snort to read input from a file.
+
+* --daq-var raw: tells the ABC DAQ you will input payload data only.  Without
+  this option you must enter abcip commands.
+
+* --daq-var stack: tells the ABC DAQ how to format your packets.
+
+* --daq-var trace: makes the ABC DAQ echo input commands.
+
+* -c snort.conf: probably want some rules here!
+
+* -A console:test: tells Snort to output packet number, gid, sid, and rev.
+
+* -A cmg: tells Snort to output alert and packet data to stdout.
+
+[NOTE]
+
+You can change the stack within an abc file as usual but you can't change the
+layer 2 protocol because Snort doesn't support changing that on the fly.
+
+
+== ABC VIM
+
+Victor Roemer has contributed abc.vim for syntax highlighting.  Copy the file
+from doc/ to ~/.vim/syntax/.
+
+
+== ADDITIONAL HELP
+
+The best way to see what abcip does is to generate and examine pcaps.  These
+commands will help you get started:
+
+    --help or -? to get this help
+    --help-a or -?a to get a list of a|b protocol options
+    --help-b or -?b to get a list of a|b protocol options
+    --help-c or -?c to get a list of c statement options
+    --help-d or -?d to get a list of d statement options
+    --help-bind to get a list of available protocol bindings
+    --help-config same as --help-c
+    --help-data to dump the default stream data
+    --help-define same as --help-d
+    --help-packet same as --help-a and --help-b
+    --help-protos to get a list of supported protocols
+    --help-users to get a list of supported users
+
+
+You can also look at the abc files in the test directory.  The corresponding
+pcaps and tcpdump output are in test/ref/.
+
+
+[NOTE]
+This HTML page was generated with http://www.methods.co.nz/asciidoc/[asciidoc].
+

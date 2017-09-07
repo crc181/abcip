@@ -1,0 +1,2 @@
+d ( stack="eth:ip4:udp" )
+a ( ip4:max=1500; udp:len=2048 )

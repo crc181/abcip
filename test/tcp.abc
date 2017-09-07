@@ -1,0 +1,25 @@
+c( a.data="Groovy Baby!", b.data="shagalicious" )
+c( ip4:a="192.168.1.2", b="10.10.4.182"; tcp:a=8420, b=80 )
+
+a(syn)
+b(syn, ack)
+a(ack)
+
+a(ack, len=16)
+b(ack, len=16)
+
+a(fin,ack)
+b(fin,ack)
+a(ack)
+
+c(a=48621)
+a(syn)
+b(syn, ack)
+a(ack)
+
+a(ack, len=16)
+
+a(fin,ack)
+b(fin,ack)
+a(ack)
+

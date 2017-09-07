@@ -1,0 +1,13 @@
+a(syn)
+b(syn, ack)
+a(ack)
+
+a(ack, len=65536, max=1460, una=4096)
+
+a(ack, len=1024 )
+b(ack)
+
+a(fin,ack)
+b(fin,ack)
+a(ack)
+

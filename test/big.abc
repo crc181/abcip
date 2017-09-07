@@ -1,0 +1,11 @@
+a(syn)
+b(syn, ack)
+a(ack)
+
+a(phy:perm=8571, ip4:max=8; ack, len=65495, max=512)
+b(ack)
+
+a(fin,ack)
+b(fin,ack)
+a(ack)
+

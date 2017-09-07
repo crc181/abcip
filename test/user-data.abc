@@ -1,0 +1,17 @@
+c ( a.file="tmp/data.txt" )
+c ( b.data="The quick brown fragments jumped over the lazy packets. " )
+
+a(syn)
+b(syn, ack)
+a(ack)
+
+a(ack, len="max")
+
+b(ack, len=35)
+b(ack, len=25)
+b(ack, len=15)
+
+a(fin,ack)
+b(fin,ack)
+a(ack)
+

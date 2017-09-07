@@ -1,0 +1,28 @@
+d ( stack="eth:pppoe:ppp:ip4:tcp" )
+c ( a=50004 )
+
+a(syn)
+b(syn, ack)
+a(ack)
+
+a(ack, len=100)
+b(ack, len=100)
+
+a(fin,ack)
+b(fin,ack)
+a(ack)
+
+d ( stack="eth:pppoe:ppp:ip6:tcp" )
+c ( a=50006 )
+
+a(syn)
+b(syn, ack)
+a(ack)
+
+a(ack, len=100)
+b(ack, len=100)
+
+a(fin,ack)
+b(fin,ack)
+a(ack)
+
