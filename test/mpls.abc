@@ -1,0 +1,13 @@
+d ( stack="eth:mpls:ip4:tcp" )
+a ( syn )
+a ( syn, 3:lse=0x12345F78 )
+a ( syn, 3:lab=0x12340, tcl=0x5, bos=0x1, ttl=0x08 )
+
+d ( stack="eth:mpls:ip6:tcp" )
+a ( syn )
+
+d ( stack="eth:mpls:eth:ip4:tcp" )
+a ( syn )
+
+d ( stack="eth:mpls:mpls:mpls:mpls:ip4:tcp" )
+a ( syn, 5:lse=0x50000000 )

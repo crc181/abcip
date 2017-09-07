@@ -1,0 +1,13 @@
+a(syn)
+b(syn, ack)
+a(ack)
+
+a(ack, len=100)
+a(ack, len=100, jump=+100)
+a(ack, len=100, jump=-200)
+a(ack, len=100, jump=+100)
+
+a(fin,ack)
+b(fin,ack)
+a(ack)
+

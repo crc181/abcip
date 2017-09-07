@@ -1,0 +1,26 @@
+c ( b=80 )
+
+a ( syn )
+b ( syn, ack )
+a ( ack )
+
+a ( ack, data="GET / HTTP/1.1|d a d a|" )
+
+b ( ack, data=
+    "HTTP/1.1 200 OK|d a|"
+    "Transfer-Encoding: chunked|d a|"
+    "Content-Type: text/html; charset=iso-8859-1|d a d a|"
+)
+
+b ( ack, data="A|d a|ABCDEFGHIJ|d a|" )
+b ( ack, data="4|d a|EFGH|d a|" )
+a ( ack )
+
+b ( ack, data="4|d a|IJKL|d a|" )
+b ( ack, data="4|d a|MNOP|d a d a|" )
+a ( ack )
+
+b ( fin, ack )
+a ( fin, ack )
+b ( ack )
+

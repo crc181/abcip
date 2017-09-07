@@ -1,0 +1,10 @@
+d ( stack="eth:ip6:hop6:rte6:frag6:dst6:tcp" )
+
+a (
+   hop6:opt="| 0 0 0 0 0 0 |",
+   rte6:addr="| 0 1 2 3 4 5 6 7 8 9 a b c d e f |",
+   frag6:id=0x12345678,
+   dst6:opt="| 0 0 0 0 0 0 |",
+   tcp:pay="ABC"
+)
+

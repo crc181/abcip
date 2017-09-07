@@ -1,0 +1,16 @@
+a(syn)
+b(syn, ack)
+a(ack)
+
+# set mtu=128 and mss=500
+a(ip4:max=128; tcp:ack, len=1024, max=500)
+b(ack)
+
+# change mtu=256
+a(ip4:max=256; tcp:ack, len=1024 )
+b(ack)
+
+a(fin,ack)
+b(fin,ack)
+a(ack)
+

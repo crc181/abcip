@@ -1,0 +1,943 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+    "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="AsciiDoc 8.4.5" />
+<title>ABCIP</title>
+<style type="text/css">
+/* Debug borders */
+p, li, dt, dd, div, pre, h1, h2, h3, h4, h5, h6 {
+/*
+  border: 1px solid red;
+*/
+}
+
+body {
+  margin: 1em 5% 1em 5%;
+}
+
+a {
+  color: blue;
+  text-decoration: underline;
+}
+a:visited {
+  color: fuchsia;
+}
+
+em {
+  font-style: italic;
+  color: navy;
+}
+
+strong {
+  font-weight: bold;
+  color: #083194;
+}
+
+tt {
+  color: navy;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #527bbd;
+  font-family: sans-serif;
+  margin-top: 1.2em;
+  margin-bottom: 0.5em;
+  line-height: 1.3;
+}
+
+h1, h2, h3 {
+  border-bottom: 2px solid silver;
+}
+h2 {
+  padding-top: 0.5em;
+}
+h3 {
+  float: left;
+}
+h3 + * {
+  clear: left;
+}
+
+div.sectionbody {
+  font-family: serif;
+  margin-left: 0;
+}
+
+hr {
+  border: 1px solid silver;
+}
+
+p {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+ul, ol, li > p {
+  margin-top: 0;
+}
+
+pre {
+  padding: 0;
+  margin: 0;
+}
+
+span#author {
+  color: #527bbd;
+  font-family: sans-serif;
+  font-weight: bold;
+  font-size: 1.1em;
+}
+span#email {
+}
+span#revnumber, span#revdate, span#revremark {
+  font-family: sans-serif;
+}
+
+div#footer {
+  font-family: sans-serif;
+  font-size: small;
+  border-top: 2px solid silver;
+  padding-top: 0.5em;
+  margin-top: 4.0em;
+}
+div#footer-text {
+  float: left;
+  padding-bottom: 0.5em;
+}
+div#footer-badges {
+  float: right;
+  padding-bottom: 0.5em;
+}
+
+div#preamble {
+  margin-top: 1.5em;
+  margin-bottom: 1.5em;
+}
+div.tableblock, div.imageblock, div.exampleblock, div.verseblock,
+div.quoteblock, div.literalblock, div.listingblock, div.sidebarblock,
+div.admonitionblock {
+  margin-top: 1.5em;
+  margin-bottom: 1.5em;
+}
+div.admonitionblock {
+  margin-top: 2.5em;
+  margin-bottom: 2.5em;
+}
+
+div.content { /* Block element content. */
+  padding: 0;
+}
+
+/* Block element titles. */
+div.title, caption.title {
+  color: #527bbd;
+  font-family: sans-serif;
+  font-weight: bold;
+  text-align: left;
+  margin-top: 1.0em;
+  margin-bottom: 0.5em;
+}
+div.title + * {
+  margin-top: 0;
+}
+
+td div.title:first-child {
+  margin-top: 0.0em;
+}
+div.content div.title:first-child {
+  margin-top: 0.0em;
+}
+div.content + div.title {
+  margin-top: 0.0em;
+}
+
+div.sidebarblock > div.content {
+  background: #ffffee;
+  border: 1px solid silver;
+  padding: 0.5em;
+}
+
+div.listingblock > div.content {
+  border: 1px solid silver;
+  background: #f4f4f4;
+  padding: 0.5em;
+}
+
+div.quoteblock {
+  padding-left: 2.0em;
+  margin-right: 10%;
+}
+div.quoteblock > div.attribution {
+  padding-top: 0.5em;
+  text-align: right;
+}
+
+div.verseblock {
+  padding-left: 2.0em;
+  margin-right: 10%;
+}
+div.verseblock > div.content {
+  white-space: pre;
+}
+div.verseblock > div.attribution {
+  padding-top: 0.75em;
+  text-align: left;
+}
+/* DEPRECATED: Pre version 8.2.7 verse style literal block. */
+div.verseblock + div.attribution {
+  text-align: left;
+}
+
+div.admonitionblock .icon {
+  vertical-align: top;
+  font-size: 1.1em;
+  font-weight: bold;
+  text-decoration: underline;
+  color: #527bbd;
+  padding-right: 0.5em;
+}
+div.admonitionblock td.content {
+  padding-left: 0.5em;
+  border-left: 2px solid silver;
+}
+
+div.exampleblock > div.content {
+  border-left: 2px solid silver;
+  padding: 0.5em;
+}
+
+div.imageblock div.content { padding-left: 0; }
+span.image img { border-style: none; }
+a.image:visited { color: white; }
+
+dl {
+  margin-top: 0.8em;
+  margin-bottom: 0.8em;
+}
+dt {
+  margin-top: 0.5em;
+  margin-bottom: 0;
+  font-style: normal;
+  color: navy;
+}
+dd > *:first-child {
+  margin-top: 0.1em;
+}
+
+ul, ol {
+    list-style-position: outside;
+}
+ol.arabic {
+  list-style-type: decimal;
+}
+ol.loweralpha {
+  list-style-type: lower-alpha;
+}
+ol.upperalpha {
+  list-style-type: upper-alpha;
+}
+ol.lowerroman {
+  list-style-type: lower-roman;
+}
+ol.upperroman {
+  list-style-type: upper-roman;
+}
+
+div.compact ul, div.compact ol,
+div.compact p, div.compact p,
+div.compact div, div.compact div {
+  margin-top: 0.1em;
+  margin-bottom: 0.1em;
+}
+
+div.tableblock > table {
+  border: 3px solid #527bbd;
+}
+thead {
+  font-family: sans-serif;
+  font-weight: bold;
+}
+tfoot {
+  font-weight: bold;
+}
+td > div.verse {
+  white-space: pre;
+}
+p.table {
+  margin-top: 0;
+}
+/* Because the table frame attribute is overriden by CSS in most browsers. */
+div.tableblock > table[frame="void"] {
+  border-style: none;
+}
+div.tableblock > table[frame="hsides"] {
+  border-left-style: none;
+  border-right-style: none;
+}
+div.tableblock > table[frame="vsides"] {
+  border-top-style: none;
+  border-bottom-style: none;
+}
+
+
+div.hdlist {
+  margin-top: 0.8em;
+  margin-bottom: 0.8em;
+}
+div.hdlist tr {
+  padding-bottom: 15px;
+}
+dt.hdlist1.strong, td.hdlist1.strong {
+  font-weight: bold;
+}
+td.hdlist1 {
+  vertical-align: top;
+  font-style: normal;
+  padding-right: 0.8em;
+  color: navy;
+}
+td.hdlist2 {
+  vertical-align: top;
+}
+div.hdlist.compact tr {
+  margin: 0;
+  padding-bottom: 0;
+}
+
+.comment {
+  background: yellow;
+}
+
+@media print {
+  div#footer-badges { display: none; }
+}
+
+div#toctitle {
+  color: #527bbd;
+  font-family: sans-serif;
+  font-size: 1.1em;
+  font-weight: bold;
+  margin-top: 1.0em;
+  margin-bottom: 0.1em;
+}
+
+div.toclevel1, div.toclevel2, div.toclevel3, div.toclevel4 {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+div.toclevel2 {
+  margin-left: 2em;
+  font-size: 0.9em;
+}
+div.toclevel3 {
+  margin-left: 4em;
+  font-size: 0.9em;
+}
+div.toclevel4 {
+  margin-left: 6em;
+  font-size: 0.9em;
+}
+/* Workarounds for IE6's broken and incomplete CSS2. */
+
+div.sidebar-content {
+  background: #ffffee;
+  border: 1px solid silver;
+  padding: 0.5em;
+}
+div.sidebar-title, div.image-title {
+  color: #527bbd;
+  font-family: sans-serif;
+  font-weight: bold;
+  margin-top: 0.0em;
+  margin-bottom: 0.5em;
+}
+
+div.listingblock div.content {
+  border: 1px solid silver;
+  background: #f4f4f4;
+  padding: 0.5em;
+}
+
+div.quoteblock-attribution {
+  padding-top: 0.5em;
+  text-align: right;
+}
+
+div.verseblock-content {
+  white-space: pre;
+}
+div.verseblock-attribution {
+  padding-top: 0.75em;
+  text-align: left;
+}
+
+div.exampleblock-content {
+  border-left: 2px solid silver;
+  padding-left: 0.5em;
+}
+
+/* IE6 sets dynamically generated links as visited. */
+div#toc a:visited { color: blue; }
+</style>
+</head>
+<body>
+<div id="header">
+<h1>ABCIP</h1>
+<span id="author">Charles R. Combs</span><br />
+<span id="email"><tt>&lt;<a href="mailto:crc181@gmail.com">crc181@gmail.com</a>&gt;</tt></span><br />
+<span id="revnumber">version 2.1.0,</span>
+<span id="revdate">2013-06-20</span>
+</div>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph"><p>abcip is named for its use of <em>a</em>, <em>b</em>, and <em>c</em> statements to generate and
+configure packets.  The name also intimates ease of use.  That depends on your
+level of comfort with protocol control information.  If you use wireshark then
+you should have no problem with abcip.</p></div>
+</div>
+</div>
+<h2 id="_packet_statements">PACKET STATEMENTS</h2>
+<div class="sectionbody">
+<div class="paragraph"><p><em>a</em> and <em>b</em> statements specify packets from a to b and b to a respectively.
+Here a and b designate service end points.  They are entirely equivalent;
+either may be client or server and either may appear first or not at all.</p></div>
+<div class="paragraph"><p>Suppose demo.abc contains the following.  It is a typical session with
+a transfer of 16 octets from a to b.  The actual payload, and all other
+values, get defaults since they aren&#8217;t specified explicitly.</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>#-----------------------------------------
+a(syn)
+b(syn,ack)
+a(ack)</tt></pre>
+</div></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>a(ack,len=16)</tt></pre>
+</div></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>a(fin,ack)
+b(fin,ack)
+a(ack)
+#-----------------------------------------</tt></pre>
+</div></div>
+<div class="paragraph"><p>If you run:</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>`abcip --pcap demo4.pcap &lt; demo.abc`</tt></pre>
+</div></div>
+<div class="paragraph"><p>you will get a pcap using the default stack (eth:ip4:tcp).  Since demo.abc
+doesn&#8217;t contain any ip version specific configuration, you could generate an
+eth:ip6:tcp pcap with:</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>`abcip --stack eth:ip6:tcp --pcap demo6.pcap &lt; demo.abc`</tt></pre>
+</div></div>
+<div class="paragraph"><p>Either way, appropriate default values are provided for addresses and ports,
+etc.  These can be changed with configure and define statements.</p></div>
+<div class="paragraph"><p>For available packet statement options, run:</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>`abcip --help-packet`</tt></pre>
+</div></div>
+</div>
+<h2 id="_config_statements">CONFIG STATEMENTS</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>If you want to configure packet fields without generating a packet, use the
+<em>c</em> statement.  For example:</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>c(ip4:a="192.168.1.2", b="192.168.2.3")</tt></pre>
+</div></div>
+<div class="paragraph"><p>will set the ip4 addresses at layer 3 for all following packets until
+overridden.</p></div>
+<div class="paragraph"><p>We could also set ethernet addresses at layer 2 and tcp ports at layer 4:</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>c(eth:b="2:1:2:3:4:5", ip4:b="192.168.2.3", tcp:b=80)</tt></pre>
+</div></div>
+<div class="paragraph"><p>In this case we have fully specified the service access point for b.</p></div>
+<div class="paragraph"><p>You can also change the default stream data like this:</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>c(a.data="Who are you?  I am the doctor.  ")
+a(ack, len=36)</tt></pre>
+</div></div>
+<div class="paragraph"><p>This example would produce the following payload:</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>"Who are you?  I am the doctor.  Who "</tt></pre>
+</div></div>
+<div class="paragraph"><p>This reveals that the data is iterated over as needed to generate payloads.</p></div>
+<div class="paragraph"><p>For available config statement options, run:</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>`abcip --help-config`</tt></pre>
+</div></div>
+</div>
+<h2 id="_define_statements">DEFINE STATEMENTS</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>You can also use the <em>d</em> statement to redefine the stack at any point.
+For example, if this statement is the first executed:</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>d(stack="eth:ip6:tcp")</tt></pre>
+</div></div>
+<div class="paragraph"><p>it is equivalent to using the command line argument --stack eth:ip6:tcp.</p></div>
+<div class="paragraph"><p>For available define statement options, run:</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>`abcip --help-define`</tt></pre>
+</div></div>
+</div>
+<h2 id="_protocol_layers">PROTOCOL LAYERS</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>Attributes are set by layer, which are numbered counting up from phy=1 (phy is
+the physical layer added automatically when you specify a stack that does not
+already include it).  So layers in the default stack, "eth:ip4:tcp", equivalent
+to "phy:eth:ip4:tcp", are numbered phy=1, eth=2, ip4=3, and tcp=4.  In the
+stack "eth:pppoe:ppp:ip4:tcp", the ip4 layer is numbered 5.  Here are some
+examples with the default stack:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+The top layer is the default if not specified.  Both forms below will
+create a tcp syn with data:
+</p>
+<div class="literalblock">
+<div class="content">
+<pre><tt>a ( syn, data="hello" )
+a ( 4:syn, 4:data="hello" )</tt></pre>
+</div></div>
+</li>
+<li>
+<p>
+Once a layer is specified, that layer remains in effect until a
+  different layer is specified.  Both forms below will create a
+  tcp ack with an ip4 ttl of 32:
+</p>
+<div class="literalblock">
+<div class="content">
+<pre><tt>a ( 3:ttl=32, 4:ack )
+a ( ack, 3:ttl=32 )</tt></pre>
+</div></div>
+</li>
+<li>
+<p>
+A semicolon resets the layer to the top, so this is equivalent to the
+  above:
+</p>
+<div class="literalblock">
+<div class="content">
+<pre><tt>a ( 3:ttl=32; ack )</tt></pre>
+</div></div>
+</li>
+<li>
+<p>
+If a protocol appears only once in a stack, you my use either protocol or
+  layer number, so this is equivalent to the above:
+</p>
+<div class="literalblock">
+<div class="content">
+<pre><tt>a ( ip4:ttl=32, tcp:ack )</tt></pre>
+</div></div>
+</li>
+<li>
+<p>
+If a protocol appears more than once in a stack, parameters specified by
+  protocol refer to the innermost instance of that protocol.  Given the
+  stack below, the two packet statements are equivalent:
+</p>
+<div class="literalblock">
+<div class="content">
+<pre><tt>d ( stack="phy:eth:vlan:vlan:ip4:tcp" )
+a ( vlan:vid=100 )
+a ( 4:vid=100 )</tt></pre>
+</div></div>
+</li>
+<li>
+<p>
+You can also specify layers by counting down from the top, eg layer 0
+  is the top and layer -1 is the one below that.  These are equivalent:
+</p>
+<div class="literalblock">
+<div class="content">
+<pre><tt>a ( 3:ttl=32, 4:ack )
+a ( -1:ttl=32, 0:ack )</tt></pre>
+</div></div>
+</li>
+</ul></div>
+</div>
+<h2 id="_multiple_sessions">MULTIPLE SESSIONS</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>Commands may be preceded by an optional session ID to allow multiple
+simultaneous sessions to be generated.  A new session ID results in
+a new session based on the default stack and user.</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+This will configure two new sessions, named ftp and ftp-data with
+the usual defaults except the host b port:
+</p>
+<div class="literalblock">
+<div class="content">
+<pre><tt>ftp:d ( stack="eth:ip4:tcp" )
+ftp:c ( b=21 )</tt></pre>
+</div></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>data:d ( stack="eth:ip4:tcp" )
+data:c ( b=20 )</tt></pre>
+</div></div>
+</li>
+<li>
+<p>
+Any commands without a session ID are applied to the default session.
+These are equivalent:
+</p>
+<div class="literalblock">
+<div class="content">
+<pre><tt>a ( syn )
+default:a ( syn )</tt></pre>
+</div></div>
+</li>
+<li>
+<p>
+The stack must be defined for non-default sessions before using in other
+  commands.
+</p>
+</li>
+<li>
+<p>
+Session IDs must be comprised of alphanumeric characters.
+</p>
+</li>
+</ul></div>
+</div>
+<h2 id="_syntax_details">SYNTAX DETAILS</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>Keep these in mind when writing statements:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+The gridlet starts a comment until end of line.
+</p>
+</li>
+<li>
+<p>
+Whitespace and comments are optional between tokens.  These pairs of
+  statements are equivalent:
+</p>
+<div class="literalblock">
+<div class="content">
+<pre><tt>a(syn)b(syn,ack)</tt></pre>
+</div></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>a ( syn  # i like
+)b(      # weird
+syn ,ack # formatting
+)</tt></pre>
+</div></div>
+</li>
+<li>
+<p>
+Integer values may be entered as hex or decimal.
+</p>
+<div class="literalblock">
+<div class="content">
+<pre><tt>a(seq=1, ack=0x123)</tt></pre>
+</div></div>
+</li>
+<li>
+<p>
+String values must be quoted:
+</p>
+<div class="literalblock">
+<div class="content">
+<pre><tt>a(ack, pay="this is an example")</tt></pre>
+</div></div>
+</li>
+<li>
+<p>
+Strings may contain pipe delimited hex:
+</p>
+<div class="literalblock">
+<div class="content">
+<pre><tt>b(ack, pay="this|20|is |61 6e| example")
+a(ack, pay="GET / HTTP/1.1|d a d a|")</tt></pre>
+</div></div>
+</li>
+<li>
+<p>
+Strings can be broken up with whitespace and/or comments.  These two
+  statements are equivalent:
+</p>
+<div class="literalblock">
+<div class="content">
+<pre><tt>a (pay=
+    "header"</tt></pre>
+</div></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt># comment
+"+body+"</tt></pre>
+</div></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>    "trailer"
+)</tt></pre>
+</div></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>a ( pay="header+body+trailer" )</tt></pre>
+</div></div>
+</li>
+<li>
+<p>
+Unquoted tokens are not case sensitive so these are equivalent:
+</p>
+<div class="literalblock">
+<div class="content">
+<pre><tt>a(syn, ACK)
+A(sYn, aCK)</tt></pre>
+</div></div>
+</li>
+</ul></div>
+</div>
+<h2 id="_other_features">OTHER FEATURES</h2>
+<div class="sectionbody">
+<div class="ulist"><ul>
+<li>
+<p>
+By default, the packets are generated correctly, but can easily
+  exhibit any desired flaws.  The following generates a packet
+  with ip version of 3 and tcp header length of 24 (4 octets past
+  end of packet):
+</p>
+<div class="literalblock">
+<div class="content">
+<pre><tt>a( 3:ver=3, 4:off=6 )</tt></pre>
+</div></div>
+</li>
+<li>
+<p>
+You can fragment ip4 packets and/or segment tcp streams automatically,
+  and generate multiple packets from a single a or b statement.  This
+  example will generate 3 tcp segments, the first 2 of which are split
+  into 5 fragments each, for a total of 11 packets:
+</p>
+<div class="literalblock">
+<div class="content">
+<pre><tt>a ( ip4:max=128; tcp:ack, len=1024, max=500 )</tt></pre>
+</div></div>
+</li>
+<li>
+<p>
+Acks can be generated automatically if you are segmenting with tcp:max
+  to ensure that generated data segments stay in window by setting the
+  maximum unacknowledged with una.  This example will generate 45 data
+  segments with 15 acks:
+</p>
+<div class="literalblock">
+<div class="content">
+<pre><tt>a ( ack, len=65536, max=1460, una=4096 )</tt></pre>
+</div></div>
+</li>
+<li>
+<p>
+To shuffle the generated packet order, use the phy:perm or phy:rev
+  attributes.  This example will randomly permute the next 8571 packets:
+</p>
+<div class="literalblock">
+<div class="content">
+<pre><tt>a ( phy:perm=8571, ip4:max=8; tcp:ack, len=65495, max=512 )</tt></pre>
+</div></div>
+</li>
+<li>
+<p>
+len="max" can be used to get the size of the data stream.  This is
+  especially useful if your stream is from file and you are also setting
+  max to segment the data.
+</p>
+</li>
+<li>
+<p>
+Use the --raw command line argument if you just want to enter payload data.
+  Each new line is the end of one packet and the start of another.
+</p>
+<div class="literalblock">
+<div class="content">
+<pre><tt># raw input:
+abc 123 xyz
+abc |31 32 33| xyz</tt></pre>
+</div></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt># equivalent cooked commands:
+a ( ack, pay="abc 123 xyz" )
+a ( ack, pay="abc |31 32 33| xyz" )</tt></pre>
+</div></div>
+</li>
+</ul></div>
+</div>
+<h2 id="_daq_related">DAQ RELATED</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>If you built and installed an ABC DAQ, you can use that with Snort as follows:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+read an abc file:
+</p>
+<div class="literalblock">
+<div class="content">
+<pre><tt>snort -c snort.conf -A console:test \
+    --daq-dir /usr/local/lib/abcip --daq abc \
+    -r .abc --daq-var trace</tt></pre>
+</div></div>
+</li>
+<li>
+<p>
+read a text file:
+</p>
+<div class="literalblock">
+<div class="content">
+<pre><tt>snort -c snort.conf -A cmg \
+    --daq-dir /usr/local/lib/abcip --daq abc \
+    --daq-var stack="eth:ip6:tcp" \
+    -i tty --daq-var raw &lt; .txt</tt></pre>
+</div></div>
+</li>
+<li>
+<p>
+read console input:
+</p>
+<div class="literalblock">
+<div class="content">
+<pre><tt>snort -c snort.conf -A console:test \
+    --daq-dir /usr/local/lib/abcip --daq abc \
+    -i tty --daq-var raw</tt></pre>
+</div></div>
+</li>
+<li>
+<p>
+generate abc from a script:
+</p>
+<div class="literalblock">
+<div class="content">
+<pre><tt>./script.sh | snort -c snort.conf -A console:test \
+    --daq-dir /usr/local/lib/abcip --daq abc \
+    -i tty</tt></pre>
+</div></div>
+</li>
+</ul></div>
+<div class="paragraph"><p>The arguments are for:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+--daq-dir: tells Snort where to find daq_abc.so.
+</p>
+</li>
+<li>
+<p>
+--daq abc: tells Snort which DAQ to use.
+</p>
+</li>
+<li>
+<p>
+-i tty: tells the DAQ to get input from stdin instead of a file.
+</p>
+</li>
+<li>
+<p>
+-r .abc : tells snort to read input from a file.
+</p>
+</li>
+<li>
+<p>
+--daq-var raw: tells the ABC DAQ you will input payload data only.  Without
+  this option you must enter abcip commands.
+</p>
+</li>
+<li>
+<p>
+--daq-var stack: tells the ABC DAQ how to format your packets.
+</p>
+</li>
+<li>
+<p>
+--daq-var trace: makes the ABC DAQ echo input commands.
+</p>
+</li>
+<li>
+<p>
+-c snort.conf: probably want some rules here!
+</p>
+</li>
+<li>
+<p>
+-A console:test: tells Snort to output packet number, gid, sid, and rev.
+</p>
+</li>
+<li>
+<p>
+-A cmg: tells Snort to output alert and packet data to stdout.
+</p>
+</li>
+</ul></div>
+<div class="admonitionblock">
+<table><tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">You can change the stack within an abc file as usual but you can&#8217;t change the
+layer 2 protocol because Snort doesn&#8217;t support changing that on the fly.</td>
+</tr></table>
+</div>
+</div>
+<h2 id="_abc_vim">ABC VIM</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>Victor Roemer has contributed abc.vim for syntax highlighting.  Copy the file
+from doc/ to ~/.vim/syntax/.</p></div>
+</div>
+<h2 id="_additional_help">ADDITIONAL HELP</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>The best way to see what abcip does is to generate and examine pcaps.  These
+commands will help you get started:</p></div>
+<div class="literalblock">
+<div class="content">
+<pre><tt>--help or -? to get this help
+--help-a or -?a to get a list of a|b protocol options
+--help-b or -?b to get a list of a|b protocol options
+--help-c or -?c to get a list of c statement options
+--help-d or -?d to get a list of d statement options
+--help-bind to get a list of available protocol bindings
+--help-config same as --help-c
+--help-data to dump the default stream data
+--help-define same as --help-d
+--help-packet same as --help-a and --help-b
+--help-protos to get a list of supported protocols
+--help-users to get a list of supported users</tt></pre>
+</div></div>
+<div class="paragraph"><p>You can also look at the abc files in the test directory.  The corresponding
+pcaps and tcpdump output are in test/ref/.</p></div>
+<div class="admonitionblock">
+<table><tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">This HTML page was generated with <a href="http://www.methods.co.nz/asciidoc/">asciidoc</a>.</td>
+</tr></table>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 2.1.0<br />
+Last updated 2013-08-09 09:13:57 EDT
+</div>
+</div>
+</body>
+</html>

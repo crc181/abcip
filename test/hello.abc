@@ -1,0 +1,61 @@
+# abcip is a simple tool for crafting packets
+# that go from point a to point b.  this file
+# is a an example that shows how to do the
+# basics.
+
+# by now you know that comments start with '#'
+# and go to end of line.
+
+# there are four types of statements: a, b, c,
+# and d.  d statements define things that apply
+# to both ends.
+
+# the default stack is eth:ip4:tcp
+# but we define it here to show how
+d ( stack="eth:ip4:tcp" )
+#   layer:  2   3   4
+
+# c statements configure things for each end
+# specifically.
+c ( 
+   3:a="10.4.10.182", # host a ip4 address
+   4:b=80             # host b port
+)
+
+# we know 3:a is the ip4 address because our
+# stack has ip4 at layer 3 and since layer 4
+# was defined to be tcp, 4:b is a port.
+
+# a and b statements generate packets from a to
+# b and from b to a respectively.
+
+# this is a normal 3-way handshake
+# from client a to server b:
+a ( syn ) 
+b ( syn, ack )
+a ( ack )
+
+# by default, attributes apply to the top layer
+# so we didn't need to say a ( 4:syn ).
+
+# now a sends some data
+a ( ack, pay="hello world" )
+b ( ack ) # and b acks it
+
+# sequence and acknowledgement numbers are
+# calculated automatically for normal traffic
+
+# b replies with 11 bytes of default data
+b( ack, len=11 )
+
+# a acks it and closes the connection
+a ( fin, ack )
+b ( fin, ack )
+a ( ack )
+
+# that's it.  you can create a full tcp session
+# pcap with abcip --pcap hello.pcap < hello.abc.
+
+# to generate ip6 instead of ip4 add the option:
+# --stack "eth:ip6:tcp".
+

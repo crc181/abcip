@@ -1,0 +1,23 @@
+d ( stack="eth:ip6:tcp" )
+a ( ack, pay="abcdefghijklmnop" )
+
+d ( stack="eth:ip4:udp:ip6:tcp" )
+c ( 4:a=3797, b=3544 )
+a ( ack, seq=16, pay="abcdefghijklmnop" )
+
+d ( stack="eth:ip4:udp:ip6:udp" )
+c ( 4:a=3797, b=3544 )
+a ( pay="abcdefghijklmnop" )
+
+d ( stack="eth:ip4:udp:ip6:icmp6" )
+c ( 4:a=3797, b=3544 )
+a ( pay="|53 aa 01 26|" )
+
+d ( stack="eth:ip4:udp:ip6" )
+c ( 4:a=3797, b=3544; )
+a ( pay="abcdefg" )
+
+d ( stack="eth:ip4:udp:ip6:udp" )
+c ( 4:a=3797, b=3544 )
+a ( head="|1 2 3|" )
+

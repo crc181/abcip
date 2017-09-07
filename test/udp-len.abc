@@ -1,0 +1,11 @@
+# the cks is hardcoded because otherwise it would be wrong
+# since it would include all 40 bytes of payload.
+d ( stack="eth:ip4:udp" )
+
+# this has effectively 32 bytes of eth trailer
+a ( ip4:tot=36; tcp:ulen=16, len=40, cks=0x2CA1 )
+
+# similar to the above, but this time udp is correct 
+# and ip4 has a shorter total length
+a ( ip4:tot=36; tcp:len=40 )
+

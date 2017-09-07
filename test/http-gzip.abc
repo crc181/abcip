@@ -1,0 +1,30 @@
+# create a gzipped http response like this:
+
+#$ gzip -c - < data.txt > data.gzip
+
+#$ ls -l data.gzip
+#-rw-r--r-- 1 russ russ 480 2011-10-16 10:32 data.gzip
+
+# put the gzipped size in the content-length header.
+
+c ( b=80; b.file="tmp/data.gzip" )
+
+a ( syn )
+b ( syn, ack )
+a ( ack )
+
+a ( ack, pay="GET / HTTP/1.0|d a d a|" )
+
+b ( ack, pay=
+    "HTTP/1.1 200 OK|d a|"
+    "Content-Type: text/plain; charset=iso-8859-1|d a|"
+    "Content-Encoding: gzip|d a|"
+    "Content-Length: 480|d a d a|"
+)
+
+b ( ack, len=480 )
+a ( ack )
+
+b ( fin, ack )
+a ( fin, ack )
+b ( ack )

@@ -1,0 +1,7 @@
+# net unreachable
+d(stack="eth:ip4:icmp4:ip4:udp")
+a(icmp4:type=3, code=0, u32=0x12345678; len=16)
+
+# ping
+d(stack="eth:ip4:icmp4")
+a(fill=64)

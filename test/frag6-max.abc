@@ -1,0 +1,2 @@
+d ( stack="eth:ip6:frag6:udp" )
+a ( frag6:max=1500; udp:len=2048 )

@@ -1,0 +1,4 @@
+d ( stack="eth:ip4:gre:ip4:gre:ip6:tcp" )
+c ( 3:a="172.16.32.64", ip6:a="fc00:1:2::a:b" )
+a ( syn, 4:seq=1,sre="|0 0 0 0|" )
+

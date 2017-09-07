@@ -1,0 +1,53 @@
+#-----------------------------------------------------------
+# this generates a passive ftp transfer
+# ftp: is the control channel, data: is the data channel
+#-----------------------------------------------------------
+
+ftp:d ( stack="eth:ip4:tcp" )
+ftp:c ( a=31337, b=21 )
+
+ftp:a ( syn )
+ftp:b ( syn, ack )
+ftp:a ( ack )
+
+ftp:b ( psh, ack, pay="220 Microsoft FTP Service|d a|" )
+ftp:a ( psh, ack, pay="USER anonymous|d a|" )
+ftp:b ( psh, ack, pay="331 Anonymous access allowed, "
+    "send identity (e-mail name) as password.|d a|" )
+
+ftp:a ( psh, ack, pay="PASS |d a|" )
+ftp:b ( psh, ack, pay="230 User logged in.|d a|" )
+
+ftp:a ( psh, ack, pay="PASV|d a|" )
+ftp:b ( psh, ack, pay="227 Entering Passive Mode "
+    "(10,9,8,7,208,161)|d a|" )
+
+ftp:a ( psh, ack, pay="RETR abcip.html|d a|" )
+
+#-----------------------------------------------------------
+# data transfer takes place on the data channel while the
+# control channel remains open
+data:d ( stack="eth:ip4:tcp" )
+data:c ( a=31338, b=53409, b.file="tmp/data.bin" )
+
+data:a ( syn, win=65535 )
+data:b ( syn, ack )
+data:a ( ack )
+
+data:b ( ack, len=max, max=1460 )
+data:a ( ack )
+
+data:b ( fin, ack )
+data:a ( fin, ack )
+data:b ( ack )
+#-----------------------------------------------------------
+
+# now the control channel resumes ...
+ftp:b ( psh, ack, pay="226 Transfer complete.|d a|" )
+ftp:a ( psh, ack, pay="QUIT|d a|" )
+ftp:b ( psh, ack, pay="221 Bye|d a|" )
+
+ftp:b ( fin, ack )
+ftp:a ( fin, ack )
+ftp:b ( ack )
+
