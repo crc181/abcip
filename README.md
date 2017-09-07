@@ -1,8 +1,14 @@
 abcip is a simple packet crafting tool.  It is intended to be easy to generate
 pcaps for testing, especially pcaps containing flawed packets.
 
-To get started, the usual ./configure && make && make install will usually do
-the trick.
+To get started after cloning the repo, do this:
+
+````
+    autoreconf -isvf
+    ./configure
+    make
+    make install
+````
 
 You can also ./configure --enable-daq to produce a DAQ that can be used with
 Snort.  Use --with-daq-includes=/path/to/daq/include if needed.
@@ -33,6 +39,7 @@ See the README for more information on the abc file.
 
 Here is a an example abc file:
 
+````
 # define the stack
 d ( stack="eth:ip4:tcp" )
 
@@ -44,6 +51,7 @@ a ( syn )
 
 # generate a packet from a to b
 b ( syn, ack, len=16 )
+````
 
 This produces 2 packets: a syn from a to b and a syn-ack from b to a.  The
 latter also has 16 bytes of payload.  The packets are both eth:ip4:tcp and
