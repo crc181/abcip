@@ -227,7 +227,7 @@ void Ip4Protocol::Checksum (const Packet&) {
     CheckField f[] = {
         { (uint16_t*)&my->h, (int)sizeof(my->h) / 2 },
         // padded options
-        { (uint16_t*)opts, olen>>1 },  // alignment
+        { (uint16_t*)opts, (uint16_t)(olen>>1) },  // alignment
         { (uint16_t*)oend, oadj },
         { NULL, 0 }
     };

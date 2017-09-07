@@ -249,7 +249,7 @@ const uint8_t* TcpProtocol::GetOptions (
         for (unsigned i = 0; i < sizeof(x); i++) my->opt += ((char*)x)[i];
     }
     if ( p.cake.IsSet("wis") ) {
-        char x[3] = { 3, 3, (uint8_t)p.cake.GetValue("wis", 0) };
+        char x[3] = { 3, 3, (char)p.cake.GetValue("wis", 0) };
         for (unsigned i = 0; i < sizeof(x); i++) my->opt += x[i];
     }
     if ( p.cake.IsSet("tsv") || p.cake.IsSet("tse") ) {
@@ -295,17 +295,21 @@ bool TcpProtocol::HasPayload () {
 }
 
 void TcpProtocol::Checksum (const Packet& p) {
+    /* FIXTHIS oend unused
     uint16_t olen = my->opt.length();
     const uint8_t* opts = (uint8_t*)my->opt.data();
+    */
 
     uint16_t dlen = p.Length();
     const uint8_t* data = p.Data();
 
     uint16_t tlen = sizeof(my->h) + dlen;
 
+    /* FIXTHIS oend unused
     uint16_t oadj = 0;
     uint8_t oend[2] = { 0, 0 };
     if ( olen & 0x1 ) oend[oadj++] = opts[--olen];
+    */
 
     uint16_t dadj = 0;
     uint8_t dend[2] = { 0, 0 };  // alignment
@@ -313,11 +317,11 @@ void TcpProtocol::Checksum (const Packet& p) {
 
     CheckField f[] = {
         // pseudoheader
-        { (uint16_t*)my->ph->GetData(p, tlen), my->ph->GetLength()>>1 },
+        { (uint16_t*)my->ph->GetData(p, tlen), (uint16_t)(my->ph->GetLength()>>1) },
         // tcp header
         { (uint16_t*)&my->h, sizeof(my->h)>>1 },
         // padded payload
-        { (uint16_t*)data, dlen>>1 },  // alignment
+        { (uint16_t*)data, (uint16_t)(dlen>>1) },  // alignment
         { (uint16_t*)dend, dadj },
         { NULL, 0 }
     };

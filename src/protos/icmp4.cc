@@ -91,7 +91,7 @@ void Icmp4Protocol::Checksum (const Packet& p) {
         // icmp4 header
         { (uint16_t*)&my->h, sizeof(my->h) >> 1 },
         // padded payload
-        { (uint16_t*)data, dlen>>1 },  // alignment
+        { (uint16_t*)data, (uint16_t)(dlen>>1) },  // alignment
         { (uint16_t*)dend, dadj },
         { NULL, 0 }
     };
