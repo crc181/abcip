@@ -102,10 +102,10 @@ PhyProtocol::PhyProtocol () : Protocol(s_type) {
 #ifdef HAVE_DAQ
     memset(&my->daqhdr, 0, sizeof(my->daqhdr));
 
-    my->daqhdr.ingress_index = -1;
-    my->daqhdr.egress_index = -1;
-    my->daqhdr.ingress_group = -1;
-    my->daqhdr.egress_group = -1;
+    my->daqhdr.ingress_index = DAQ_PKTHDR_UNKNOWN;
+    my->daqhdr.egress_index = DAQ_PKTHDR_UNKNOWN;
+    my->daqhdr.ingress_group = DAQ_PKTHDR_UNKNOWN;
+    my->daqhdr.egress_group = DAQ_PKTHDR_UNKNOWN;
 #endif
 }
 
@@ -220,7 +220,9 @@ const uint8_t* PhyProtocol::GetHeader (
     if ( my->max && !my->nOut )
         p.drop = true;
 
+#ifdef HAVE_DAQ
     p.daqhdr = my->daqhdr;
+#endif
 
     return Protocol::GetHeader(p, len);
 }
