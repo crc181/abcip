@@ -23,9 +23,7 @@
 #include <math.h>
 #include <string.h>
 
-extern "C" {
-    #include <daq_common.h>
-};
+#include <daq_common.h>
 
 #include "daq_writer.h"
 
