@@ -39,9 +39,7 @@ struct PhyImpl {
     uint32_t snap;
     float late;
 
-#ifdef HAVE_DAQ
     DAQ_PktHdr_t daqhdr;
-#endif
 
     void Reverse(unsigned);
     void Permute(unsigned);

@@ -18,9 +18,14 @@ AC_PROG_LIBTOOL
 LT_INIT
 
 # Checks for libraries.
-AC_CHECK_LIB([pcap], [pcap_lib_version],,AC_ERROR([Missing libpcap >= 1.0.0]))
+AC_CHECK_LIB([pcap], [pcap_lib_version], [have_pcap="false"], [have_pcap="false"])
 
-# Checks for host.
+#AC_CHECK_HEADERS([pcap.h])
+AM_CONDITIONAL([HAVE_PCAP], [test "x$have_pcap" == "xtrue"])
+
+
+
+# Cmecks for host.
 case "$host" in
     *darwin*)
     AC_DEFINE([MACOSX], [1], [Define if MacOSX])
