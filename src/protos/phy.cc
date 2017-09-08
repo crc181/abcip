@@ -21,11 +21,13 @@
 //-------------------------------------------------------------------------
 
 #include <stdlib.h>
+#include <string.h>
 #include <string>
-using namespace std;
 
 #include "cake.h"
 #include "phy.h"
+
+using namespace std;
 
 static const char* s_type = "phy";
 
@@ -36,6 +38,10 @@ struct PhyImpl {
 
     uint32_t snap;
     float late;
+
+#ifdef HAVE_DAQ
+    DAQ_PktHdr_t daqhdr;
+#endif
 
     void Reverse(unsigned);
     void Permute(unsigned);
@@ -92,6 +98,15 @@ PhyProtocol::PhyProtocol () : Protocol(s_type) {
     my->max = my->nIn = my->nOut = 0;
     my->snap = 0;
     my->late = 0.0;
+
+#ifdef HAVE_DAQ
+    memset(&my->daqhdr, 0, sizeof(my->daqhdr));
+
+    my->daqhdr.ingress_index = -1;
+    my->daqhdr.egress_index = -1;
+    my->daqhdr.ingress_group = -1;
+    my->daqhdr.egress_group = -1;
+#endif
 }
 
 PhyProtocol::~PhyProtocol () {
@@ -104,13 +119,92 @@ bool PhyProtocol::Bind (const string&) {
     return true;
 }
 
-void PhyProtocol::Fetch (Cake& cake, bool) {
+void PhyProtocol::Fetch (Cake& cake, bool a2b) {
     if ( cake.IsSet("seed") )
         srand(cake.GetValue("seed", 1));
 
     my->snap = cake.GetValue("snap", my->snap);
     my->late = cake.GetReal("sec", my->late);
+
+#ifdef HAVE_DAQ
+    if (cake.IsSet("fid"))
+    {
+        my->daqhdr.flow_id = cake.GetValue("fid", my->daqhdr.flow_id);
+        my->daqhdr.flags |= DAQ_PKT_FLAG_FLOWID_IS_VALID;
+    }
+
+    my->daqhdr.address_space_id = cake.GetValue("as", my->daqhdr.address_space_id);
+
+    if (a2b)
+        FetchA2B(cake);
+    else
+        FetchB2A(cake);
+#endif
 }
+
+#ifdef HAVE_DAQ
+void PhyProtocol::FetchA2B (Cake& cake)
+{
+    my->daqhdr.ingress_index = cake.GetValue("a.if", my->daqhdr.ingress_index);
+    my->daqhdr.egress_index = cake.GetValue("b.if", my->daqhdr.egress_index);
+    my->daqhdr.ingress_group = cake.GetValue("a.gr", my->daqhdr.ingress_group);
+    my->daqhdr.egress_group = cake.GetValue("b.gr", my->daqhdr.egress_group);
+
+    if (cake.IsSet("a.rip"))
+    {
+        inet_pton(AF_INET, cake.GetCValue("a.rip"), &my->daqhdr.real_sIP);
+        my->daqhdr.flags |= DAQ_PKT_FLAG_REAL_ADDRESSES;
+    }
+    if (cake.IsSet("b.rip"))
+    {
+        inet_pton(AF_INET, cake.GetCValue("b.rip"), &my->daqhdr.real_dIP);
+        my->daqhdr.flags |= DAQ_PKT_FLAG_REAL_ADDRESSES;
+    }
+    if (cake.IsSet("a.rip6"))
+    {
+        inet_pton(AF_INET6, cake.GetCValue("a.rip6"), &my->daqhdr.real_sIP);
+        my->daqhdr.flags |= (DAQ_PKT_FLAG_REAL_ADDRESSES | DAQ_PKT_FLAG_REAL_SIP_V6);
+    }
+    if (cake.IsSet("b.rip6"))
+    {
+        inet_pton(AF_INET6, cake.GetCValue("b.rip6"), &my->daqhdr.real_dIP);
+        my->daqhdr.flags |= (DAQ_PKT_FLAG_REAL_ADDRESSES | DAQ_PKT_FLAG_REAL_SIP_V6);
+    }
+    my->daqhdr.n_real_sPort = cake.GetValue("a.rpt", my->daqhdr.n_real_sPort);
+    my->daqhdr.n_real_dPort = cake.GetValue("b.rpt", my->daqhdr.n_real_dPort);
+}
+
+// Swap directional DAQ components for the B-to-A case.
+void PhyProtocol::FetchB2A (Cake& cake)
+{
+    my->daqhdr.ingress_index = cake.GetValue("b.if", my->daqhdr.ingress_index);
+    my->daqhdr.egress_index = cake.GetValue("a.if", my->daqhdr.egress_index);
+    my->daqhdr.ingress_group = cake.GetValue("b.gr", my->daqhdr.ingress_group);
+    my->daqhdr.egress_group = cake.GetValue("a.gr", my->daqhdr.egress_group);
+     if (cake.IsSet("b.rip"))
+    {
+        inet_pton(AF_INET, cake.GetCValue("b.rip"), &my->daqhdr.real_sIP);
+        my->daqhdr.flags |= DAQ_PKT_FLAG_REAL_ADDRESSES;
+    }
+    if (cake.IsSet("a.rip"))
+    {
+        inet_pton(AF_INET, cake.GetCValue("a.rip"), &my->daqhdr.real_dIP);
+        my->daqhdr.flags |= DAQ_PKT_FLAG_REAL_ADDRESSES;
+    }
+    if (cake.IsSet("b.rip6"))
+    {
+        inet_pton(AF_INET6, cake.GetCValue("b.rip6"), &my->daqhdr.real_sIP);
+        my->daqhdr.flags |= (DAQ_PKT_FLAG_REAL_ADDRESSES | DAQ_PKT_FLAG_REAL_SIP_V6);
+    }
+    if (cake.IsSet("a.rip6"))
+    {
+        inet_pton(AF_INET6, cake.GetCValue("a.rip6"), &my->daqhdr.real_dIP);
+        my->daqhdr.flags |= (DAQ_PKT_FLAG_REAL_ADDRESSES | DAQ_PKT_FLAG_REAL_SIP_V6);
+    }
+    my->daqhdr.n_real_sPort = cake.GetValue("b.rpt", my->daqhdr.n_real_sPort);
+    my->daqhdr.n_real_dPort = cake.GetValue("a.rpt", my->daqhdr.n_real_dPort);
+}
+#endif
 
 const uint8_t* PhyProtocol::GetHeader (
     Packet& p, uint32_t& len
@@ -125,6 +219,8 @@ const uint8_t* PhyProtocol::GetHeader (
 
     if ( my->max && !my->nOut )
         p.drop = true;
+
+    p.daqhdr = my->daqhdr;
 
     return Protocol::GetHeader(p, len);
 }
@@ -167,6 +263,20 @@ static Field s_fields[] = {
     { FT_CFG, "snap", "u32", "set snap length" },
     { FT_CFG, "seed", "u32", "set perm seed" },
     { FT_CFG, "sec", "r32", "set latency seconds" },
+
+    { FT_CFG, "a.if", "i32", "set host a interface" },
+    { FT_CFG, "b.if", "i32", "set host b interface" },
+    { FT_CFG, "a.gr", "i32", "set host a interface group" },
+    { FT_CFG, "b.gr", "i32", "set host b interface group" },
+    { FT_CFG, "a.rip", "a4", "set host a real address" },
+    { FT_CFG, "b.rip", "a4", "set host b real address" },
+    { FT_CFG, "a.rip6", "a16", "set host a real v6 address" },
+    { FT_CFG, "b.rip6", "a16", "set host b real v6 address" },
+    { FT_CFG, "a.rpt", "u16", "set host a real port" },
+    { FT_CFG, "b.rpt", "u16", "set host b real port" },
+    { FT_CFG, "fid", "u32", "set flow id" },
+    { FT_CFG, "as", "u16", "set address space id" },
+
     { FT_PKT, "drop", "b", "don't log packet" },
     { FT_PKT, "rev", "u32", "output packets in reverse order" },
     { FT_PKT, "perm", "u32", "randomly permute packets" },

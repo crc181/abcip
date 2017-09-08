@@ -25,6 +25,10 @@
 
 #include "protocol.h"
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 class PhyProtocol : public Protocol {
 public:
     PhyProtocol();
@@ -38,6 +42,12 @@ public:
 
     virtual bool HasPayload();
     static Pimp* GetPimp();
+
+private:
+#ifdef HAVE_DAQ
+    void FetchA2B(Cake&);
+    void FetchB2A(Cake&);
+#endif
 
 private:
     struct PhyImpl* my;

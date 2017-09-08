@@ -68,7 +68,7 @@ void DaqWriter::SetCallback (DAQ_Analysis_Func_t cb, void* pv) {
 }
 
 void DaqWriter::operator<< (const Packet& p) {
-    DAQ_PktHdr_t h;
+    DAQ_PktHdr_t h = p.daqhdr;
 
     h.pktlen = p.Length();
     h.caplen = (p.snap && h.pktlen > p.snap) ? p.snap : h.pktlen;
@@ -95,12 +95,6 @@ void DaqWriter::operator<< (const Packet& p) {
         h.ts.tv_sec = t.tv_sec;
         h.ts.tv_usec = t.tv_usec;
     }
-    // ugh - shouldn't have to set this if not capable
-    h.ingress_index = h.egress_index = 0;
-    h.ingress_group = h.egress_group = 0;
-    h.flags = h.opaque = 0;
-    h.address_space_id = 0;
-    h.priv_ptr = NULL;
 
     if ( !my->func )
         return;
