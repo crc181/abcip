@@ -1,5 +1,6 @@
+
+SUBDIRS = common protos app
 if BUILD_DAQ
-    DAQ_DIR = daq
+SUBDIRS += daq
 endif
-SUBDIRS = common protos app $(DAQ_DIR)
 

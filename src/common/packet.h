@@ -25,14 +25,16 @@
 #ifndef __PACKET_H__
 #define __PACKET_H__
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <stdint.h>
 #include <string>
 #include <iostream>
 
+#ifdef HAVE_DAQ
 #include <daq_common.h>
-
-#ifdef HAVE_CONFIG_H
-#include "config.h"
 #endif
 
 using namespace std;
