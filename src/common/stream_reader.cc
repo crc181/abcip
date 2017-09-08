@@ -45,6 +45,6 @@ StreamReader:: ~StreamReader() {
 }
 
 bool StreamReader::operator>> (char& c) {
-    return ( *sin >> c );
+    return static_cast<bool>( *sin >> c );
 }
 
