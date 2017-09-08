@@ -19,10 +19,7 @@
 #ifndef __BASE_DAQ_H__
 #define __BASE_DAQ_H__
 
-extern "C" {
-    #include <daq_common.h>
-    #include <daq_api.h>
-};
+#include <daq_common.h>
 
 class Daq {
 public:
