@@ -28,6 +28,13 @@
 #include <stdint.h>
 #include <string>
 #include <iostream>
+
+#include <daq_common.h>
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 using namespace std;
 
 class Cake;
@@ -46,6 +53,10 @@ public:
 
 public:
     Cake& cake;
+
+#ifdef HAVE_DAQ
+    DAQ_PktHdr_t daqhdr;
+#endif
 
     bool drop;
     uint32_t snap;

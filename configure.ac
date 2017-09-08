@@ -57,6 +57,10 @@ AC_ARG_ENABLE([daq],
 
 AM_CONDITIONAL([BUILD_DAQ], [test "x$enable_daq" = xyes])
 
+if test "x$enable_daq" != "xno" ; then
+    AC_DEFINE([HAVE_DAQ],[1],[can build DAQ code])
+fi
+
 # FIXTHIS make conditional on enable_daq or with_daq_includes
 # should enable_daq; also should only add daq includes to daq
 # makes
