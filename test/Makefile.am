@@ -42,4 +42,5 @@ vlan.abc ref/vlan.out ref/vlan.pcap
 
 clean-local:
 	rm -rf tmp/
+	rm -f ref/*.out
 
