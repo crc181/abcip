@@ -54,9 +54,7 @@ public:
 public:
     Cake& cake;
 
-#ifdef HAVE_DAQ
     DAQ_PktHdr_t daqhdr;
-#endif
 
     bool drop;
     uint32_t snap;

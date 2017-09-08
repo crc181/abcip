@@ -12,7 +12,6 @@ daq_writer.h daq_writer.cc
 
 daq_abc_la_LDFLAGS = -module -export-dynamic -avoid-version -shared
 daq_abc_la_LIBADD = \
--lpcap \
 $(top_builddir)/src/protos/libproto.la \
 $(top_builddir)/src/common/libcommon.la
 
