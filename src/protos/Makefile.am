@@ -1,8 +1,3 @@
-AUTOMAKE_OPTIONS = foreign no-dependencies
-
-AM_CXXFLAGS = -Wall -Wextra -Wformat -Wformat-security -pedantic
-
-AM_CPPFLAGS = -I$(top_srcdir)/src/common
 
 noinst_LTLIBRARIES = libproto.la
 
@@ -33,6 +28,8 @@ vlan.cc vlan.h
 BUILT_SOURCES = \
 prototool-inc.h \
 prototool-new.h
+
+libproto_la_CPPFLAGS = $(AM_CPPFLAGS) -I$(top_srcdir)/src/common
 
 build_inc = \
     grep -h -A 2 "__PROTOTOOL_TAG__" $(top_srcdir)/src/protos/*.h | \

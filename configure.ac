@@ -1,24 +1,26 @@
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
-AC_PREREQ(2.61)
+AC_PREREQ([2.69])
 AC_INIT([abcip], [2.2.1], [crc181@gmail.com])
 
 AC_CONFIG_SRCDIR([src/])
 AC_CONFIG_HEADER([config.h])
-AM_INIT_AUTOMAKE([-Wall -Werror foreign])
+AM_INIT_AUTOMAKE([-Wall -Wno-extra-portability -Werror foreign])
 AC_CONFIG_MACRO_DIR([m4])
 
 # Checks for programs.
-AC_PROG_CXX
 AC_PROG_CC
+AC_PROG_CXX
 AC_PROG_GREP
 AC_PROG_INSTALL
-AC_PROG_LIBTOOL
 LT_INIT
 
+# Set default language to C++
+AC_LANG([C++])
+
 # Checks for libraries.
-AC_CHECK_LIB([pcap], [pcap_lib_version],,AC_ERROR([Missing libpcap >= 1.0.0]))
+AC_CHECK_LIB([pcap], [pcap_lib_version],,AC_MSG_ERROR(Missing libpcap >= 1.0.0))
 
 # Checks for host.
 case "$host" in
@@ -32,7 +34,7 @@ esac
 
 # Checks for header files.
 AC_HEADER_STDC
-AC_CHECK_HEADERS([arpa/inet.h netinet/in.h stdint.h stdlib.h string.h daq_api.h])
+AC_CHECK_HEADERS([arpa/inet.h netinet/in.h stdint.h stdlib.h string.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
@@ -45,34 +47,32 @@ AC_TYPE_UINT8_T
 AC_TYPE_UINT16_T
 AC_TYPE_UINT32_T
 
-AC_ENABLE_VISIBILITY()
+# Visibility foo (enable it if we can)
+gl_VISIBILITY()
+CPPFLAGS="$CFLAG_VISIBILITY $CPPFLAGS"
 
 # Checks for library functions.
 AC_CHECK_FUNCS([gettimeofday memset strcasecmp strncasecmp strtol])
 
 # abc daq
 AC_ARG_ENABLE([daq],
-    AC_HELP_STRING([--enable-daq],[build the abc daq module]),
-    [enable_daq=$enableval], [enable_daq=no])
-
-AM_CONDITIONAL([BUILD_DAQ], [test "x$enable_daq" = xyes])
+    AS_HELP_STRING([--disable-daq],[disable building with libdaq support (including the abcip DAQ module)]))
 
 if test "x$enable_daq" != "xno" ; then
+    # Checks for the LibDAQ headers.
+    AC_CHECK_DAQ_HEADERS
+    if test "x$HAVE_DAQ_HEADERS" != "xyes"; then
+        AC_MSG_ERROR([Could not find LibDAQ headers!])
+    fi
+
     AC_DEFINE([HAVE_DAQ],[1],[can build DAQ code])
 fi
 
-# FIXTHIS make conditional on enable_daq or with_daq_includes
-# should enable_daq; also should only add daq includes to daq
-# makes
-# Checks for libraries.
-AC_ARG_WITH([daq_includes],
-    [  --with-daq-includes=DIR    libdaq include directory],
-    [with_daq_includes="$withval"], [with_daq_includes="no"])
+AM_CONDITIONAL([BUILD_DAQ], [test "x$enable_daq" = xyes])
 
-if test "x$with_daq_includes" != "xno"; then
-    CPPFLAGS="${CPPFLAGS} -I${with_daq_includes}"
-    SOURCE="${with_daq_includes}"
-fi
+AM_CPPFLAGS="-Wall -Wextra -Wformat -Wformat-security -pedantic ${LIBDAQ_CPPFLAGS}"
+
+AC_SUBST([AM_CPPFLAGS])
 
 AC_CONFIG_FILES([ \
     Makefile \
@@ -86,3 +86,20 @@ AC_CONFIG_FILES([ \
 ])
 
 AC_OUTPUT
+AC_MSG_RESULT([
+    $PACKAGE $VERSION
+
+    prefix:         ${prefix}
+    sysconfdir:     ${sysconfdir}
+    libdir:         ${libdir}
+    includedir:     ${includedir}
+
+    compiler++:      ${CXX}
+    cppflags:        ${CPPFLAGS}
+    am_cppflags:     ${AM_CPPFLAGS}
+    cxxflags:        ${CXXFLAGS}
+    am_cxxflags:     ${AM_CXXFLAGS}
+    ldflags:         ${LDFLAGS}
+    am_ldflags:      ${AM_LDFLAGS}
+    libs:            ${LIBS}
+])

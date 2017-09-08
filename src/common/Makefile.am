@@ -1,5 +1,3 @@
-AUTOMAKE_OPTIONS = foreign no-dependencies
-AM_CXXFLAGS = -Wall -Wextra -Wformat -Wformat-security -pedantic
 
 noinst_LTLIBRARIES = libcommon.la
 
@@ -24,5 +22,5 @@ stream_reader.cc stream_reader.h \
 user.cc user.h \
 writer.h
 
-AM_CPPFLAGS = -I$(top_srcdir)/src/protos
+libcommon_la_CPPFLAGS = $(AM_CPPFLAGS) -I$(top_srcdir)/src/protos
 
