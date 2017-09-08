@@ -4,7 +4,7 @@ pcaps for testing, especially pcaps containing flawed packets.
 To get started after cloning the repo, do this:
 
 ````
-    autoreconf -isvf
+    ./bootstrap
     ./configure
     make
     make install
