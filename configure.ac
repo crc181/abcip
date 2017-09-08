@@ -68,7 +68,7 @@ if test "x$enable_daq" != "xno" ; then
     AC_DEFINE([HAVE_DAQ],[1],[can build DAQ code])
 fi
 
-AM_CONDITIONAL([BUILD_DAQ], [test "x$enable_daq" = xyes])
+AM_CONDITIONAL([BUILD_DAQ], [test "x$enable_daq" != xno])
 
 AM_CPPFLAGS="-Wall -Wextra -Wformat -Wformat-security -pedantic ${LIBDAQ_CPPFLAGS}"
 
