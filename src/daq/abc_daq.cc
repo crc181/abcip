@@ -16,21 +16,19 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //--------------------------------------------------------------------- EOL
 
-#include <stdio.h>
-#include <string.h>
-
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-extern "C" {
-    #include <daq_common.h>
-    #include <sfbpf_dlt.h>
-};
-
 #include "abc_daq.h"
+
+#include <stdio.h>
+#include <string.h>
+
+#include <daq_api.h>
+#include <sfbpf_dlt.h>
+
 #include "abc_io.h"
-#include "cake.h"
 #include "cmd_parser.h"
 #include "daq_writer.h"
 #include "data_parser.h"

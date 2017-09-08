@@ -16,18 +16,16 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //--------------------------------------------------------------------- EOL
 
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
-
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-extern "C" {
-    #include <daq_api.h>
-    #include <sfbpf_dlt.h>
-};
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
+
+#include <daq_api.h>
+#include <sfbpf_dlt.h>
 
 #include "daq_lib.h"
 #include "base_daq.h"
@@ -158,7 +156,7 @@ static int daq_get_device_index(void* handle, const char* device)
 //-------------------------------------------------------------------------
 
 extern "C" {
-  DAQ_Module_t DAQ_MODULE_DATA = 
+  DAQ_SO_PUBLIC DAQ_Module_t DAQ_MODULE_DATA = 
   {
     /*.api_version =*/ DAQ_API_VERSION,
     /*.module_version =*/ DAQ_VER,
@@ -181,10 +179,12 @@ extern "C" {
     /*.get_errbuf =*/ daq_get_errbuf,
     /*.set_errbuf =*/ daq_set_errbuf,
     /*.get_device_index =*/ daq_get_device_index,
-    NULL,
-    NULL,
-    NULL,
-    NULL
+    /*.modify_flow =*/ NULL,
+    /*.hup_prep =*/ NULL,
+    /*.hup_apply =*/ NULL,
+    /*.hup_post =*/ NULL,
+    /*.dp_add_dc =*/ NULL,
+    /*.query_flow =*/ NULL
   };
-};
+}
 
