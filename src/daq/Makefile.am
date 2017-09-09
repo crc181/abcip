@@ -11,5 +11,4 @@ daq_abc_la_CPPFLAGS = $(AM_CPPFLAGS) -I$(top_srcdir)/src/common -I$(top_srcdir)/
 daq_abc_la_LDFLAGS  = $(AM_LDFLAGS) -module -export-dynamic -avoid-version -shared
 daq_abc_la_LIBADD   = \
 $(top_builddir)/src/protos/libproto.la \
-$(top_builddir)/src/common/libcommon.la \
--lpcap
+$(top_builddir)/src/common/libcommon.la
