@@ -11,6 +11,7 @@ bad=""
 
 rm -rf $TMP/
 mkdir $TMP/
+[[ -d ref/ ]] || mkdir ref
 
 cp $TOP/data.* $TMP/
 
@@ -26,9 +27,9 @@ for fin in $TOP/*.abc ; do
     ../src/app/abcip --pcap $TMP/$pcap < $fin &> /dev/null &&
         tcpdump -tvnnXXr $TMP/$pcap > $TMP/$fout 2> /dev/null
 
-    tcpdump -tvnnXXr $TOP/ref/$pcap > $TOP/ref/$fout 2> /dev/null
+    tcpdump -tvnnXXr $TOP/ref/$pcap > ref/$fout 2> /dev/null
 
-    if diff -q $TOP/ref/$fout $TMP/$fout ; then
+    if diff -q ref/$fout $TMP/$fout ; then
         echo OK 
         pass=$((pass+1))
     else
