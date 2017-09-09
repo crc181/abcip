@@ -2,8 +2,11 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-AC_INIT([abcip], [2.2.1], [crc181@gmail.com])
+AC_INIT([abcip],
+        m4_esyscmd([build-aux/git-version-gen .tarball-version]),
+        [crc181@gmail.com])
 
+AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_SRCDIR([src/])
 AC_CONFIG_HEADER([config.h])
 AM_INIT_AUTOMAKE([-Wall -Wno-extra-portability -Werror foreign])
