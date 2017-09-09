@@ -152,7 +152,7 @@ int AbcDaq::Acquire (
 }
 
 int AbcDaq::Inject (
-    const DAQ_PktHdr_t* hdr, const uint8_t* data, uint32_t len, int reverse)
+    const DAQ_PktHdr_t*, const uint8_t*, uint32_t, int)
 {
     return DAQ_ERROR_NOTSUP;
 }
@@ -186,7 +186,7 @@ DAQ_State AbcDaq::GetState ()
     return impl->state;
 }
 
-int AbcDaq::SetFilter (const char* filter)
+int AbcDaq::SetFilter (const char*)
 {
     // TBD add bpf support
     return DAQ_ERROR_NOTSUP;
