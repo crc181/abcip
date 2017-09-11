@@ -18,7 +18,7 @@ To run it, do this:
 abcip [options] < abc-file
 
 Options are:
-
+````
   --help or -? to get this help
   --help-types to get a list of supported hosts & protocols
   --help-bind to get a list of available protocol bindinds
@@ -33,7 +33,7 @@ Options are:
   --stack <protos=eth:ip4:tcp> sets protocols
   --version outputs version information
   --license outputs license information
-
+````
 abcip returns 0 for success or -1 for error reading abc file.
 See the README for more information on the abc file.
 
