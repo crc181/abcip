@@ -20,19 +20,27 @@ abcip [options] < abc-file
 Options are:
 ````
   --help or -? to get this help
-  --help-types to get a list of supported hosts & protocols
-  --help-bind to get a list of available protocol bindinds
-  --help-define to get a list of d statement options
-  --help-config to get a list of c statement options
-  --help-fields to get a list of a|b statement options
+  --help-a or -?a to get a list of a|b protocol options
+  --help-b or -?b to get a list of a|b protocol options
+  --help-c or -?c to get a list of c statement options
+  --help-d or -?d to get a list of d statement options
+  --help-bind to get a list of available protocol bindings
+  --help-config same as --help-c
   --help-data to dump the default stream data
-  --host <type=co> to select host type
-  --pcap <file> writes each packet to the given pcap file
-  --snap <len=65535> set pcap snaplen
-  --trace outputs a text summary of each packet
-  --stack <protos=eth:ip4:tcp> sets protocols
-  --version outputs version information
+  --help-define same as --help-d
+  --help-packet same as --help-a and --help-b
+  --help-protos to get a list of supported protocols
+  --help-users to get a list of supported users
   --license outputs license information
+  --pcap <file> writes each packet to the given pcap file
+  --raw changes input to just payload data (no commands)
+  --snap <len=65535> set pcap snaplen
+  --stack <protos=eth:ip4:tcp> sets default encapsulations
+  --trace outputs a text summary of each packet
+  --user <type=user> sets default user type
+  --full-monty to use original scene V default stream data
+  --full-dubya to use obfuscated scene V default stream data
+  --version outputs version information
 ````
 abcip returns 0 for success or -1 for error reading abc file.
 See the README for more information on the abc file.
