@@ -170,8 +170,8 @@ void PhyProtocol::FetchA2B (Cake& cake)
         inet_pton(AF_INET6, cake.GetCValue("b.rip6"), &my->daqhdr.real_dIP);
         my->daqhdr.flags |= (DAQ_PKT_FLAG_REAL_ADDRESSES | DAQ_PKT_FLAG_REAL_SIP_V6);
     }
-    my->daqhdr.n_real_sPort = cake.GetValue("a.rpt", my->daqhdr.n_real_sPort);
-    my->daqhdr.n_real_dPort = cake.GetValue("b.rpt", my->daqhdr.n_real_dPort);
+    my->daqhdr.n_real_sPort = htons(cake.GetValue("a.rpt", my->daqhdr.n_real_sPort));
+    my->daqhdr.n_real_dPort = htons(cake.GetValue("b.rpt", my->daqhdr.n_real_dPort));
 }
 
 // Swap directional DAQ components for the B-to-A case.
@@ -201,8 +201,8 @@ void PhyProtocol::FetchB2A (Cake& cake)
         inet_pton(AF_INET6, cake.GetCValue("a.rip6"), &my->daqhdr.real_dIP);
         my->daqhdr.flags |= (DAQ_PKT_FLAG_REAL_ADDRESSES | DAQ_PKT_FLAG_REAL_SIP_V6);
     }
-    my->daqhdr.n_real_sPort = cake.GetValue("b.rpt", my->daqhdr.n_real_sPort);
-    my->daqhdr.n_real_dPort = cake.GetValue("a.rpt", my->daqhdr.n_real_dPort);
+    my->daqhdr.n_real_sPort = htons(cake.GetValue("b.rpt", my->daqhdr.n_real_sPort));
+    my->daqhdr.n_real_dPort = htons(cake.GetValue("a.rpt", my->daqhdr.n_real_dPort));
 }
 #endif
 
