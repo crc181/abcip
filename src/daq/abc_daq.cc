@@ -38,6 +38,7 @@
 
 class AbcImpl {
 public:
+    ~AbcImpl() { delete abc; }
     bool LoadVars(const DAQ_Config_t*);
 
 public:
@@ -137,7 +138,7 @@ AbcDaq::AbcDaq (const DAQ_Config_t* cfg)
 
 AbcDaq::~AbcDaq ()
 {
-    delete impl->abc;
+    delete impl;
 }
 
 //-------------------------------------------------------------------------
