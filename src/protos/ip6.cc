@@ -20,13 +20,14 @@
 // ip6 stuff
 //-------------------------------------------------------------------------
 
-#include <netinet/ip.h>
-#include <netinet/ip6.h>
 #include <stdio.h>
 
 #include "ip6.h"
 #include "cake.h"
 #include "pseudo_hdr.h"
+
+#include <netinet/ip.h>
+#include <netinet/ip6.h>
 
 #define IP6_A  "::ffff:10.1.2" // + .layer
 #define IP6_B  "::ffff:10.9.8.7"

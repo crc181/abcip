@@ -20,11 +20,12 @@
 // vlan stuff
 //-------------------------------------------------------------------------
 
-#include <net/ethernet.h>
 
 #include "cake.h"
 #include "eth.h"
 #include "vlan.h"
+
+#include <net/ethernet.h>
 
 static const char* s_type = "vlan";
 

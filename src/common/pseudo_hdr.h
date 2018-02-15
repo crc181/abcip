@@ -23,6 +23,9 @@
 #ifndef __PSEUDO_HDR_H__
 #define __PSEUDO_HDR_H__
 
+#include <sys/types.h>
+#include <sys/socket.h>
+
 #include <stdint.h>
 #include <arpa/inet.h>
 #include "protocol.h"

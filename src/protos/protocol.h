@@ -23,6 +23,10 @@
 #ifndef __PROTOCOL_H__
 #define __PROTOCOL_H__
 
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <net/ethernet.h>
+
 #include <stdint.h>
 #include <arpa/inet.h>
 

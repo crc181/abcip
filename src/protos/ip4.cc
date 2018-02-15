@@ -20,8 +20,6 @@
 // ip4 stuff
 //-------------------------------------------------------------------------
 
-#include <netinet/in.h>
-#include <netinet/ip.h>
 #include <stdio.h>
 
 #include <sstream>
@@ -30,6 +28,9 @@ using namespace std;
 #include "ip4.h"
 #include "cake.h"
 #include "pseudo_hdr.h"
+
+#include <netinet/in.h>
+#include <netinet/ip.h>
 
 #define IP4_A   "10.1.2"  // + .layer
 #define IP4_B   "10.9.8.7"

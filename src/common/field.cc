@@ -19,8 +19,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <arpa/inet.h>
-#include <net/ethernet.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,6 +33,9 @@
 
 #include "field.h"
 #include "status.h"
+
+#include <net/ethernet.h>
+#include <arpa/inet.h>
 
 ostream& operator<< (ostream& os, const Field& f) {
     os << f.name;
