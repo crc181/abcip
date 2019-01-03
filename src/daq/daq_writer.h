@@ -27,18 +27,18 @@
 
 class DaqWriter : public Writer {
 public:
-    DaqWriter();
-    virtual ~DaqWriter();
+    DaqWriter(uint32_t pool_size, uint32_t snaplen);
+    virtual ~DaqWriter() override;
 
-    void SetCallback(DAQ_Analysis_Func_t, void*);
+    void SetMsgVector(const DAQ_Msg_t* msgs[]);
+    unsigned GetMsgCount();
+    void ReleaseMsg(const DAQ_Msg_t* msg);
+    void GetMsgPoolInfo(DAQ_MsgPoolInfo_t* info);
 
-    void GetStats(DAQ_Stats_t*);
-    void ResetStats();
-
-    virtual void operator<<(const Packet&);
+    virtual void operator<<(const Packet&) override;
 
 private:
-    class DaqWriterImpl* my;
+    class DaqWriterImpl* impl;
 };
 
 #endif

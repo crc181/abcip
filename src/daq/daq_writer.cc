@@ -23,85 +23,140 @@
 #include <math.h>
 #include <string.h>
 
+#include <vector>
+
 #include <daq_common.h>
 
 #include "daq_writer.h"
 
-class DaqWriterImpl {
-public:
-    struct timeval start;
-    DAQ_Stats_t stats;
+using namespace std;
 
-    DAQ_Analysis_Func_t func;
-    void* user;
+struct DaqWriterPktDesc
+{
+    DAQ_Msg_t msg;
+    DAQ_PktHdr_t pkthdr;
 };
 
-DaqWriter::DaqWriter () {
-    my = new DaqWriterImpl;
+struct DaqWriterMsgPool
+{
+    DaqWriterPktDesc* pool;
+    vector<DaqWriterPktDesc*> freelist;
+    DAQ_MsgPoolInfo_t info;
+};
 
-    my->func = NULL;
-    my->user = NULL;
+class DaqWriterImpl
+{
+public:
+    DaqWriterImpl(uint32_t pool_size, uint32_t snaplen);
+    ~DaqWriterImpl();
 
-    memset (&my->start, 0, sizeof(my->start));
-    gettimeofday(&my->start, NULL);
+    struct timeval start;
+    uint32_t snap;
+    DaqWriterMsgPool pool = { };
+    const DAQ_Msg_t** msg_vector = nullptr;
+    unsigned msg_count = 0;
+};
 
-    ResetStats();
+DaqWriterImpl::DaqWriterImpl(uint32_t pool_size, uint32_t snaplen)
+{
+    gettimeofday(&start, NULL);
+    snap = snaplen;
+    pool.pool = new DaqWriterPktDesc[pool_size]();
+    pool.info.mem_size = sizeof(DaqWriterPktDesc) * pool_size;
+    for (uint32_t i = 0; i < pool_size; i++)
+    {
+        DaqWriterPktDesc* desc = &pool.pool[i];
+        DAQ_Msg_t* msg = &desc->msg;
+        msg->type = DAQ_MSG_TYPE_PACKET;
+        msg->hdr_len = sizeof(desc->pkthdr);
+        msg->hdr = &desc->pkthdr;
+        msg->data = new uint8_t[snap];
+        msg->priv = desc;
+        pool.freelist.push_back(desc);
+        pool.info.mem_size += snap;
+        pool.info.size++;
+    }
+    pool.info.available = pool.info.size;
 }
 
-DaqWriter::~DaqWriter () {
-    delete my;
+DaqWriterImpl::~DaqWriterImpl()
+{
+    while (pool.info.size > 0)
+        delete[] pool.pool[--pool.info.size].msg.data;
+    delete[] pool.pool;
 }
 
-void DaqWriter::GetStats (DAQ_Stats_t* s) {
-    *s = my->stats;
+DaqWriter::DaqWriter(uint32_t pool_size, uint32_t snaplen)
+{
+    impl = new DaqWriterImpl(pool_size, snaplen);
 }
 
-void DaqWriter::ResetStats () {
-    memset(&my->stats, 0, sizeof(my->stats));
+DaqWriter::~DaqWriter()
+{
+    delete impl;
 }
 
-void DaqWriter::SetCallback (DAQ_Analysis_Func_t cb, void* pv) {
-    my->func = cb;
-    my->user = pv;
+void DaqWriter::SetMsgVector(const DAQ_Msg_t* msgs[])
+{
+    impl->msg_count = 0;
+    impl->msg_vector = msgs;
 }
 
-void DaqWriter::operator<< (const Packet& p) {
-    DAQ_PktHdr_t h = p.daqhdr;
+unsigned DaqWriter::GetMsgCount()
+{
+    return impl->msg_count;
+}
 
-    h.pktlen = p.Length();
-    h.caplen = (p.snap && h.pktlen > p.snap) ? p.snap : h.pktlen;
+void DaqWriter::ReleaseMsg(const DAQ_Msg_t* msg)
+{
+    DaqWriterPktDesc* desc = (DaqWriterPktDesc*) msg->priv;
+    impl->pool.freelist.push_back(desc);
+}
 
-    if ( p.late ) {
-        h.ts.tv_sec = my->start.tv_sec;
-        h.ts.tv_usec = my->start.tv_usec;
+void DaqWriter::GetMsgPoolInfo(DAQ_MsgPoolInfo_t* info)
+{
+    *info = impl->pool.info;
+}
+
+void DaqWriter::operator<<(const Packet& p)
+{
+    DaqWriterPktDesc* desc = impl->pool.freelist.back();
+    impl->pool.freelist.pop_back();
+    desc->pkthdr = p.daqhdr;
+
+    desc->pkthdr.pktlen = p.Length();
+    uint32_t data_len = (p.snap && desc->pkthdr.pktlen > p.snap) ? p.snap : desc->pkthdr.pktlen;
+    data_len = (data_len > impl->snap) ? impl->snap : data_len;
+    desc->msg.data_len = data_len;
+    memcpy(desc->msg.data, p.Data(), desc->msg.data_len);
+
+    if ( p.late )
+    {
+        desc->pkthdr.ts.tv_sec = impl->start.tv_sec;
+        desc->pkthdr.ts.tv_usec = impl->start.tv_usec;
 
         uint32_t us = (uint32_t)p.late;
         us = round((p.late-us) * 1e6);
 
-        my->start.tv_sec += p.late;
-        my->start.tv_usec += us;
+        impl->start.tv_sec += p.late;
+        impl->start.tv_usec += us;
 
-        if ( h.ts.tv_usec > 1000000 ) {
-            h.ts.tv_usec -= 1000000;
-            h.ts.tv_sec++;
+        if ( desc->pkthdr.ts.tv_usec > 1000000 )
+        {
+            desc->pkthdr.ts.tv_usec -= 1000000;
+            desc->pkthdr.ts.tv_sec++;
         }
-    } else {
+    }
+    else
+    {
         struct timeval t;
         memset (&t, 0, sizeof(t));
         gettimeofday(&t, NULL);
 
-        h.ts.tv_sec = t.tv_sec;
-        h.ts.tv_usec = t.tv_usec;
+        desc->pkthdr.ts.tv_sec = t.tv_sec;
+        desc->pkthdr.ts.tv_usec = t.tv_usec;
     }
 
-    if ( !my->func )
-        return;
-
-    DAQ_Verdict v = my->func(my->user, &h, p.Data());
-
-    if ( v < MAX_DAQ_VERDICT ) { 
-        my->stats.verdicts[v]++;
-        my->stats.packets_received++;
-    }
+    impl->msg_vector[impl->msg_count++] = &desc->msg;
 }
 

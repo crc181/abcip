@@ -3,7 +3,7 @@ pkglib_LTLIBRARIES = daq_abc.la
 
 daq_abc_la_SOURCES = \
 abc_daq.h abc_daq.cc \
-base_daq.h \
+base_daq.h base_daq.cc \
 daq_lib.h daq_lib.cc \
 daq_writer.h daq_writer.cc
 

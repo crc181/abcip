@@ -25,8 +25,8 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <daq_api.h>
-#include <sfbpf_dlt.h>
+#include <daq_dlt.h>
+#include <daq_module_api.h>
 
 #include "abc_io.h"
 #include "cmd_parser.h"
@@ -34,67 +34,69 @@
 #include "data_parser.h"
 #include "stream_reader.h"
 
+#define SET_ERROR(modinst, ...)    daq_base_api->set_errbuf(modinst, __VA_ARGS__)
+
+#define ABC_DAQ_DEFAULT_POOL_SIZE 16
+
 //-------------------------------------------------------------------------
 
 class AbcImpl {
 public:
+    AbcImpl(const DAQ_BaseAPI_t* base_api) : daq_base_api(base_api) { }
     ~AbcImpl() { delete abc; }
-    bool LoadVars(const DAQ_Config_t*);
+    bool LoadVars(const DAQ_ModuleConfig_h modcfg);
 
 public:
+    const DAQ_BaseAPI_t* daq_base_api;
+    DAQ_ModuleInstance_h modinst;
+
     DAQ_Stats_t stats;
-    DAQ_State state;
 
     int dlt;
     uint32_t snap;
 
-    bool trace;
-    bool raw;
+    bool trace = false;
+    bool raw = false;
+    bool interrupted = false;
 
-    string stack;
-    string user;
-
-    char error[DAQ_ERRBUF_SIZE];
+    string stack = DEFAULT_STACK;
+    string user = DEFAULT_USER;
 
     AbcIo* abc;
     DaqWriter* writer;
 };
 
-bool AbcImpl::LoadVars (const DAQ_Config_t* cfg) {
-    DAQ_Dict* entry;
-
-    // defaults
-    raw = false;
-    trace = false;
-    stack = DEFAULT_STACK;
-    user = DEFAULT_USER;
-
-    for ( entry = cfg->values; entry; entry = entry->next)
+bool AbcImpl::LoadVars(const DAQ_ModuleConfig_h modcfg)
+{
+    const char* varKey, * varValue;
+    daq_base_api->config_first_variable(modcfg, &varKey, &varValue);
+    while (varKey)
     {   
-        if ( !strcmp(entry->key, "stack") )
-            stack = entry->value;
+        if ( !strcmp(varKey, "stack") )
+            stack = varValue;
 
-        else if ( !strcmp(entry->key, "user") )
-            user = entry->value;
+        else if ( !strcmp(varKey, "user") )
+            user = varValue;
 
-        else if ( !strcmp(entry->key, "trace") )
+        else if ( !strcmp(varKey, "trace") )
             trace = true;
 
-        else if ( !strcmp(entry->key, "raw") )
+        else if ( !strcmp(varKey, "raw") )
             raw = true;
 
         else
             break;
     }
-    if ( entry )
-        DPE(error, "ERROR: bad var (%s = %s)\n", entry->key, entry->value);
+    if ( varKey )
+        SET_ERROR(modinst, "ERROR: bad var (%s = %s)\n", varKey, varValue);
 
-    return ( entry == NULL );
+    return ( varKey == NULL );
 }
 
 //-------------------------------------------------------------------------
 //
-static int GetDataLinkType (const char* proto) {
+static int GetDataLinkType (const char* proto)
+{
     if ( !strncasecmp(proto, "eth", 3) )
         return DLT_EN10MB;
 
@@ -109,22 +111,29 @@ static int GetDataLinkType (const char* proto) {
 
 //-------------------------------------------------------------------------
 // constructor / destructor
-AbcDaq::AbcDaq (const DAQ_Config_t* cfg)
+AbcDaq::AbcDaq(const DAQ_BaseAPI_t* base_api)
 {
-    impl = new AbcImpl;
+    impl = new AbcImpl(base_api);
+}
 
-    impl->LoadVars(cfg);
+int AbcDaq::Init(const DAQ_ModuleConfig_h modcfg, DAQ_ModuleInstance_h modinst)
+{
+    impl->modinst = modinst;
+    impl->LoadVars(modcfg);
 
     impl->dlt = GetDataLinkType(impl->stack.c_str());
-    impl->snap = cfg->snaplen;
+    impl->snap = impl->daq_base_api->config_get_snaplen(modcfg);
 
-    Reader* reader = new StreamReader(cfg->name);
+    Reader* reader = new StreamReader(impl->daq_base_api->config_get_input(modcfg));
 
     Parser* parser = impl->raw ?
         (Parser*)new DataParser(reader) :
         (Parser*)new CommandParser(reader, "a,b,c,d");
 
-    impl->writer = new DaqWriter;
+    uint32_t pool_size = impl->daq_base_api->config_get_msg_pool_size(modcfg);
+    if (pool_size == 0)
+        pool_size = ABC_DAQ_DEFAULT_POOL_SIZE;
+    impl->writer = new DaqWriter(pool_size, impl->snap);
 
     impl->abc = new AbcIo(
         parser, impl->writer,
@@ -132,8 +141,7 @@ AbcDaq::AbcDaq (const DAQ_Config_t* cfg)
 
     ResetStats();
 
-    impl->error[0] = '\0';
-    impl->state = DAQ_STATE_INITIALIZED;
+    return DAQ_SUCCESS;
 }
 
 AbcDaq::~AbcDaq ()
@@ -144,18 +152,44 @@ AbcDaq::~AbcDaq ()
 //-------------------------------------------------------------------------
 // packet processing functions:
 
-int AbcDaq::Acquire (
-    int cnt, DAQ_Analysis_Func_t callback, void* user)
+unsigned AbcDaq::MsgReceive(const unsigned max_recv, const DAQ_Msg_t* msgs[], DAQ_RecvStatus* rstat)
 {
-    impl->writer->SetCallback(callback, user);
-    int err = impl->abc->Execute(cnt);
-    return (err < 0) ? err : DAQ_READFILE_EOF;
+    impl->writer->SetMsgVector(msgs);
+    int err = impl->abc->Execute(max_recv);
+    unsigned num_receive = impl->writer->GetMsgCount();
+    impl->stats.packets_received += num_receive;
+    if (err < 0)
+       *rstat = DAQ_RSTAT_ERROR;
+    else if (err == 0 || num_receive < max_recv)
+    {
+        if (impl->interrupted)
+        {
+            impl->interrupted = false;
+            *rstat = DAQ_RSTAT_INTERRUPTED;
+        }
+        else
+            *rstat = DAQ_RSTAT_EOF;
+    }
+    else
+        *rstat = DAQ_RSTAT_OK;
+
+    return num_receive;
 }
 
-int AbcDaq::Inject (
-    const DAQ_PktHdr_t*, const uint8_t*, uint32_t, int)
+int AbcDaq::MsgFinalize(const DAQ_Msg_t* msg, DAQ_Verdict verdict)
 {
-    return DAQ_ERROR_NOTSUP;
+    if (verdict >= MAX_DAQ_VERDICT)
+        verdict = DAQ_VERDICT_PASS;
+    impl->stats.verdicts[verdict]++;
+    impl->writer->ReleaseMsg(msg);
+
+    return DAQ_SUCCESS;
+}
+
+int AbcDaq::GetMsgPoolInfo(DAQ_MsgPoolInfo_t* info)
+{
+    impl->writer->GetMsgPoolInfo(info);
+    return DAQ_SUCCESS;
 }
 
 //-------------------------------------------------------------------------
@@ -163,45 +197,33 @@ int AbcDaq::Inject (
 
 int AbcDaq::Start ()
 {
-    impl->state = DAQ_STATE_STARTED;
     return DAQ_SUCCESS;
 }
 
 int AbcDaq::Stop ()
 {
-    impl->state = DAQ_STATE_STOPPED;
     return DAQ_SUCCESS;
 }
 
-int AbcDaq::Breakloop ()
+int AbcDaq::Interrupt ()
 {
-    impl->abc->BreakLoop();
+    impl->abc->Interrupt();
+    impl->interrupted = true;
     return DAQ_SUCCESS;
 }
 
 //-------------------------------------------------------------------------
 // accessors
 
-DAQ_State AbcDaq::GetState ()
-{
-    return impl->state;
-}
-
-int AbcDaq::SetFilter (const char*)
-{
-    // TBD add bpf support
-    return DAQ_ERROR_NOTSUP;
-}
-
 int AbcDaq::GetStats (DAQ_Stats_t* stats)
 {
-    impl->writer->GetStats(stats);
+    *stats = impl->stats;
     return DAQ_SUCCESS;
 }
 
 void AbcDaq::ResetStats ()
 {
-    impl->writer->ResetStats();
+    memset(&impl->stats, 0, sizeof(impl->stats));
 }
 
 int AbcDaq::GetSnaplen ()
@@ -211,27 +233,12 @@ int AbcDaq::GetSnaplen ()
 
 uint32_t AbcDaq::GetCapabilities ()
 {
-    uint32_t caps = DAQ_CAPA_BREAKLOOP /*| DAQ_CAPA_BPF*/;
+    uint32_t caps = DAQ_CAPA_INTERRUPT;
     return caps;
 }
 
 int AbcDaq::GetDatalinkType ()
 {
     return impl->dlt;
-}
-
-const char* AbcDaq::GetErrbuf ()
-{
-    return impl->error;
-}
-
-void AbcDaq::SetErrbuf (const char* s)
-{
-    DPE(impl->error, "%s", s ? s : "");
-}
-
-int AbcDaq::GetDeviceIndex (const char*)
-{
-    return DAQ_ERROR_NOTSUP;
 }
 

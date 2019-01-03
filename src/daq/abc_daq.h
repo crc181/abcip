@@ -23,29 +23,25 @@
 
 class AbcDaq : public Daq {
 public:
-    AbcDaq(const DAQ_Config_t*);
-    ~AbcDaq();
+    AbcDaq(const DAQ_BaseAPI_t* base_api);
+    ~AbcDaq() override;
 
-    int Acquire(int cnt, DAQ_Analysis_Func_t, void* user);
-    int Inject(const DAQ_PktHdr_t*, const uint8_t* data, uint32_t len, int reverse);
+    int Init(const DAQ_ModuleConfig_h modcfg, DAQ_ModuleInstance_h modinst) override;
 
-    int Start();
-    int Stop();
-    int Breakloop();
+    int Start() override;
+    int Interrupt() override;
+    int Stop() override;
 
-    uint32_t GetCapabilities();
-    DAQ_State GetState();
-    int SetFilter(const char* filter);
+    int GetStats(DAQ_Stats_t*) override;
+    void ResetStats() override;
 
-    int GetStats(DAQ_Stats_t* stats);
-    void ResetStats();
+    int GetSnaplen() override;
+    uint32_t GetCapabilities() override;
+    int GetDatalinkType() override;
 
-    int GetSnaplen();
-    int GetDatalinkType();
-    int GetDeviceIndex(const char* device);
-
-    const char* GetErrbuf();
-    void SetErrbuf(const char* s);
+    unsigned MsgReceive(const unsigned max_recv, const DAQ_Msg_t* msgs[], DAQ_RecvStatus* rstat) override;
+    int MsgFinalize(const DAQ_Msg_t* msg, DAQ_Verdict verdict) override;
+    int GetMsgPoolInfo(DAQ_MsgPoolInfo_t* info) override;
 
 private:
     class AbcImpl* impl;
