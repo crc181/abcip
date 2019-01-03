@@ -19,33 +19,33 @@
 #ifndef __BASE_DAQ_H__
 #define __BASE_DAQ_H__
 
-#include <daq_common.h>
+#include <daq_module_api.h>
 
 class Daq {
 public:
     virtual ~Daq() { };
 
-    virtual int Acquire(int cnt, DAQ_Analysis_Func_t, void* user) = 0;
-    virtual int Inject(
-        const DAQ_PktHdr_t*, const uint8_t* data, uint32_t len, int reverse) = 0;
+    virtual int Init(const DAQ_ModuleConfig_h modcfg, DAQ_ModuleInstance_h modinst) = 0;
 
-    virtual int Start() = 0;
-    virtual int Stop() = 0;
-    virtual int Breakloop() = 0;
+    virtual int SetFilter(const char* filter);
 
-    virtual uint32_t GetCapabilities() = 0;
-    virtual DAQ_State GetState() = 0;
-    virtual int SetFilter(const char* filter) = 0;
+    virtual int Start();
+    virtual int Inject(DAQ_MsgType type, const void *hdr, const uint8_t *data, uint32_t data_len);
+    virtual int InjectRelative(const DAQ_Msg_t* msg, const uint8_t* data, uint32_t data_len, int reverse);
+    virtual int Interrupt();
+    virtual int Stop();
+    virtual int Ioctl(DAQ_IoctlCmd cmd, void* arg, size_t arglen);
 
-    virtual int GetStats(DAQ_Stats_t*) = 0;
-    virtual void ResetStats() = 0;
+    virtual int GetStats(DAQ_Stats_t*);
+    virtual void ResetStats();
 
-    virtual int GetSnaplen() = 0;
-    virtual int GetDatalinkType() = 0;
-    virtual int GetDeviceIndex(const char* device) = 0;
+    virtual int GetSnaplen();
+    virtual uint32_t GetCapabilities();
+    virtual int GetDatalinkType();
 
-    virtual const char* GetErrbuf() = 0;
-    virtual void SetErrbuf(const char* s) = 0;
+    virtual unsigned MsgReceive(const unsigned max_recv, const DAQ_Msg_t* msgs[], DAQ_RecvStatus* rstat);
+    virtual int MsgFinalize(const DAQ_Msg_t* msg, DAQ_Verdict verdict);
+    virtual int GetMsgPoolInfo(DAQ_MsgPoolInfo_t* info);
 
 protected:
     Daq() { };

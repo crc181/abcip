@@ -36,7 +36,7 @@ public:
     virtual ~AbcIo();
 
     int Execute(int maxPkts = 0);
-    void BreakLoop();
+    void Interrupt();
 
     static void HelpDefine(ostream&);
 

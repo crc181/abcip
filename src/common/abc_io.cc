@@ -67,7 +67,7 @@ public:
     string stack;
     string user;
     bool trace;
-    bool go;
+    bool stop;
 };
 
 //-------------------------------------------------------------------------
@@ -273,7 +273,7 @@ AbcIo::AbcIo (
     my->trace = trace;
     my->stack = stack;
     my->user = user;
-    my->go = true;
+    my->stop = false;
 }
 
 AbcIo::~AbcIo () {
@@ -289,8 +289,8 @@ AbcIo::~AbcIo () {
     delete my;
 }
 
-void AbcIo::BreakLoop () {
-    my->go = false;
+void AbcIo::Interrupt () {
+    my->stop = true;
 }
 
 //-------------------------------------------------------------------------
@@ -300,13 +300,21 @@ int AbcIo::Execute (int maxPkts) {
     unsigned numCmds = 0;
     int numPkts = 0;
 
-    while ( my->go && my->parser->Load(cmd) )
+    while ( maxPkts <= 0 || numPkts < maxPkts )
     {
-        bool ok = false;
+        if ( my->stop )
+        {
+            my->stop = false;
+            break;
+        }
+
+        if ( !my->parser->Load(cmd) )
+            break;
 
         if ( my->trace )
             my->Dump(cmd, numCmds);
 
+        bool ok = false;
         if ( cmd.GetName() == CMD_A2B ) {
             AbcIp* abc = my->Load(cmd);
             ok = abc && abc->AtoB();
@@ -327,9 +335,6 @@ int AbcIo::Execute (int maxPkts) {
         }
         if ( !ok )
             return -1;
-
-        if ( maxPkts > 0 && numPkts >= maxPkts )
-            my->go = false;
 
         cmd.Clear();
         numCmds++;
