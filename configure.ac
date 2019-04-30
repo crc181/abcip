@@ -21,6 +21,7 @@ LT_INIT
 
 # Set default language to C++
 AC_LANG([C++])
+AX_CXX_COMPILE_STDCXX_11
 
 # Checks for libraries.
 AC_CHECK_LIB([pcap], [pcap_lib_version],,AC_MSG_ERROR(Missing libpcap >= 1.0.0))
