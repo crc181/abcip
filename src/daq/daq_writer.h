@@ -27,7 +27,7 @@
 
 class DaqWriter : public Writer {
 public:
-    DaqWriter(uint32_t pool_size, uint32_t snaplen);
+    DaqWriter(uint32_t pool_size, uint32_t snaplen, bool real_time);
     virtual ~DaqWriter() override;
 
     void SetMsgVector(const DAQ_Msg_t* msgs[]);
