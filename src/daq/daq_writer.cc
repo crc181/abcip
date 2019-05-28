@@ -47,20 +47,22 @@ struct DaqWriterMsgPool
 class DaqWriterImpl
 {
 public:
-    DaqWriterImpl(uint32_t pool_size, uint32_t snaplen);
+    DaqWriterImpl(uint32_t pool_size, uint32_t snaplen, bool real_time);
     ~DaqWriterImpl();
 
-    struct timeval start;
+    struct timeval last;
+    struct timeval interval = { 0, 1 };
+
     uint32_t snap;
     DaqWriterMsgPool pool = { };
     const DAQ_Msg_t** msg_vector = nullptr;
     unsigned msg_count = 0;
 };
 
-DaqWriterImpl::DaqWriterImpl(uint32_t pool_size, uint32_t snaplen)
+DaqWriterImpl::DaqWriterImpl(uint32_t pool_size, uint32_t snaplen, bool real_time)
 {
-    gettimeofday(&start, NULL);
     snap = snaplen;
+
     pool.pool = new DaqWriterPktDesc[pool_size]();
     pool.info.mem_size = sizeof(DaqWriterPktDesc) * pool_size;
     for (uint32_t i = 0; i < pool_size; i++)
@@ -77,6 +79,11 @@ DaqWriterImpl::DaqWriterImpl(uint32_t pool_size, uint32_t snaplen)
         pool.info.size++;
     }
     pool.info.available = pool.info.size;
+
+    if (real_time)
+        gettimeofday(&last, NULL);
+    else
+        last = { 946684800, 0 }; // Defaults to Y2K
 }
 
 DaqWriterImpl::~DaqWriterImpl()
@@ -86,9 +93,9 @@ DaqWriterImpl::~DaqWriterImpl()
     delete[] pool.pool;
 }
 
-DaqWriter::DaqWriter(uint32_t pool_size, uint32_t snaplen)
+DaqWriter::DaqWriter(uint32_t pool_size, uint32_t snaplen, bool real_time)
 {
-    impl = new DaqWriterImpl(pool_size, snaplen);
+    impl = new DaqWriterImpl(pool_size, snaplen, real_time);
 }
 
 DaqWriter::~DaqWriter()
@@ -130,33 +137,19 @@ void DaqWriter::operator<<(const Packet& p)
     desc->msg.data_len = data_len;
     memcpy(desc->msg.data, p.Data(), desc->msg.data_len);
 
-    if ( p.late )
+    // Per-packet override of the timing interval
+    if (p.late)
     {
-        desc->pkthdr.ts.tv_sec = impl->start.tv_sec;
-        desc->pkthdr.ts.tv_usec = impl->start.tv_usec;
-
-        uint32_t us = (uint32_t)p.late;
-        us = round((p.late-us) * 1e6);
-
-        impl->start.tv_sec += p.late;
-        impl->start.tv_usec += us;
-
-        if ( desc->pkthdr.ts.tv_usec > 1000000 )
-        {
-            desc->pkthdr.ts.tv_usec -= 1000000;
-            desc->pkthdr.ts.tv_sec++;
-        }
+        struct timeval increment;
+        increment.tv_sec = static_cast<time_t>(p.late);
+        increment.tv_usec = round((p.late - increment.tv_sec) * 1e6);
+        timeradd(&impl->last, &increment, &desc->pkthdr.ts);
     }
     else
-    {
-        struct timeval t;
-        memset (&t, 0, sizeof(t));
-        gettimeofday(&t, NULL);
-
-        desc->pkthdr.ts.tv_sec = t.tv_sec;
-        desc->pkthdr.ts.tv_usec = t.tv_usec;
-    }
+        timeradd(&impl->last, &impl->interval, &desc->pkthdr.ts);
 
     impl->msg_vector[impl->msg_count++] = &desc->msg;
+
+    impl->last = desc->pkthdr.ts;
 }
 
