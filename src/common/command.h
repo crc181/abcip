@@ -25,12 +25,11 @@
 
 #include <string>
 #include <vector>
-using namespace std;
 
 class Option {
 public:
-    Option(unsigned u, const string& k,
-        const string& v, const string& p)
+    Option(unsigned u, const std::string& k,
+        const std::string& v, const std::string& p)
     {
         index = u;
         key = k;
@@ -43,24 +42,24 @@ public:
 
 public:
     unsigned index;
-    string key;
-    string value;
-    string proto;
+    std::string key;
+    std::string value;
+    std::string proto;
     unsigned row, col;
 };
 
-typedef vector<Option*> OptVector;
+typedef std::vector<Option*> OptVector;
 
 class Command {
 public:
     Command() = default;
     virtual ~Command() = default;
 
-    void SetName(string& s) { name = s; }
-    string& GetName() { return name; }
+    void SetName(std::string& s) { name = s; }
+    std::string& GetName() { return name; }
 
-    void SetContext(string& s) { context = s; }
-    string& GetContext() { return context; }
+    void SetContext(std::string& s) { context = s; }
+    std::string& GetContext() { return context; }
 
     void AddOption(Option* o) {
         opts.push_back(o);
@@ -79,8 +78,8 @@ public:
         name.clear();
     }
 private:
-    string name;
-    string context;
+    std::string name;
+    std::string context;
     OptVector opts;
 };
 

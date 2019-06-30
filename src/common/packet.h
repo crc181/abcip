@@ -37,8 +37,6 @@
 #include <daq_common.h>
 #endif
 
-using namespace std;
-
 class Cake;
 
 class Packet {
@@ -65,7 +63,7 @@ public:
     float late;
 
 private:
-    string buf;
+    std::string buf;
 };
 
 inline Packet::Packet (Cake& c) : cake(c) {

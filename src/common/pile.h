@@ -24,7 +24,7 @@
 #define __PILE_H__
 
 #include <string>
-using namespace std;
+
 class User;
 
 class Pile {
@@ -35,11 +35,11 @@ public:
     void Push(class Protocol*, bool a2b);
     void PopAll();
 
-    const string& GetRootId();
+    const std::string& GetRootId();
     class PseudoHdr* GetPseudoHdr();
 
     class Protocol* GetProtocol(unsigned lyr);
-    unsigned GetLayer(const string&);
+    unsigned GetLayer(const std::string&);
 
     void Configure(class Cake&, bool a2b);
 

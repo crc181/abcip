@@ -35,6 +35,8 @@
 #include "eth.h"
 #include "cake.h"
 
+using namespace std;
+
 #define ETHERTYPE_IP6   0x86dd
 #define ETHERTYPE_VLAN  0x8100
 #define ETHERTYPE_RAW   0x0101

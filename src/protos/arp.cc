@@ -42,6 +42,8 @@
 #include "cake.h"
 #include "arp.h"
 
+using namespace std;
+
 struct ArpHdr {
     uint16_t hw;
     uint16_t ip;

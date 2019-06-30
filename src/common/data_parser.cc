@@ -22,13 +22,12 @@
 
 #include <iostream>
 
-//#include <string.h>
-//#include <stdlib.h>
-
 #include "attribute.h"
 #include "data_parser.h"
 #include "command.h"
 #include "reader.h"
+
+using namespace std;
 
 //-------------------------------------------------------------------------
 // parser

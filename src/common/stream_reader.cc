@@ -24,6 +24,8 @@
 
 #include "stream_reader.h"
 
+using namespace std;
+
 StreamReader::StreamReader (const char* filename) {
     const string dev = "tty";
 

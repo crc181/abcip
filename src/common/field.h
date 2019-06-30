@@ -19,8 +19,6 @@
 #include <iostream>
 #include <string>
 
-using namespace std;
-
 #ifndef __FIELD_H__
 #define __FIELD_H__
 
@@ -34,14 +32,14 @@ struct Field {
     const char* type;
     const char* help;
 
-    static FieldType GetType(const string& cmd);
-    static void Print(ostream&, FieldType, string&, const Field*);
+    static FieldType GetType(const std::string& cmd);
+    static void Print(std::ostream&, FieldType, std::string&, const Field*);
 
     static bool Validate(const Field*, FieldType,
-        const string& var, const string& val);
+        const std::string& var, const std::string& val);
 };
 
-ostream& operator<< (ostream& os, const Field&);
+std::ostream& operator<< (std::ostream& os, const Field&);
 
 #endif
 

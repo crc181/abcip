@@ -24,7 +24,6 @@
 #define __DATA_H__
 
 #include <string>
-using namespace std;
 
 enum DataOption {
     DATA_FULL_MONTY,
@@ -33,7 +32,7 @@ enum DataOption {
 };
 
 void SetData(DataOption);
-const string& GetData();
+const std::string& GetData();
 
 #endif
 

@@ -23,6 +23,8 @@
 #include "cake.h"
 #include "raw.h"
 
+using namespace std;
+
 static const char* s_type = "raw";
 
 RawProtocol::RawProtocol () : Protocol(s_type) { }

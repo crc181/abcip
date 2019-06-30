@@ -24,7 +24,6 @@
 #define __ABC_IO_H__
 
 #include <iostream>
-using namespace std;
 
 class Parser;
 class Writer;
@@ -38,7 +37,7 @@ public:
     int Execute(int maxPkts = 0);
     void Interrupt();
 
-    static void HelpDefine(ostream&);
+    static void HelpDefine(std::ostream&);
 
 private:
     class AbcIoImpl* my;

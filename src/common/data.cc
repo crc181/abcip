@@ -18,6 +18,8 @@
 
 #include "data.h"
 
+using namespace std;
+
 //-------------------------------------------------------------------------
 // this is the text of scene 5 from Monty Python and the Holy Grail
 //-------------------------------------------------------------------------

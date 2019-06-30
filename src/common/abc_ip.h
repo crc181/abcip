@@ -37,10 +37,10 @@ public:
     bool Configure();
 
     class Cake& GetCake(bool a2b);
-    unsigned GetLayer(const string&, bool a2b);
+    unsigned GetLayer(const std::string&, bool a2b);
 
-    const string& GetProtocol(unsigned lyr, bool a2b);
-    const string& GetRootId();
+    const std::string& GetProtocol(unsigned lyr, bool a2b);
+    const std::string& GetRootId();
 
 private:
     class AbcIpImpl* my;

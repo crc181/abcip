@@ -28,6 +28,8 @@
 #include "dumb_user.h"
 #include "field.h"
 
+using namespace std;
+
 class DumbUserImpl {
 public:
     istream* stream;

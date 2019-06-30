@@ -19,8 +19,6 @@
 #include <iostream>
 #include <string>
 
-using namespace std;
-
 //-------------------------------------------------------------------------
 // pimp = protocol instantiation and management pattern
 // (similar to a person in the management profession)
@@ -38,25 +36,25 @@ class Pimp {
 public:
     virtual ~Pimp() = default;
 
-    const string& Type() { return type; }
+    const std::string& Type() { return type; }
 
     virtual Protocol* New(PseudoHdr*) = 0;
 
-    virtual void HelpBind(ostream&) { }
+    virtual void HelpBind(std::ostream&) { }
 
-    void HelpConfig(ostream&);
-    void HelpPacket(ostream&);
+    void HelpConfig(std::ostream&);
+    void HelpPacket(std::ostream&);
 
-    bool Validate(FieldType, const string& key, const string& val);
+    bool Validate(FieldType, const std::string& key, const std::string& val);
 
 protected:
     Pimp(const char* s, const Field*);
 
-    void HelpConfig(ostream&, const Field*);
-    void HelpPacket(ostream&, const Field*);
+    void HelpConfig(std::ostream&, const Field*);
+    void HelpPacket(std::ostream&, const Field*);
 
 private:
-    string type;
+    std::string type;
     const Field* fields;
 };
 

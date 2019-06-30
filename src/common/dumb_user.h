@@ -37,10 +37,10 @@ public:
 
     static const char* Type() { return "user"; }
 
-    static void HelpConfig(ostream&);
-    static void HelpPacket(ostream&);
+    static void HelpConfig(std::ostream&);
+    static void HelpPacket(std::ostream&);
 
-    static bool Validate(const string&, const string&, const string&);
+    static bool Validate(const std::string&, const std::string&, const std::string&);
 
 private:
     class DumbUserImpl* my;

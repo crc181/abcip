@@ -26,23 +26,21 @@
 #include <iostream>
 #include <string>
 
-using namespace std;
-
 class Protocol;
 class PseudoHdr;
 
 class ProtoTool {
 public:
-    static Protocol* New(const string&, PseudoHdr*);
+    static Protocol* New(const std::string&, PseudoHdr*);
 
-    static void HelpTypes(ostream&);
-    static void HelpBind(ostream&);
-    static void HelpConfig(ostream&);
-    static void HelpPacket(ostream&);
+    static void HelpTypes(std::ostream&);
+    static void HelpBind(std::ostream&);
+    static void HelpConfig(std::ostream&);
+    static void HelpPacket(std::ostream&);
 
     static bool Validate(
-        const string& cmd, const string& proto,
-        const string& key, const string& val);
+        const std::string& cmd, const std::string& proto,
+        const std::string& key, const std::string& val);
 };
 
 #endif

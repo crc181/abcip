@@ -31,14 +31,14 @@ public:
     ~EthProtocol() override;
 
     void Store(Cake&, bool) override;
-    bool Bind(const string&) override;
+    bool Bind(const std::string&) override;
 
     const uint8_t* GetHeader(Packet&, uint32_t&) override;
 
     static Pimp* GetPimp();
 
     static const char* GetBindings();
-    static bool GetBinding(const string& s, uint16_t& et);
+    static bool GetBinding(const std::string& s, uint16_t& et);
 
 private:
     class EthImpl* my;

@@ -34,6 +34,8 @@
 #include "data_parser.h"
 #include "stream_reader.h"
 
+using namespace std;
+
 #define SET_ERROR(modinst, ...)    daq_base_api->set_errbuf(modinst, __VA_ARGS__)
 
 #define ABC_DAQ_DEFAULT_POOL_SIZE 16

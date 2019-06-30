@@ -26,6 +26,8 @@
 #include "opt6.h"
 #include "cake.h"
 
+using namespace std;
+
 struct Opt6Hdr {
     uint8_t next;
     uint8_t len;

@@ -24,14 +24,13 @@
 #define __USER_H__
 
 #include <string>
-using namespace std;
 
 #include "cake.h"
 #include "packet.h"
 
 class User {
 public:
-    static User* New(const string&);
+    static User* New(const std::string&);
     virtual ~User() = default;
 
     virtual void Setup(const char* id) = 0;
@@ -39,11 +38,11 @@ public:
     virtual const uint8_t* Send(Packet&, uint32_t&) = 0;
     virtual void Recv(Packet&) = 0;
 
-    static void HelpTypes(ostream&);
-    static void HelpConfig(ostream&);
-    static void HelpPacket(ostream&);
+    static void HelpTypes(std::ostream&);
+    static void HelpConfig(std::ostream&);
+    static void HelpPacket(std::ostream&);
 
-    static bool Validate(const string&, const string&, const string&);
+    static bool Validate(const std::string&, const std::string&, const std::string&);
 
     Cake& GetCake() { return cake; }
 

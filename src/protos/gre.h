@@ -30,7 +30,7 @@ public:
     GreProtocol();
     ~GreProtocol() override;
 
-    bool Bind(const string&) override;
+    bool Bind(const std::string&) override;
 
     const uint8_t* GetHeader(Packet&, uint32_t&) override;
     const uint8_t* GetOptions(const Packet&, uint32_t&) override;
