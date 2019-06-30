@@ -76,7 +76,7 @@ static int daq_instantiate(const DAQ_ModuleConfig_h modcfg, DAQ_ModuleInstance_h
 
 static void daq_destroy(void* handle)
 {
-    Daq* daq = (Daq*)handle;
+    Daq* daq = static_cast<Daq*>(handle);
     delete daq;
 }
 
@@ -85,92 +85,92 @@ static void daq_destroy(void* handle)
 
 static int daq_set_filter (void* handle, const char* filter)
 {
-    Daq* daq = (Daq*)handle;
+    Daq* daq = static_cast<Daq*>(handle);
     return daq->SetFilter(filter);
 }
 
 static int daq_start (void* handle)
 {
-    Daq* daq = (Daq*)handle;
+    Daq* daq = static_cast<Daq*>(handle);
     return daq->Start();
 }
 
 static int daq_inject(void *handle, DAQ_MsgType type, const void *hdr, const uint8_t *data, uint32_t data_len)
 {
-    Daq* daq = (Daq*)handle;
+    Daq* daq = static_cast<Daq*>(handle);
     return daq->Inject(type, hdr, data, data_len);
 }
 
 static int daq_inject_relative(void* handle, const DAQ_Msg_t* msg, const uint8_t* data,
         uint32_t data_len, int reverse)
 {
-    Daq* daq = (Daq*)handle;
+    Daq* daq = static_cast<Daq*>(handle);
     return daq->InjectRelative(msg, data, data_len, reverse);
 }
 
 static int daq_interrupt(void* handle)
 {
-    Daq* daq = (Daq*)handle;
+    Daq* daq = static_cast<Daq*>(handle);
     return daq->Interrupt();
 }
 
 static int daq_stop (void* handle)
 {
-    Daq* daq = (Daq*)handle;
+    Daq* daq = static_cast<Daq*>(handle);
     return daq->Stop();
 }
 
 static int daq_ioctl(void* handle, DAQ_IoctlCmd cmd, void* arg, size_t arglen)
 {
-    Daq* daq = (Daq*)handle;
+    Daq* daq = static_cast<Daq*>(handle);
     return daq->Ioctl(cmd, arg, arglen);
 }
 
 static int daq_get_stats (void* handle, DAQ_Stats_t* stats)
 {
-    Daq* daq = (Daq*)handle;
+    Daq* daq = static_cast<Daq*>(handle);
     return daq->GetStats(stats);
 }
 
 static void daq_reset_stats (void* handle)
 {
-    Daq* daq = (Daq*)handle;
+    Daq* daq = static_cast<Daq*>(handle);
     daq->ResetStats();
 }
 
 static int daq_get_snaplen (void* handle)
 {
-    Daq* daq = (Daq*)handle;
+    Daq* daq = static_cast<Daq*>(handle);
     return daq->GetSnaplen();
 }
 
 static uint32_t daq_get_capabilities (void* handle)
 {
-    Daq* daq = (Daq*)handle;
+    Daq* daq = static_cast<Daq*>(handle);
     return daq->GetCapabilities();
 }
 
 static int daq_get_datalink_type (void* handle)
 {
-    Daq* daq = (Daq*)handle;
+    Daq* daq = static_cast<Daq*>(handle);
     return daq->GetDatalinkType();
 }
 
 static unsigned daq_msg_receive(void* handle, const unsigned max_recv, const DAQ_Msg_t* msgs[], DAQ_RecvStatus* rstat)
 {
-    Daq* daq = (Daq*)handle;
+    Daq* daq = static_cast<Daq*>(handle);
     return daq->MsgReceive(max_recv, msgs, rstat);
 }
 
 static int daq_msg_finalize(void* handle, const DAQ_Msg_t* msg, DAQ_Verdict verdict)
 {
-    Daq* daq = (Daq*)handle;
+    Daq* daq = static_cast<Daq*>(handle);
     return daq->MsgFinalize(msg, verdict);
 }
 
 static int daq_get_msg_pool_info(void* handle, DAQ_MsgPoolInfo_t* info)
 {
-    Daq* daq = (Daq*)handle;
+    Daq* daq = static_cast<Daq*>(handle);
     return daq->GetMsgPoolInfo(info);
 }
 

@@ -113,7 +113,7 @@ void Cake::Dump () {
         AttributeMap::iterator it; 
         AttributeMap& m = my->attribs[i];
 
-        for ( it = m.begin(); it != m.end(); it++ ) { 
+        for ( it = m.begin(); it != m.end(); ++it ) { 
             Attribute& a = it->second;
             cout << i << ": " << it->first;
             cout << "=";
@@ -128,7 +128,7 @@ void Cake::Reset () {
         AttributeMap::iterator it; 
         AttributeMap& m = my->attribs[i];
 
-        for ( it = m.begin(); it != m.end(); it++ ) { 
+        for ( it = m.begin(); it != m.end(); ++it ) { 
             it->second.Reset();
         }
     }

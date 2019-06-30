@@ -42,7 +42,7 @@ public:
     PileImpl(User& a) : user(a) { }
 
     ProtoList protos;
-    PseudoHdr* ph;
+    PseudoHdr* ph = nullptr;
 
     User& user;
 
@@ -118,7 +118,7 @@ void Pile::Configure (Cake& cake, bool a2b) {
     while ( it != my->protos.end() ) {
         (*it)->Fetch(cake, a2b);
         cake.Next();
-        it++;
+        ++it;
     }
 }
 

@@ -78,7 +78,7 @@ bool MplsProtocol::Bind (const string& type) {
     else 
         return false;
 
-    my->bos = my->h.lse & 0x100 ? 1 : 0;
+    my->bos = (my->h.lse & 0x100) ? 1 : 0;
     return true;
 }
 

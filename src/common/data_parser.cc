@@ -70,7 +70,6 @@ void DataParser::GetLocation (int& y, int& x) {
 
 bool DataParser::Load (Command& cmd) {
     string tok, proto, ack = "ack", flag = "1";
-    unsigned index = 4;
     char c;
 
     my->ok = true;
@@ -85,6 +84,7 @@ bool DataParser::Load (Command& cmd) {
         ++my->pos;
     }
     if ( tok.size() ) {
+        unsigned index = 4;
         cmd.SetName(my->name);
         cmd.AddOption(new Option(index, my->key, tok, proto));
         cmd.AddOption(new Option(index, ack, flag, proto));

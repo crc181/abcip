@@ -279,7 +279,7 @@ AbcIo::AbcIo (
 AbcIo::~AbcIo () {
     AbcMap::iterator it;
 
-    for ( it = my->sessions.begin(); it != my->sessions.end(); it++ )
+    for ( it = my->sessions.begin(); it != my->sessions.end(); ++it )
         delete it->second;
 
     if ( my->writer )

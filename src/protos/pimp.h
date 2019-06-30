@@ -48,7 +48,7 @@ public:
     bool Validate(FieldType, const std::string& key, const std::string& val);
 
 protected:
-    Pimp(const char* s, const Field*);
+    Pimp(const char* s, const Field* f) : type(s), fields(f) { }
 
     void HelpConfig(std::ostream&, const Field*);
     void HelpPacket(std::ostream&, const Field*);

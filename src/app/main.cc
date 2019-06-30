@@ -221,12 +221,11 @@ int main (int argc, char* argv[]) {
 
     Reader* reader = new StreamReader;
 
-    // c'mon gcc!  this produces a bogus error w/o casting:
-    // conditional expression between distinct pointer types
-    // ‘DataParser*’ and ‘CommandParser*’ lacks a cast
-    Parser* parser = c.raw ?
-        (Parser*)new DataParser(reader) :
-        (Parser*)new CommandParser(reader, "a,b,c,d");
+    Parser* parser;
+    if (c.raw)
+        parser = new DataParser(reader);
+    else
+        parser = new CommandParser(reader, "a,b,c,d");
 
     Writer* writer = c.pcap ? 
         new PcapWriter(c.pcap, c.stack, c.snap) : nullptr;

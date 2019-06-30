@@ -119,7 +119,7 @@ unsigned DaqWriter::GetMsgCount()
 
 void DaqWriter::ReleaseMsg(const DAQ_Msg_t* msg)
 {
-    DaqWriterPktDesc* desc = (DaqWriterPktDesc*) msg->priv;
+    DaqWriterPktDesc* desc = static_cast<DaqWriterPktDesc*>(msg->priv);
     impl->pool.freelist.push_back(desc);
 }
 
