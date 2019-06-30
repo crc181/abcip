@@ -20,8 +20,13 @@
 // pseudoheader stuff
 //-------------------------------------------------------------------------
 
-#include <cstdint>
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include "pseudo_hdr.h"
+
+#include <cstdint>
 
 void PseudoHdr::GetAddresses (
     const Packet& p, const char*& src, const char*& dst

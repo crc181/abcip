@@ -20,14 +20,18 @@
 // icmp6 stuff
 //-------------------------------------------------------------------------
 
-#include <iostream>
-//#include <netinet/icmp6.h>
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 
-#define ICMP6_ECHO_REQUEST 128
+#include "icmp6.h"
+
+#include <iostream>
 
 #include "cake.h"
-#include "icmp6.h"
 #include "pseudo_hdr.h"
+
+#define ICMP6_ECHO_REQUEST 128
 
 static const char* s_type = "icmp6";
 

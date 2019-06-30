@@ -20,16 +20,17 @@
 // icmp4 stuff
 //-------------------------------------------------------------------------
 
-#include <iostream>
-
-#define ICMP_ECHO 8
-
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
 #include "icmp4.h"
+
+#include <iostream>
+
 #include "cake.h"
+
+#define ICMP_ECHO 8
 
 static const char* s_type = "icmp4";
 

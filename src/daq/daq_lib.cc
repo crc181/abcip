@@ -20,13 +20,14 @@
 #include "config.h"
 #endif
 
-#include <cstdlib>
-#include <cstring>
-#include <cstdio>
+#include "daq_lib.h"
 
 #include <daq_module_api.h>
 
-#include "daq_lib.h"
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+
 #include "base_daq.h"
 
 static DAQ_BaseAPI_t daq_base_api;

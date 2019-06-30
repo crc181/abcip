@@ -20,11 +20,17 @@
 // ip6 stuff
 //-------------------------------------------------------------------------
 
-#include <netinet/ip.h>
-#include <netinet/ip6.h>
-#include <cstdio>
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 
 #include "ip6.h"
+
+#include <netinet/ip.h>
+#include <netinet/ip6.h>
+
+#include <cstdio>
+
 #include "cake.h"
 #include "pseudo_hdr.h"
 

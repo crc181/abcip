@@ -22,11 +22,11 @@
 
 #include "abc_daq.h"
 
-#include <cstdio>
-#include <cstring>
-
 #include <daq_dlt.h>
 #include <daq_module_api.h>
+
+#include <cstdio>
+#include <cstring>
 
 #include "abc_io.h"
 #include "cmd_parser.h"

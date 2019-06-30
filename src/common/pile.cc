@@ -20,14 +20,20 @@
 // pile stuff
 //-------------------------------------------------------------------------
 
-#include <vector>
-using namespace std;
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 
 #include "pile.h"
+
+#include <vector>
+
 #include "cake.h"
-#include "user.h"
 #include "protocol.h"
 #include "pseudo_hdr.h"
+#include "user.h"
+
+using namespace std;
 
 typedef vector<Protocol*> ProtoList;
 

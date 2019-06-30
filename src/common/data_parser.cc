@@ -20,10 +20,15 @@
 // parsing stuff
 //-------------------------------------------------------------------------
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include "data_parser.h"
+
 #include <iostream>
 
 #include "attribute.h"
-#include "data_parser.h"
 #include "command.h"
 #include "reader.h"
 

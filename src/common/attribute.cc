@@ -20,11 +20,16 @@
 // attribute stuff
 //-------------------------------------------------------------------------
 
-#include <ostream>
-using namespace std;
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include "attribute.h"
 
 #include <cstdlib>
-#include "attribute.h"
+#include <ostream>
+
+using namespace std;
 
 int32_t Attribute::GetValue (int32_t dflt) {
     char* end;

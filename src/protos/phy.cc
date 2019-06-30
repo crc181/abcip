@@ -20,12 +20,17 @@
 // physical layer stuff
 //-------------------------------------------------------------------------
 
-#include <stdlib.h>
-#include <string.h>
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include "phy.h"
+
+#include <cstdlib>
+#include <cstring>
 #include <string>
 
 #include "cake.h"
-#include "phy.h"
 
 using namespace std;
 

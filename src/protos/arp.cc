@@ -20,12 +20,11 @@
 // arp stuff
 //-------------------------------------------------------------------------
 
-#include <cstdlib>
-#include <cstring>
-
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+
+#include "arp.h"
 
 #ifdef LINUX
 #include <netinet/ether.h>
@@ -37,10 +36,11 @@
 #include <net/ethernet.h>
 #endif
 
+#include <cstdlib>
+#include <cstring>
 #include <iostream>
 
 #include "cake.h"
-#include "arp.h"
 
 using namespace std;
 

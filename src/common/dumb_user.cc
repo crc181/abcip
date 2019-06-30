@@ -20,12 +20,17 @@
 // dumb user stuff
 //-------------------------------------------------------------------------
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include "dumb_user.h"
+
 #include <fstream>
 #include <sstream>
 
 #include "cake.h"
 #include "data.h"
-#include "dumb_user.h"
 #include "field.h"
 
 using namespace std;

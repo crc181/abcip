@@ -20,9 +20,14 @@
 // protocol stuff
 //-------------------------------------------------------------------------
 
-#include <cstdlib>
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 
 #include "pimp.h"
+
+#include <cstdlib>
+
 #include "status.h"
 
 using namespace std;

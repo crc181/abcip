@@ -20,9 +20,14 @@
 // protocol stuff
 //-------------------------------------------------------------------------
 
-#include <cstdlib>
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 
 #include "protocol.h"
+
+#include <cstdlib>
+
 #include "pseudo_hdr.h"
 
 using namespace std;

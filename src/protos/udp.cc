@@ -20,11 +20,16 @@
 // udp stuff
 //-------------------------------------------------------------------------
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include "udp.h"
+
 #include <ostream>
 
 #include "cake.h"
 #include "pseudo_hdr.h"
-#include "udp.h"
 
 using namespace std;
 

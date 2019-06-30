@@ -20,19 +20,21 @@
 // eth stuff
 //-------------------------------------------------------------------------
 
-#include <cstdlib>
-#include <cstring>
-#include <net/ethernet.h>
-
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+
+#include "eth.h"
+
+#include <net/ethernet.h>
 
 #ifdef LINUX
 #include <netinet/ether.h>
 #endif
 
-#include "eth.h"
+#include <cstdlib>
+#include <cstring>
+
 #include "cake.h"
 
 using namespace std;

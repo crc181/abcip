@@ -25,10 +25,6 @@
 #ifndef __PACKET_H__
 #define __PACKET_H__
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include <cstdint>
 #include <string>
 #include <iostream>

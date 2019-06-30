@@ -20,6 +20,10 @@
 // status stuff
 //-------------------------------------------------------------------------
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include "status.h"
 
 using namespace std;

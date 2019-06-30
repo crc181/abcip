@@ -20,11 +20,16 @@
 // PPP over Ethenet stuff
 //-------------------------------------------------------------------------
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include "pppoe.h"
+
 #include <cstdio>
 #include <ostream>
 
 #include "cake.h"
-#include "pppoe.h"
 
 using namespace std;
 

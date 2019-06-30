@@ -38,13 +38,13 @@
 // Makefile.am).
 //-------------------------------------------------------------------------
 
-#include <iostream>
-#include <cstdlib>
-#include <cstring>
-
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+
+#include <cstdlib>
+#include <cstring>
+#include <iostream>
 
 #include "abc_io.h"
 #include "abc_ip.h"
