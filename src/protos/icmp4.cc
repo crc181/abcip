@@ -114,11 +114,11 @@ static Field s_fields[] = {
 
 class Icmp4Pimp : public Pimp {
 public:
-    Icmp4Pimp() : Pimp(s_type, s_fields) { };
+    Icmp4Pimp() : Pimp(s_type, s_fields) { }
 
     Protocol* New(PseudoHdr*) override {
         return new Icmp4Protocol();
-    };
+    }
 };
 
 Pimp* Icmp4Protocol::GetPimp () { return new Icmp4Pimp; }

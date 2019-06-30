@@ -262,11 +262,11 @@ static Field s_fields[] = {
 
 class Ip4Pimp : public Pimp {
 public:
-    Ip4Pimp() : Pimp(s_type, s_fields) { };
+    Ip4Pimp() : Pimp(s_type, s_fields) { }
 
     Protocol* New(PseudoHdr*) override {
         return new Ip4Protocol();
-    };
+    }
 
     void HelpBind(ostream&) override;
 };

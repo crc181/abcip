@@ -163,11 +163,11 @@ static Field s_fields[] = {
 
 class Ip6Pimp : public Pimp {
 public:
-    Ip6Pimp() : Pimp(s_type, s_fields) { };
+    Ip6Pimp() : Pimp(s_type, s_fields) { }
 
     Protocol* New(PseudoHdr*) override {
         return new Ip6Protocol();
-    };
+    }
 
     void HelpBind(ostream&) override;
 };

@@ -87,11 +87,11 @@ static Field s_fields[] = {
 
 class PPPoEPimp : public Pimp {
 public:
-    PPPoEPimp() : Pimp(s_type, s_fields) { };
+    PPPoEPimp() : Pimp(s_type, s_fields) { }
 
     Protocol* New(PseudoHdr*) override {
         return new PPPoEProtocol();
-    };
+    }
 
     void HelpBind(ostream&) override;
 };

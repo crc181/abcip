@@ -152,11 +152,11 @@ static Field s_fields[] = {
 
 class EthPimp : public Pimp {
 public:
-    EthPimp() : Pimp(s_type, s_fields) { };
+    EthPimp() : Pimp(s_type, s_fields) { }
 
     Protocol* New(PseudoHdr*) override {
         return new EthProtocol();
-    };
+    }
 
     void HelpBind(ostream&) override;
 };

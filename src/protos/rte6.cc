@@ -110,11 +110,11 @@ static Field s_fields[] = {
 
 class Rte6Pimp : public Pimp {
 public:
-    Rte6Pimp() : Pimp(s_type, s_fields) { };
+    Rte6Pimp() : Pimp(s_type, s_fields) { }
 
     Protocol* New(PseudoHdr*) override {
         return new Rte6Protocol();
-    };
+    }
 
     void HelpBind(ostream&) override;
 };

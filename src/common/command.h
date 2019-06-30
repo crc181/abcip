@@ -37,9 +37,9 @@ public:
         value = v;
         proto = p;
         row = col = 0;
-    };
+    }
     void SetPos(unsigned r, unsigned c)
-        { row = r; col = c; };
+        { row = r; col = c; }
 
 public:
     unsigned index;
@@ -56,28 +56,28 @@ public:
     Command() = default;
     virtual ~Command() = default;
 
-    void SetName(string& s) { name = s; };
-    string& GetName() { return name; };
+    void SetName(string& s) { name = s; }
+    string& GetName() { return name; }
 
-    void SetContext(string& s) { context = s; };
-    string& GetContext() { return context; };
+    void SetContext(string& s) { context = s; }
+    string& GetContext() { return context; }
 
     void AddOption(Option* o) {
         opts.push_back(o);
-    };
+    }
     Option* GetOption(unsigned at) {
         return at < opts.size() ? opts[at] : nullptr;
-    };
+    }
     Option* operator[](unsigned at) {
         return at < opts.size() ? opts[at] : nullptr;
-    };
+    }
     void Clear() {
         for ( OptVector::iterator it = opts.begin(); it != opts.end(); ++it )
             delete *it;
         opts.clear();
         context.clear();
         name.clear();
-    };
+    }
 private:
     string name;
     string context;

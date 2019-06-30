@@ -59,11 +59,11 @@ static Field s_fields[] = {
 
 class ModbusPimp : public Pimp {
 public:
-    ModbusPimp() : Pimp(s_type, s_fields) { };
+    ModbusPimp() : Pimp(s_type, s_fields) { }
 
     Protocol* New(PseudoHdr*) override {
         return new ModbusProtocol();
-    };
+    }
 };
 
 Pimp* ModbusProtocol::GetPimp ()

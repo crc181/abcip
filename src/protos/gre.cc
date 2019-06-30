@@ -147,11 +147,11 @@ static Field s_fields[] = {
 
 class GrePimp : public Pimp {
 public:
-    GrePimp() : Pimp(s_type, s_fields) { };
+    GrePimp() : Pimp(s_type, s_fields) { }
 
     Protocol* New(PseudoHdr*) override {
         return new GreProtocol();
-    };
+    }
 
     void HelpBind(ostream&) override;
 };

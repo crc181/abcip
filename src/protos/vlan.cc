@@ -96,11 +96,11 @@ static Field s_fields[] = {
 
 class VlanPimp : public Pimp {
 public:
-    VlanPimp() : Pimp(s_type, s_fields) { };
+    VlanPimp() : Pimp(s_type, s_fields) { }
 
     Protocol* New(PseudoHdr*) override {
         return new VlanProtocol();
-    };
+    }
 
     void HelpBind(ostream&) override;
 };

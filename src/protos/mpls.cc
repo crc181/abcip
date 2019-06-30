@@ -111,11 +111,11 @@ static Field s_fields[] = {
 
 class MplsPimp : public Pimp {
 public:
-    MplsPimp() : Pimp(s_type, s_fields) { };
+    MplsPimp() : Pimp(s_type, s_fields) { }
 
     Protocol* New(PseudoHdr*) override {
         return new MplsProtocol();
-    };
+    }
 
     void HelpBind(ostream&) override;
 };
