@@ -28,18 +28,18 @@
 class Ip4Protocol : public Protocol {
 public:
     Ip4Protocol();
-    virtual ~Ip4Protocol();
+    ~Ip4Protocol() override;
 
-    virtual void Store(Cake&, bool);
-    virtual bool Bind(const string&);
+    void Store(Cake&, bool) override;
+    bool Bind(const string&) override;
 
-    virtual PseudoHdr* GetPseudoHdr(unsigned lyr);
+    PseudoHdr* GetPseudoHdr(unsigned lyr) override;
 
-    virtual const uint8_t* GetHeader(Packet&, uint32_t&);
-    virtual const uint8_t* GetOptions(const Packet&, uint32_t&);
-    virtual const uint8_t* GetPayload(const Packet&, uint32_t&);
+    const uint8_t* GetHeader(Packet&, uint32_t&) override;
+    const uint8_t* GetOptions(const Packet&, uint32_t&) override;
+    const uint8_t* GetPayload(const Packet&, uint32_t&) override;
 
-    virtual bool HasPayload();
+    bool HasPayload() override;
     static Pimp* GetPimp();
 
 protected:

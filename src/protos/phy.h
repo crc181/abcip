@@ -32,15 +32,15 @@
 class PhyProtocol : public Protocol {
 public:
     PhyProtocol();
-    virtual ~PhyProtocol();
+    ~PhyProtocol() override;
 
-    virtual void Fetch(Cake&, bool);
+    void Fetch(Cake&, bool) override;
 
-    virtual bool Bind(const string&);
-    virtual const uint8_t* GetHeader(Packet&, uint32_t&);
-    virtual const uint8_t* GetPayload(const Packet&, uint32_t&);
+    bool Bind(const string&) override;
+    const uint8_t* GetHeader(Packet&, uint32_t&) override;
+    const uint8_t* GetPayload(const Packet&, uint32_t&) override;
 
-    virtual bool HasPayload();
+    bool HasPayload() override;
     static Pimp* GetPimp();
 
 private:

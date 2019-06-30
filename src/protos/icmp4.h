@@ -28,9 +28,9 @@
 class Icmp4Protocol : public Protocol {
 public:
     Icmp4Protocol();
-    virtual ~Icmp4Protocol();
+    ~Icmp4Protocol() override;
 
-    virtual const uint8_t* GetHeader(Packet&, uint32_t&);
+    const uint8_t* GetHeader(Packet&, uint32_t&) override;
 
     static Pimp* GetPimp();
 

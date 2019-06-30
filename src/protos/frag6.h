@@ -28,14 +28,14 @@
 class Frag6Protocol : public Protocol {
 public:
     Frag6Protocol();
-    virtual ~Frag6Protocol();
+    ~Frag6Protocol() override;
 
-    virtual bool Bind(const string&);
+    bool Bind(const string&) override;
 
-    virtual const uint8_t* GetHeader(Packet&, uint32_t&);
-    virtual const uint8_t* GetPayload(const Packet&, uint32_t&);
+    const uint8_t* GetHeader(Packet&, uint32_t&) override;
+    const uint8_t* GetPayload(const Packet&, uint32_t&) override;
 
-    virtual bool HasPayload();
+    bool HasPayload() override;
     static Pimp* GetPimp();
 
 private:

@@ -367,7 +367,7 @@ class TcpPimp : public Pimp {
 public:
     TcpPimp() : Pimp(s_type, s_fields) { };
 
-    Protocol* New(PseudoHdr* ph) {
+    Protocol* New(PseudoHdr* ph) override {
         return new TcpProtocol(ph);
     };
 };

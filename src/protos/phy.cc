@@ -290,11 +290,11 @@ class PhyPimp : public Pimp {
 public:
     PhyPimp() : Pimp(s_type, s_fields) { };
 
-    Protocol* New(PseudoHdr*) {
+    Protocol* New(PseudoHdr*) override {
         return new PhyProtocol();
     };
 
-    void HelpBind(ostream&);
+    void HelpBind(ostream&) override;
 };
 
 void PhyPimp::HelpBind (ostream& out) {

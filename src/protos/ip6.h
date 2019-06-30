@@ -28,13 +28,13 @@
 class Ip6Protocol : public Protocol {
 public:
     Ip6Protocol();
-    ~Ip6Protocol();
+    ~Ip6Protocol() override;
 
-    virtual void Store(Cake&, bool);
-    virtual bool Bind(const string&);
+    void Store(Cake&, bool) override;
+    bool Bind(const string&) override;
 
-    virtual PseudoHdr* GetPseudoHdr(unsigned lyr);
-    virtual const uint8_t* GetHeader(Packet&, uint32_t&);
+    PseudoHdr* GetPseudoHdr(unsigned lyr) override;
+    const uint8_t* GetHeader(Packet&, uint32_t&) override;
 
     static Pimp* GetPimp();
     static const char* GetBindings();

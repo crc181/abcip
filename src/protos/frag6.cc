@@ -155,11 +155,11 @@ class Frag6Pimp : public Pimp {
 public:
     Frag6Pimp() : Pimp(s_type, s_fields) { };
 
-    Protocol* New(PseudoHdr*) {
+    Protocol* New(PseudoHdr*) override {
         return new Frag6Protocol();
     };
 
-    void HelpBind(ostream&);
+    void HelpBind(ostream&) override;
 };
 
 void Frag6Pimp::HelpBind (ostream& out) {

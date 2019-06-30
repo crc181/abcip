@@ -48,11 +48,11 @@ class RawPimp : public Pimp {
 public:
     RawPimp() : Pimp(s_type, nullptr) { };
 
-    Protocol* New(PseudoHdr*) {
+    Protocol* New(PseudoHdr*) override {
         return new RawProtocol();
     };
 
-    void HelpBind(ostream&);
+    void HelpBind(ostream&) override;
 };
 
 void RawPimp::HelpBind (ostream& out) {

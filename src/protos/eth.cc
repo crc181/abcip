@@ -154,11 +154,11 @@ class EthPimp : public Pimp {
 public:
     EthPimp() : Pimp(s_type, s_fields) { };
 
-    Protocol* New(PseudoHdr*) {
+    Protocol* New(PseudoHdr*) override {
         return new EthProtocol();
     };
 
-    void HelpBind(ostream&);
+    void HelpBind(ostream&) override;
 };
 
 void EthPimp::HelpBind (ostream& out) {

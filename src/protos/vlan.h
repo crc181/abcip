@@ -28,13 +28,13 @@
 class VlanProtocol : public Protocol {
 public:
     VlanProtocol();
-    virtual ~VlanProtocol();
+    ~VlanProtocol() override;
 
-    virtual bool Bind(const string&);
+    bool Bind(const string&) override;
 
-    virtual const uint8_t* GetHeader(Packet&, uint32_t&);
+    const uint8_t* GetHeader(Packet&, uint32_t&) override;
 
-    virtual void Store(Cake&, bool);
+    void Store(Cake&, bool) override;
 
     static Pimp* GetPimp();
 

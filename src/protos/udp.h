@@ -28,11 +28,11 @@
 class UdpProtocol : public Protocol {
 public:
     UdpProtocol(PseudoHdr*);
-    virtual ~UdpProtocol();
+    ~UdpProtocol() override;
 
-    virtual void Store(Cake&, bool);
+    void Store(Cake&, bool) override;
 
-    virtual const uint8_t* GetHeader(Packet&, uint32_t&);
+    const uint8_t* GetHeader(Packet&, uint32_t&) override;
 
     static Pimp* GetPimp();
 
