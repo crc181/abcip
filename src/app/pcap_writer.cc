@@ -23,10 +23,10 @@
 #include <iostream>
 using namespace std;
 
-#include <math.h>
+#include <cmath>
 #include <pcap.h>
-#include <stdlib.h>
-#include <string.h>
+#include <cstdlib>
+#include <cstring>
 
 #include "pcap_writer.h"
 

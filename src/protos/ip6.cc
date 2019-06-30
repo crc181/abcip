@@ -22,7 +22,7 @@
 
 #include <netinet/ip.h>
 #include <netinet/ip6.h>
-#include <stdio.h>
+#include <cstdio>
 
 #include "ip6.h"
 #include "cake.h"

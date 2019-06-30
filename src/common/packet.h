@@ -29,7 +29,7 @@
 #include "config.h"
 #endif
 
-#include <stdint.h>
+#include <cstdint>
 #include <string>
 #include <iostream>
 

@@ -20,7 +20,7 @@
 // protocol stuff
 //-------------------------------------------------------------------------
 
-#include <stdlib.h>
+#include <cstdlib>
 
 #include "protocol.h"
 #include "pseudo_hdr.h"

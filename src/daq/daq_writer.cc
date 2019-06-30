@@ -20,8 +20,8 @@
 // daq writer stuff
 //-------------------------------------------------------------------------
 
-#include <math.h>
-#include <string.h>
+#include <cmath>
+#include <cstring>
 
 #include <vector>
 

@@ -23,7 +23,7 @@
 #ifndef __PSEUDO_HDR_H__
 #define __PSEUDO_HDR_H__
 
-#include <stdint.h>
+#include <cstdint>
 #include <arpa/inet.h>
 #include "protocol.h"
 

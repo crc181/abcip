@@ -27,7 +27,7 @@
 // some make magic to soft code the bindings.
 //-------------------------------------------------------------------------
 
-#include <stdlib.h>
+#include <cstdlib>
 #include <map>
 
 #include "protocol.h"

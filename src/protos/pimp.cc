@@ -20,7 +20,7 @@
 // protocol stuff
 //-------------------------------------------------------------------------
 
-#include <stdlib.h>
+#include <cstdlib>
 
 #include "pimp.h"
 #include "status.h"

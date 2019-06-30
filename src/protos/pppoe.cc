@@ -20,7 +20,7 @@
 // PPP over Ethenet stuff
 //-------------------------------------------------------------------------
 
-#include <stdio.h>
+#include <cstdio>
 #include <ostream>
 
 #include "cake.h"

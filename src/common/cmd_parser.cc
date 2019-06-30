@@ -23,8 +23,8 @@
 #include <iostream>
 using namespace std;
 
-#include <string.h>
-#include <stdlib.h>
+#include <cstring>
+#include <cstdlib>
 
 #include "attribute.h"
 #include "cmd_parser.h"

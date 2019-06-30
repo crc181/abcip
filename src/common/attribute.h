@@ -23,7 +23,7 @@
 #ifndef __ATTRIBUTE_H__
 #define __ATTRIBUTE_H__
 
-#include <stdint.h>
+#include <cstdint>
 
 #include <map>
 #include <string>

@@ -20,8 +20,8 @@
 // abcip stuff
 //-------------------------------------------------------------------------
 
-#include <stdlib.h>
-#include <string.h>
+#include <cstdlib>
+#include <cstring>
 
 #include "abc_ip.h"
 #include "pile.h"
