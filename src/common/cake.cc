@@ -20,10 +20,15 @@
 // cake stuff
 //-------------------------------------------------------------------------
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include "cake.h"
+
 #include <iostream>
 
 #include "attribute.h"
-#include "cake.h"
 
 using namespace std;
 

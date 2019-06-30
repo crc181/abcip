@@ -20,19 +20,24 @@
 // abcip stuff
 //-------------------------------------------------------------------------
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include "abc_ip.h"
+
 #include <cstdlib>
 #include <cstring>
 
-#include "abc_ip.h"
-#include "pile.h"
-#include "user.h"
-#include "writer.h"
-#include "packet.h"
-#include "parser.h"
-#include "status.h"
-
 #include "../protos/protocol.h"
 #include "../protos/prototool.h"
+
+#include "packet.h"
+#include "parser.h"
+#include "pile.h"
+#include "status.h"
+#include "user.h"
+#include "writer.h"
 
 using namespace std;
 

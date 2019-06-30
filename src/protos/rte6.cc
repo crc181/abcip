@@ -20,11 +20,16 @@
 // ip6 extension hop-by-hop and dest options stuff
 //-------------------------------------------------------------------------
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include "rte6.h"
+
 #include <netinet/in.h>
 
-#include "ip6.h"
-#include "rte6.h"
 #include "cake.h"
+#include "ip6.h"
 
 using namespace std;
 

@@ -20,17 +20,17 @@
 // abcio stuff
 //-------------------------------------------------------------------------
 
-#include <cassert>
-#include <cstdlib>
-
-#include <iostream>
-#include <map>
-
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
 #include "abc_io.h"
+
+#include <cassert>
+#include <cstdlib>
+#include <iostream>
+#include <map>
+
 #include "abc_ip.h"
 #include "cake.h"
 #include "command.h"

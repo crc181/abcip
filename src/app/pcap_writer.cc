@@ -20,15 +20,20 @@
 // pcap writer stuff
 //-------------------------------------------------------------------------
 
-#include <iostream>
-using namespace std;
-
-#include <cmath>
-#include <pcap.h>
-#include <cstdlib>
-#include <cstring>
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 
 #include "pcap_writer.h"
+
+#include <pcap.h>
+
+#include <cmath>
+#include <cstdlib>
+#include <cstring>
+#include <iostream>
+
+using namespace std;
 
 #define MAX_SNAP 65535
 

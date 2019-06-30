@@ -16,19 +16,19 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //--------------------------------------------------------------------- EOL
 
-#include <cstdlib>
-#include <cstring>
-
-#include <arpa/inet.h>
-#include <net/ethernet.h>
-
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
+#include <arpa/inet.h>
+#include <net/ethernet.h>
+
 #ifdef LINUX
 #include <netinet/ether.h>
 #endif
+
+#include <cstdlib>
+#include <cstring>
 
 #include "field.h"
 #include "status.h"

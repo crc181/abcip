@@ -20,10 +20,15 @@
 // mpls stuff
 //-------------------------------------------------------------------------
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include "mpls.h"
+
 #include <ostream>
 
 #include "cake.h"
-#include "mpls.h"
 
 using namespace std;
 

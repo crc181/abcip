@@ -20,11 +20,16 @@
 // vlan stuff
 //-------------------------------------------------------------------------
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include "vlan.h"
+
 #include <net/ethernet.h>
 
 #include "cake.h"
 #include "eth.h"
-#include "vlan.h"
 
 using namespace std;
 

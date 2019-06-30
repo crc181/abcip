@@ -20,10 +20,15 @@
 // gre stuff
 //-------------------------------------------------------------------------
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include "gre.h"
+
 #include <netinet/in.h>
 
 #include "eth.h"
-#include "gre.h"
 #include "cake.h"
 
 using namespace std;

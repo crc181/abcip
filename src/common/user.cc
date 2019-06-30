@@ -20,7 +20,12 @@
 // user stuff
 //-------------------------------------------------------------------------
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include "user.h"
+
 #include "dumb_user.h"
 
 using namespace std;

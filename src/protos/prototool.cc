@@ -27,11 +27,16 @@
 // some make magic to soft code the bindings.
 //-------------------------------------------------------------------------
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include "prototool.h"
+
 #include <cstdlib>
 #include <map>
 
 #include "protocol.h"
-#include "prototool.h"
 #include "status.h"
 
 #include "prototool-inc.h"

@@ -25,10 +25,6 @@
 
 #include "protocol.h"
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 class PhyProtocol : public Protocol {
 public:
     PhyProtocol();

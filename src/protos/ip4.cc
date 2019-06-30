@@ -20,16 +20,22 @@
 // ip4 stuff
 //-------------------------------------------------------------------------
 
-#include <netinet/in.h>
-#include <netinet/ip.h>
-#include <cstdio>
-
-#include <sstream>
-using namespace std;
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 
 #include "ip4.h"
+
+#include <netinet/in.h>
+#include <netinet/ip.h>
+
+#include <cstdio>
+#include <sstream>
+
 #include "cake.h"
 #include "pseudo_hdr.h"
+
+using namespace std;
 
 #define IP4_A   "10.1.2"  // + .layer
 #define IP4_B   "10.9.8.7"

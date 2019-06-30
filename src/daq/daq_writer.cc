@@ -20,14 +20,17 @@
 // daq writer stuff
 //-------------------------------------------------------------------------
 
-#include <cmath>
-#include <cstring>
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 
-#include <vector>
+#include "daq_writer.h"
 
 #include <daq_common.h>
 
-#include "daq_writer.h"
+#include <cmath>
+#include <cstring>
+#include <vector>
 
 using namespace std;
 

@@ -20,11 +20,16 @@
 // tcp stuff
 //-------------------------------------------------------------------------
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include "tcp.h"
+
 #include <netinet/tcp.h>
 
 #include "cake.h"
 #include "pseudo_hdr.h"
-#include "tcp.h"
 
 using namespace std;
 

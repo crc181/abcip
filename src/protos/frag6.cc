@@ -20,11 +20,16 @@
 // ip6 extension frag stuff
 //-------------------------------------------------------------------------
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include "frag6.h"
+
 #include <netinet/in.h>
 
-#include "ip6.h"
-#include "frag6.h"
 #include "cake.h"
+#include "ip6.h"
 
 using namespace std;
 

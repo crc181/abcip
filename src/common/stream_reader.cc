@@ -20,9 +20,13 @@
 // stream_reader stuff
 //-------------------------------------------------------------------------
 
-#include <fstream>
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 
 #include "stream_reader.h"
+
+#include <fstream>
 
 using namespace std;
 
