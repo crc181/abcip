@@ -91,7 +91,7 @@ static Field s_fields[] = {
     { FT_PKT, "cfi", "u1", "set canonical indicator" },
     { FT_PKT, "vid", "u12", "set vlan id" },
     { FT_MAX, "pid", "u16", "set protocol id" },
-    { FT_MAX, NULL, NULL, NULL }
+    { FT_MAX, nullptr, nullptr, nullptr }
 };
 
 class VlanPimp : public Pimp {

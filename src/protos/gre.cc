@@ -125,7 +125,7 @@ const uint8_t* GreProtocol::GetOptions (const Packet& p, uint32_t& len) {
     }
 
     len = my->opt.length();
-    return len ? (uint8_t*)my->opt.data() : NULL;
+    return len ? (uint8_t*)my->opt.data() : nullptr;
 }
 
 //-------------------------------------------------------------------------
@@ -142,7 +142,7 @@ static Field s_fields[] = {
     { FT_PKT, "off", "u16", "set offset and R flag" },
     { FT_PKT, "ctl", "u8", "set C R K S s Recur" },
     { FT_PKT, "ver", "u8", "set version, incl A flag" },
-    { FT_MAX, NULL, NULL, NULL }
+    { FT_MAX, nullptr, nullptr, nullptr }
 };
 
 class GrePimp : public Pimp {

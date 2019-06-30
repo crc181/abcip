@@ -94,7 +94,7 @@ bool AbcImpl::LoadVars(const DAQ_ModuleConfig_h modcfg)
     if ( varKey )
         SET_ERROR(modinst, "ERROR: bad var (%s = %s)\n", varKey, varValue);
 
-    return ( varKey == NULL );
+    return ( varKey == nullptr );
 }
 
 //-------------------------------------------------------------------------

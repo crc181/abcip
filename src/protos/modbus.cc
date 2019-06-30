@@ -54,7 +54,7 @@ static Field s_fields[] = {
     { FT_PKT, "plen", "u16", "set modbus pdu length" },
     { FT_PKT, "uid", "u8", "set unit id" },
     { FT_PKT, "func", "u8", "set function code" },
-    { FT_MAX, NULL, NULL, NULL }
+    { FT_MAX, nullptr, nullptr, nullptr }
 };
 
 class ModbusPimp : public Pimp {

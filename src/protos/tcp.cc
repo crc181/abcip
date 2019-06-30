@@ -278,7 +278,7 @@ const uint8_t* TcpProtocol::GetPayload (
 
     if ( !max && !my->buf.length() ) {
         len = 0;
-        return NULL;
+        return nullptr;
     }
     my->buf.append((char*)p.Data(), p.Length());
 
@@ -323,7 +323,7 @@ void TcpProtocol::Checksum (const Packet& p) {
         // padded payload
         { (uint16_t*)data, (uint16_t)(dlen>>1) },  // alignment
         { (uint16_t*)dend, dadj },
-        { NULL, 0 }
+        { nullptr, 0 }
     };
     my->h.cks = 0x0000;
     my->h.cks = Protocol::Checksum(f);
@@ -360,7 +360,7 @@ static Field s_fields[] = {
     { FT_PKT, "rst", "u1", "set RST flag" },
     { FT_PKT, "psh", "u1", "set PSH flag" },
     { FT_PKT, "urg", "u1", "set URG flag" },
-    { FT_MAX, NULL, NULL, NULL }
+    { FT_MAX, nullptr, nullptr, nullptr }
 };
 
 class TcpPimp : public Pimp {

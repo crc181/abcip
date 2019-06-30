@@ -120,7 +120,7 @@ static bool ValidInt (const char* s, int max) {
     if ( !strcmp(s, " ") )
         return true;
 
-    char* end = NULL;
+    char* end = nullptr;
     long ret = (long)strtol(s, &end, 0);
 
     if ( !*s || *end ) {

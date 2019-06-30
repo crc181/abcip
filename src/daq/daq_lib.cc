@@ -50,7 +50,7 @@ static int daq_module_unload()
 
 static int daq_get_variable_descs(const DAQ_VariableDesc_t** var_desc_table)
 {
-    *var_desc_table = NULL;
+    *var_desc_table = nullptr;
 
     return 0;
 }

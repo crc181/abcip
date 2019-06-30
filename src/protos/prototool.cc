@@ -112,7 +112,7 @@ Protocol* ProtoTool::New (const string& s, PseudoHdr* ph) {
     if ( it != protos.end() )
         return it->second->New(ph);
 
-    return NULL;
+    return nullptr;
 }
 
 //-------------------------------------------------------------------------

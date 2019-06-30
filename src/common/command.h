@@ -66,10 +66,10 @@ public:
         opts.push_back(o);
     };
     Option* GetOption(unsigned at) {
-        return at < opts.size() ? opts[at] : NULL;
+        return at < opts.size() ? opts[at] : nullptr;
     };
     Option* operator[](unsigned at) {
-        return at < opts.size() ? opts[at] : NULL;
+        return at < opts.size() ? opts[at] : nullptr;
     };
     void Clear() {
         for ( OptVector::iterator it = opts.begin(); it != opts.end(); ++it )

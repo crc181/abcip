@@ -101,7 +101,7 @@ void UdpProtocol::Checksum (const Packet& p) {
         // padded payload
         { (uint16_t*)data, (uint16_t)(dlen>>1) },
         { (uint16_t*)dend, dadj },
-        { NULL, 0 }
+        { nullptr, 0 }
     };
     my->h.cks = 0x0000;
     my->h.cks = Protocol::Checksum(f);
@@ -117,7 +117,7 @@ static Field s_fields[] = {
     { FT_PKT, "dst", "u16", "set dest port" },
     { FT_PKT, "ulen", "u16", "set udp pdu length" },
     { FT_PKT, "cks", "u16", "set checksum" },
-    { FT_MAX, NULL, NULL, NULL }
+    { FT_MAX, nullptr, nullptr, nullptr }
 };
 
 class UdpPimp : public Pimp {

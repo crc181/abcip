@@ -28,7 +28,7 @@
 
 class AbcIp {
 public:
-    AbcIp(const char* stk, const char* user, Writer* = NULL);
+    AbcIp(const char* stk, const char* user, Writer* = nullptr);
     virtual ~AbcIp();
 
     bool AtoB();

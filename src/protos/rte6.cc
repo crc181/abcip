@@ -93,7 +93,7 @@ const uint8_t* Rte6Protocol::GetOptions (
     }
 
     len = my->addr.length();
-    return len ? (uint8_t*)my->addr.data() : NULL;
+    return len ? (uint8_t*)my->addr.data() : nullptr;
 }
 
 //-------------------------------------------------------------------------
@@ -105,7 +105,7 @@ static Field s_fields[] = {
     { FT_PKT, "segs", "u8", "segments left" },
     { FT_PKT, "res", "u32", "reserved" },
     { FT_PKT, "addr", "s*", "address vector" },
-    { FT_MAX, NULL, NULL, NULL }
+    { FT_MAX, nullptr, nullptr, nullptr }
 };
 
 class Rte6Pimp : public Pimp {

@@ -27,7 +27,7 @@ User* User::New (const string& s) {
     if ( DumbUser::Type() == s )
         return new DumbUser;
 
-    return NULL;
+    return nullptr;
 }
 
 void User::HelpTypes (ostream& out) {

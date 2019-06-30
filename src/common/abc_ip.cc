@@ -193,7 +193,7 @@ bool AbcIpImpl::Setup (
     while ( *tok ) if ( *tok++ == SEP ) layers++;
     usr->GetCake().Restart(layers);
 
-    Protocol* prev = NULL;
+    Protocol* prev = nullptr;
     tok = stk;
 
     while ( *tok ) {
