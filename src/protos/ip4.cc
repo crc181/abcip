@@ -22,7 +22,7 @@
 
 #include <netinet/in.h>
 #include <netinet/ip.h>
-#include <stdio.h>
+#include <cstdio>
 
 #include <sstream>
 using namespace std;

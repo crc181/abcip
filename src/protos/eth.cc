@@ -20,8 +20,8 @@
 // eth stuff
 //-------------------------------------------------------------------------
 
-#include <stdlib.h>
-#include <string.h>
+#include <cstdlib>
+#include <cstring>
 #include <net/ethernet.h>
 
 #ifdef HAVE_CONFIG_H

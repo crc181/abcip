@@ -20,7 +20,7 @@
 // pseudoheader stuff
 //-------------------------------------------------------------------------
 
-#include <stdint.h>
+#include <cstdint>
 #include "pseudo_hdr.h"
 
 void PseudoHdr::GetAddresses (

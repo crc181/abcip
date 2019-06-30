@@ -23,7 +23,7 @@
 #ifndef __PROTOCOL_H__
 #define __PROTOCOL_H__
 
-#include <stdint.h>
+#include <cstdint>
 #include <arpa/inet.h>
 
 #include "cake.h"

@@ -23,7 +23,7 @@
 #include <ostream>
 using namespace std;
 
-#include <stdlib.h>
+#include <cstdlib>
 #include "attribute.h"
 
 int32_t Attribute::GetValue (int32_t dflt) {

@@ -39,8 +39,8 @@
 //-------------------------------------------------------------------------
 
 #include <iostream>
-#include <stdlib.h>
-#include <string.h>
+#include <cstdlib>
+#include <cstring>
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
