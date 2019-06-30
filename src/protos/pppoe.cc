@@ -26,6 +26,8 @@
 #include "cake.h"
 #include "pppoe.h"
 
+using namespace std;
+
 static const char* s_type = "pppoe";
 
 struct PPPoEHdr {

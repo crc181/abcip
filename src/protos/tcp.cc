@@ -26,6 +26,8 @@
 #include "pseudo_hdr.h"
 #include "tcp.h"
 
+using namespace std;
+
 // FIXTHIS layer should be added to default addresses and ports
 #define TCP_A "48620"
 #define TCP_B     "8"

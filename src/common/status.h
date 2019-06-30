@@ -24,7 +24,6 @@
 #define __STATUS_H__
 
 #include <iostream>
-using namespace std;
 
 class Status {
 public:
@@ -57,7 +56,7 @@ private:
 
 extern Status status;
 
-ostream& operator<< (ostream&, const Status&);
+std::ostream& operator<< (std::ostream&, const Status&);
 
 #endif
 

@@ -26,6 +26,8 @@
 #include "gre.h"
 #include "cake.h"
 
+using namespace std;
+
 static const char* s_type = "gre";
 
 struct GreHdr {

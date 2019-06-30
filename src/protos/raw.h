@@ -30,7 +30,7 @@ public:
     RawProtocol();
     ~RawProtocol() override;
 
-    bool Bind(const string&) override;
+    bool Bind(const std::string&) override;
     const uint8_t* GetHeader(Packet&, uint32_t&) override;
 
     static Pimp* GetPimp();

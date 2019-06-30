@@ -25,6 +25,8 @@
 #include "pimp.h"
 #include "status.h"
 
+using namespace std;
+
 //-------------------------------------------------------------------------
 // help for base level attributes
 

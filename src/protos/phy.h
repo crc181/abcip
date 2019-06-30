@@ -36,7 +36,7 @@ public:
 
     void Fetch(Cake&, bool) override;
 
-    bool Bind(const string&) override;
+    bool Bind(const std::string&) override;
     const uint8_t* GetHeader(Packet&, uint32_t&) override;
     const uint8_t* GetPayload(const Packet&, uint32_t&) override;
 

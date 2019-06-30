@@ -44,8 +44,8 @@ public:
     virtual void Store(Cake&, bool a2b);
     virtual void Fetch(Cake&, bool a2b);
 
-    const string& GetType() { return type; }
-    virtual bool Bind(const string&) { return true; }
+    const std::string& GetType() { return type; }
+    virtual bool Bind(const std::string&) { return true; }
 
     virtual PseudoHdr* GetPseudoHdr(unsigned /*lyr*/) { return nullptr; }
 
@@ -77,7 +77,7 @@ protected:
     Protocol(const char* s) { type = s; }
 
 private:
-    string type;
+    std::string type;
     Protocol* peer;
 };
 

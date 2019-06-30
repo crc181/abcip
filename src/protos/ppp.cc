@@ -7,6 +7,8 @@
 #include "cake.h"
 #include "ppp.h"
 
+using namespace std;
+
 #define PPP_IP4 0x0021
 #define PPP_IP6 0x0057
 

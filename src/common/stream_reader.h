@@ -24,20 +24,19 @@
 #define __STREAM_READER_H__
 
 #include <iostream>
-using namespace std;
 
 #include "reader.h"
 
 class StreamReader : public Reader {
 public:
     StreamReader(const char* filename = nullptr);
-    StreamReader(istream*);
+    StreamReader(std::istream*);
     ~StreamReader() override;
 
     bool operator>>(char&) override;
 
 private:
-    istream* sin;
+    std::istream* sin;
 };
 
 #endif

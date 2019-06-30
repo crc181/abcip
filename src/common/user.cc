@@ -23,6 +23,8 @@
 #include "user.h"
 #include "dumb_user.h"
 
+using namespace std;
+
 User* User::New (const string& s) {
     if ( DumbUser::Type() == s )
         return new DumbUser;

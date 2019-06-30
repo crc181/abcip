@@ -26,6 +26,8 @@
 #include "rte6.h"
 #include "cake.h"
 
+using namespace std;
+
 static const char* s_type = "rte6";
 
 struct Rte6Hdr {

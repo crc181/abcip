@@ -27,7 +27,6 @@
 
 #include <map>
 #include <string>
-using namespace std;
 
 class Attribute {
 public:
@@ -38,11 +37,11 @@ public:
     void Reset() { if ( !sticky ) value.clear(); }
     bool IsSet() { return !value.empty(); }
 
-    void Set(const string& v) { Compress(v); }
+    void Set(const std::string& v) { Compress(v); }
     void Set(const char* v) { value = v; }
 
-    void Print(ostream& out) { Expand(out); }
-    const string& GetValue() { return value; }
+    void Print(std::ostream& out) { Expand(out); }
+    const std::string& GetValue() { return value; }
 
     int32_t GetValue(int32_t dflt);
     uint32_t GetValue(uint32_t dflt);
@@ -52,11 +51,11 @@ public:
     void SetSticky(bool b) { sticky = b; }
 
 protected:
-    bool Compress(const string&);
-    void Expand(ostream& out);
+    bool Compress(const std::string&);
+    void Expand(std::ostream& out);
 
 private:
-    string value;
+    std::string value;
     bool sticky;
 };
 

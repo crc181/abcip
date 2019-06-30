@@ -25,6 +25,8 @@
 #include "cake.h"
 #include "mpls.h"
 
+using namespace std;
+
 // 0 and 2 are reserved labels but the actual bos
 // label can be any FEC as long as the node can
 // infer the network protocol.

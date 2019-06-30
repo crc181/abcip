@@ -26,6 +26,8 @@
 #include "pseudo_hdr.h"
 #include "udp.h"
 
+using namespace std;
+
 #define UDP_A "48620"
 #define UDP_B     "8"
 

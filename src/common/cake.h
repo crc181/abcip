@@ -40,13 +40,13 @@ public:
     void Clear(const char*);
 
     bool IsSet(const char*);
-    bool IsSet(string&);
+    bool IsSet(std::string&);
 
-    void Set(const char*, const string&);
-    void Set(const string&, const string&);
+    void Set(const char*, const std::string&);
+    void Set(const std::string&, const std::string&);
 
     const char* GetCValue(const char*);
-    const string& GetValue(const char*);
+    const std::string& GetValue(const char*);
     uint32_t GetValue(const char*, uint32_t dflt);
     double GetReal(const char*, double dflt);
 

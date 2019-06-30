@@ -24,7 +24,6 @@
 #define __PCAP_WRITER_H__
 
 #include <string>
-using namespace std;
 
 #include "writer.h"
 

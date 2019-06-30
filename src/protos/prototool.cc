@@ -36,6 +36,8 @@
 
 #include "prototool-inc.h"
 
+using namespace std;
+
 //-------------------------------------------------------------------------
 
 typedef map<const string, Pimp*> ProtoMap;

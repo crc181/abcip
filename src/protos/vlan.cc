@@ -26,6 +26,8 @@
 #include "eth.h"
 #include "vlan.h"
 
+using namespace std;
+
 static const char* s_type = "vlan";
 
 // placing pid last allows normal chaining / encapsulation

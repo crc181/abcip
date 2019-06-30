@@ -25,6 +25,8 @@
 #include "protocol.h"
 #include "pseudo_hdr.h"
 
+using namespace std;
+
 //-------------------------------------------------------------------------
 // FIXTHIS create strings/defines for "a", "src", etc.
 

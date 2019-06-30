@@ -25,6 +25,8 @@
 #include "attribute.h"
 #include "cake.h"
 
+using namespace std;
+
 typedef map<string, Attribute> AttributeMap;
 
 class CakeImpl {

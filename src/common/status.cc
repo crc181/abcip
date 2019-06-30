@@ -22,6 +22,8 @@
 
 #include "status.h"
 
+using namespace std;
+
 Status status;
 
 ostream& operator<< (ostream& os, const Status& st)

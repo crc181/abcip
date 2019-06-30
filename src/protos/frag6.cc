@@ -26,6 +26,8 @@
 #include "frag6.h"
 #include "cake.h"
 
+using namespace std;
+
 #define IP6_MF  0x1
 
 static const char* s_type = "frag6";

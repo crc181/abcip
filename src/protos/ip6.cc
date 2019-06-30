@@ -28,6 +28,8 @@
 #include "cake.h"
 #include "pseudo_hdr.h"
 
+using namespace std;
+
 #define IP6_A  "::ffff:10.1.2" // + .layer
 #define IP6_B  "::ffff:10.9.8.7"
 

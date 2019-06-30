@@ -33,6 +33,8 @@
 #include "field.h"
 #include "status.h"
 
+using namespace std;
+
 ostream& operator<< (ostream& os, const Field& f) {
     os << f.name;
     os << " (" << f.type << ") ";

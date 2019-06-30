@@ -31,7 +31,7 @@ public:
     ~Ip4Protocol() override;
 
     void Store(Cake&, bool) override;
-    bool Bind(const string&) override;
+    bool Bind(const std::string&) override;
 
     PseudoHdr* GetPseudoHdr(unsigned lyr) override;
 
