@@ -46,11 +46,11 @@ const uint8_t* RawProtocol::GetHeader(
 
 class RawPimp : public Pimp {
 public:
-    RawPimp() : Pimp(s_type, nullptr) { };
+    RawPimp() : Pimp(s_type, nullptr) { }
 
     Protocol* New(PseudoHdr*) override {
         return new RawProtocol();
-    };
+    }
 
     void HelpBind(ostream&) override;
 };

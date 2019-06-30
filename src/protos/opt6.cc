@@ -108,11 +108,11 @@ static const char* s_hop = "hop6";
 
 class Hop6Pimp : public Pimp {
 public:
-    Hop6Pimp() : Pimp(s_hop, s_fields) { };
+    Hop6Pimp() : Pimp(s_hop, s_fields) { }
 
     Protocol* New(PseudoHdr*) override {
         return new Hop6Protocol();
-    };
+    }
 
     void HelpBind(ostream&) override;
 };
@@ -129,11 +129,11 @@ static const char* s_dst = "dst6";
 
 class Dst6Pimp : public Pimp {
 public:
-    Dst6Pimp() : Pimp(s_dst, s_fields) { };
+    Dst6Pimp() : Pimp(s_dst, s_fields) { }
 
     Protocol* New(PseudoHdr*) override {
         return new Dst6Protocol();
-    };
+    }
 
     void HelpBind(ostream&) override;
 };

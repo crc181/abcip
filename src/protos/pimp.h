@@ -38,11 +38,11 @@ class Pimp {
 public:
     virtual ~Pimp() = default;
 
-    const string& Type() { return type; };
+    const string& Type() { return type; }
 
     virtual Protocol* New(PseudoHdr*) = 0;
 
-    virtual void HelpBind(ostream&) { };
+    virtual void HelpBind(ostream&) { }
 
     void HelpConfig(ostream&);
     void HelpPacket(ostream&);

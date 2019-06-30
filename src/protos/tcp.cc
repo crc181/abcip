@@ -365,11 +365,11 @@ static Field s_fields[] = {
 
 class TcpPimp : public Pimp {
 public:
-    TcpPimp() : Pimp(s_type, s_fields) { };
+    TcpPimp() : Pimp(s_type, s_fields) { }
 
     Protocol* New(PseudoHdr* ph) override {
         return new TcpProtocol(ph);
-    };
+    }
 };
 
 Pimp* TcpProtocol::GetPimp () { return new TcpPimp; }

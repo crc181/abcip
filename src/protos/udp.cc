@@ -122,11 +122,11 @@ static Field s_fields[] = {
 
 class UdpPimp : public Pimp {
 public:
-    UdpPimp() : Pimp(s_type, s_fields) { };
+    UdpPimp() : Pimp(s_type, s_fields) { }
 
     Protocol* New(PseudoHdr* ph) override {
         return new UdpProtocol(ph);
-    };
+    }
 
     void HelpBind(ostream&) override;
 };

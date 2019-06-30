@@ -31,25 +31,25 @@ using namespace std;
 
 class Attribute {
 public:
-    Attribute(bool b = false) { sticky = b; };
+    Attribute(bool b = false) { sticky = b; }
     virtual ~Attribute() = default;
 
-    void Clear() { value.clear(); };
-    void Reset() { if ( !sticky ) value.clear(); };
-    bool IsSet() { return !value.empty(); };
+    void Clear() { value.clear(); }
+    void Reset() { if ( !sticky ) value.clear(); }
+    bool IsSet() { return !value.empty(); }
 
-    void Set(const string& v) { Compress(v); };
-    void Set(const char* v) { value = v; };
+    void Set(const string& v) { Compress(v); }
+    void Set(const char* v) { value = v; }
 
-    void Print(ostream& out) { Expand(out); };
-    const string& GetValue() { return value; };
+    void Print(ostream& out) { Expand(out); }
+    const string& GetValue() { return value; }
 
     int32_t GetValue(int32_t dflt);
     uint32_t GetValue(uint32_t dflt);
     double GetReal(double dflt);
 
-    bool IsSticky() { return sticky; };
-    void SetSticky(bool b) { sticky = b; };
+    bool IsSticky() { return sticky; }
+    void SetSticky(bool b) { sticky = b; }
 
 protected:
     bool Compress(const string&);

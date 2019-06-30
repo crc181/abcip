@@ -60,11 +60,11 @@ const uint8_t* PppProtocol::GetHeader (
 
 class PppPimp : public Pimp {
 public:
-    PppPimp() : Pimp(s_type, nullptr) { };
+    PppPimp() : Pimp(s_type, nullptr) { }
 
     Protocol* New(PseudoHdr*) override {
         return new PppProtocol();
-    };
+    }
 
     void HelpBind(ostream&) override;
 };

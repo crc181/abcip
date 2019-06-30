@@ -30,7 +30,7 @@ public:
     virtual ~Writer() = default;
 
     virtual void operator<<(const Packet&) = 0;
-    virtual bool Ok() { return true; };
+    virtual bool Ok() { return true; }
 
 protected:
     Writer() = default;

@@ -288,11 +288,11 @@ static Field s_fields[] = {
 
 class PhyPimp : public Pimp {
 public:
-    PhyPimp() : Pimp(s_type, s_fields) { };
+    PhyPimp() : Pimp(s_type, s_fields) { }
 
     Protocol* New(PseudoHdr*) override {
         return new PhyProtocol();
-    };
+    }
 
     void HelpBind(ostream&) override;
 };

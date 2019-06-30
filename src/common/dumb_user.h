@@ -35,7 +35,7 @@ public:
     const uint8_t* Send(Packet&, uint32_t&) override;
     void Recv(Packet&) override;
 
-    static const char* Type() { return "user"; };
+    static const char* Type() { return "user"; }
 
     static void HelpConfig(ostream&);
     static void HelpPacket(ostream&);

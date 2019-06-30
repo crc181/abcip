@@ -173,7 +173,7 @@ bool Lexer::GetToken (string& tok) {
 
 class CommandParserImpl {
 public:
-    CommandParserImpl(Reader* in) : lexer(in) { };
+    CommandParserImpl(Reader* in) : lexer(in) { }
     Option* NewOption(unsigned, const string&, const string&, const string&);
 
     Lexer lexer;

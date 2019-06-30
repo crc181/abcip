@@ -44,10 +44,10 @@ public:
     virtual void Store(Cake&, bool a2b);
     virtual void Fetch(Cake&, bool a2b);
 
-    const string& GetType() { return type; };
-    virtual bool Bind(const string&) { return true; };
+    const string& GetType() { return type; }
+    virtual bool Bind(const string&) { return true; }
 
-    virtual PseudoHdr* GetPseudoHdr(unsigned /*lyr*/) { return nullptr; };
+    virtual PseudoHdr* GetPseudoHdr(unsigned /*lyr*/) { return nullptr; }
 
     // Packet should really be const but phy needs access
     // for now, only phy should be directly changing Packet!
@@ -56,10 +56,10 @@ public:
 
     virtual const uint8_t* GetOptions(const Packet&, uint32_t& len) {
         len = 0; return nullptr;
-    };
+    }
     virtual const uint8_t* GetPayload(const Packet&, uint32_t& len) {
         len = 0; return nullptr;
-    };
+    }
     virtual bool HasPayload() { return false; }
 
     uint16_t Checksum(const CheckField*);
@@ -70,11 +70,11 @@ public:
     uint16_t SrcPort(const Packet&);
     uint16_t DstPort(const Packet&);
 
-    void SetPeer(Protocol* p) { peer = p; };
-    Protocol* GetPeer() { return peer; };
+    void SetPeer(Protocol* p) { peer = p; }
+    Protocol* GetPeer() { return peer; }
 
 protected:
-    Protocol(const char* s) { type = s; };
+    Protocol(const char* s) { type = s; }
 
 private:
     string type;

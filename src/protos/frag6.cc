@@ -153,11 +153,11 @@ static Field s_fields[] = {
 
 class Frag6Pimp : public Pimp {
 public:
-    Frag6Pimp() : Pimp(s_type, s_fields) { };
+    Frag6Pimp() : Pimp(s_type, s_fields) { }
 
     Protocol* New(PseudoHdr*) override {
         return new Frag6Protocol();
-    };
+    }
 
     void HelpBind(ostream&) override;
 };

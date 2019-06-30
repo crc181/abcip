@@ -154,11 +154,11 @@ static Field s_fields[] = {
 
 class ArpPimp : public Pimp {
 public:
-    ArpPimp() : Pimp(s_type, s_fields) { };
+    ArpPimp() : Pimp(s_type, s_fields) { }
 
     Protocol* New(PseudoHdr*) override {
         return new ArpProtocol();
-    };
+    }
 };
 
 Pimp* ArpProtocol::GetPimp () { return new ArpPimp; }

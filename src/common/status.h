@@ -28,31 +28,31 @@ using namespace std;
 
 class Status {
 public:
-    Status()
-        { ok = true; row = col = 0; err = nullptr; };
+    Status() = default;
 
     void SetError(const char* s, unsigned r, unsigned c)
-        { err = s; ok = false; row = r; col = c; };
+        { err = s; ok = false; row = r; col = c; }
 
     void SetError(const char* s = nullptr)
-        { err = s; ok = false; };
+        { err = s; ok = false; }
 
     void SetPos(unsigned r, unsigned c)
-        { row = r; col = c; };
+        { row = r; col = c; }
 
     void GetPos(unsigned& r, unsigned& c) const
-        { r = row; c = col; };
+        { r = row; c = col; }
 
     const char* GetError() const
-        { return err; };
+        { return err; }
 
     bool Ok() const
-        { return ok; };
+        { return ok; }
 
 private:
-    bool ok;
-    unsigned row, col;
-    const char* err;
+    bool ok = true;
+    unsigned row = 0;
+    unsigned col = 0;
+    const char* err = nullptr;
 };
 
 extern Status status;

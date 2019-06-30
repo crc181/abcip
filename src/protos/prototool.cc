@@ -51,9 +51,11 @@ static ProtoMapper pmap;
 
 //-------------------------------------------------------------------------
 
-#define PROTOTOOL_NEW(proto) \
-    p = proto::GetPimp(); \
-    protos[p->Type()] = p; \
+#define PROTOTOOL_NEW(proto)    \
+    do {                        \
+        p = proto::GetPimp();   \
+        protos[p->Type()] = p;  \
+    } while (0)
 
 ProtoMapper::ProtoMapper () {
     Pimp* p;

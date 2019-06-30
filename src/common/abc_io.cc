@@ -113,7 +113,7 @@ AbcIp* AbcIoImpl::New (Command& cmd) {
             return nullptr;
     }
     if ( !s || !*s )
-        s = stack.c_str();;
+        s = stack.c_str();
 
     AbcIp* abc = sessions[ssn];
 
