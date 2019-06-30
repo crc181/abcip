@@ -46,7 +46,7 @@ const uint8_t* RawProtocol::GetHeader(
 
 class RawPimp : public Pimp {
 public:
-    RawPimp() : Pimp(s_type, NULL) { };
+    RawPimp() : Pimp(s_type, nullptr) { };
 
     Protocol* New(PseudoHdr*) {
         return new RawProtocol();

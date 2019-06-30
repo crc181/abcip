@@ -119,7 +119,7 @@ public:
 };
 
 Conf::Conf (int argc, char* argv[]) {
-    pcap = NULL;
+    pcap = nullptr;
     snap = 65535;
     trace = raw = false;
     stack = DEFAULT_STACK;
@@ -229,7 +229,7 @@ int main (int argc, char* argv[]) {
         (Parser*)new CommandParser(reader, "a,b,c,d");
 
     Writer* writer = c.pcap ? 
-        new PcapWriter(c.pcap, c.stack, c.snap) : NULL;
+        new PcapWriter(c.pcap, c.stack, c.snap) : nullptr;
 
     AbcIo abc(parser, writer, c.stack, c.user, c.trace);
 

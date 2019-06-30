@@ -82,7 +82,7 @@ static Field s_fields[] = {
     { FT_PKT, "code", "u4", "code" },
     { FT_PKT, "sid", "u16", "session id" },
     { FT_PKT, "plen", "u16", "length" },
-    { FT_MAX, NULL, NULL, NULL }
+    { FT_MAX, nullptr, nullptr, nullptr }
 };
 
 class PPPoEPimp : public Pimp {

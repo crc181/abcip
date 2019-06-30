@@ -149,7 +149,7 @@ static Field s_fields[] = {
     { FT_PKT, "op", "u16", "set opcode" },
     { FT_PKT, "hwn", "u8", "set hardware length" },
     { FT_PKT, "ipn", "u8", "set proto length" },
-    { FT_MAX, NULL, NULL, NULL }
+    { FT_MAX, nullptr, nullptr, nullptr }
 };
 
 class ArpPimp : public Pimp {

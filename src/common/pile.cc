@@ -45,7 +45,7 @@ public:
 
 Pile::Pile (User& a) {
     my = new PileImpl(a);
-    my->ph = NULL;
+    my->ph = nullptr;
 }
 
 Pile::~Pile () {

@@ -106,7 +106,7 @@ static Field s_fields[] = {
     { FT_PKT, "tcl", "u3", "set traffic class" },
     { FT_PKT, "bos", "u1", "set bottom of stack" },
     { FT_PKT, "ttl", "u8", "set ttl" },
-    { FT_MAX, NULL, NULL, NULL }
+    { FT_MAX, nullptr, nullptr, nullptr }
 };
 
 class MplsPimp : public Pimp {

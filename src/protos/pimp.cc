@@ -34,7 +34,7 @@ Pimp::Pimp (const char* s, const Field* f)
 static Field s_fields[] = {
     { FT_PKT, "head", "s*", "set header octets" },
     { FT_PKT, "tail", "s*", "set trailer octets" },
-    { FT_MAX, NULL, NULL, NULL }
+    { FT_MAX, nullptr, nullptr, nullptr }
 };
 
 void Pimp::HelpPacket (ostream& out) {

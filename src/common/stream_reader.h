@@ -30,7 +30,7 @@ using namespace std;
 
 class StreamReader : public Reader {
 public:
-    StreamReader(const char* filename = NULL);
+    StreamReader(const char* filename = nullptr);
     StreamReader(istream*);
     virtual ~StreamReader();
 

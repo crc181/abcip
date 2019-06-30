@@ -179,7 +179,7 @@ const uint8_t* Ip4Protocol::GetOptions (
     }
 
     len = my->opt.length();
-    return len ? (uint8_t*)my->opt.data() : NULL;
+    return len ? (uint8_t*)my->opt.data() : nullptr;
 }
 
 const uint8_t* Ip4Protocol::GetPayload (
@@ -197,7 +197,7 @@ const uint8_t* Ip4Protocol::GetPayload (
         my->offset = 0;
         if ( !max ) {
             len = 0;
-            return NULL;
+            return nullptr;
         }
     }   
     my->buf.append((char*)p.Data(), p.Length());
@@ -229,7 +229,7 @@ void Ip4Protocol::Checksum (const Packet&) {
         // padded options
         { (uint16_t*)opts, (uint16_t)(olen>>1) },  // alignment
         { (uint16_t*)oend, oadj },
-        { NULL, 0 }
+        { nullptr, 0 }
     };
     my->h.ip_sum = 0x0000;
     my->h.ip_sum = Protocol::Checksum(f);
@@ -257,7 +257,7 @@ static Field s_fields[] = {
     { FT_PKT, "ttl", "u8", "set ttl" },
     { FT_PKT, "ihl", "u4", "set header length" },
     { FT_PKT, "ver", "u4", "set version" },
-    { FT_MAX, NULL, NULL, NULL }
+    { FT_MAX, nullptr, nullptr, nullptr }
 };
 
 class Ip4Pimp : public Pimp {

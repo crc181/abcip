@@ -86,7 +86,7 @@ const uint8_t* Opt6Protocol::GetOptions (
     }
 
     len = my->opt.length();
-    return len ? (uint8_t*)my->opt.data() : NULL;
+    return len ? (uint8_t*)my->opt.data() : nullptr;
 }
 
 //-------------------------------------------------------------------------
@@ -99,7 +99,7 @@ static Field s_fields[] = {
     { FT_PKT, "next", "u8", "next proto" },
     { FT_PKT, "len", "u8", "options header length" },
     { FT_PKT, "opt", "s*", "options octets" },
-    { FT_MAX, NULL, NULL, NULL }
+    { FT_MAX, nullptr, nullptr, nullptr }
 };
 
 //-------------------------------------------------------------------------

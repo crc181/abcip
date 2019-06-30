@@ -59,7 +59,7 @@ static const Field s_fields[] = {
     { FT_PKT, "len", "u32|max", "set payload length" },
     { FT_PKT, "fill", "u16", "fill payload with seq%256" },
     { FT_PKT, "jump", "i32", "seq delta" },
-    { FT_MAX, NULL, NULL, NULL }
+    { FT_MAX, nullptr, nullptr, nullptr }
 };
 
 void DumbUser::HelpConfig (ostream& out) {

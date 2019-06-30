@@ -120,7 +120,7 @@ const uint8_t* Frag6Protocol::GetPayload (
         my->offset = 0;
         if ( !max ) {
             len = 0;
-            return NULL;
+            return nullptr;
         }
     }
     my->buf.append((char*)p.Data(), p.Length());
@@ -148,7 +148,7 @@ static Field s_fields[] = {
     { FT_PKT, "res", "u8", "reserved field" },
     { FT_PKT, "r2", "u2", "reserved bits" },
     { FT_PKT, "m", "u1", "more fragments" },
-    { FT_MAX, NULL, NULL, NULL }
+    { FT_MAX, nullptr, nullptr, nullptr }
 };
 
 class Frag6Pimp : public Pimp {

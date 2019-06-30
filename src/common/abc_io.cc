@@ -74,7 +74,7 @@ public:
 
 static Field s_fields[] = {
     { FT_DEF, "stack", "s*", "define new stack" },
-    { FT_MAX, NULL, NULL, NULL }
+    { FT_MAX, nullptr, nullptr, nullptr }
 };
 
 void AbcIo::HelpDefine (ostream& out) {
@@ -95,13 +95,13 @@ static const char* GetStack (Option* opt) {
         cerr << "=" << opt->value;
 
     cerr << ")" << endl;
-    return NULL;
+    return nullptr;
 }
 
 AbcIp* AbcIoImpl::New (Command& cmd) {
     string& ssn = cmd.GetContext();
     Option* opt = cmd.GetOption(0);
-    const char* s = NULL;
+    const char* s = nullptr;
 
     if ( ssn.empty() )
         ssn.assign(DEFAULT_KEY);
@@ -110,7 +110,7 @@ AbcIp* AbcIoImpl::New (Command& cmd) {
         s = GetStack(opt);
 
         if ( !s )
-            return NULL;
+            return nullptr;
     }
     if ( !s || !*s )
         s = stack.c_str();;
@@ -143,7 +143,7 @@ AbcIp* AbcIoImpl::Find (Command& cmd)
     if ( key != DEFAULT_KEY ) {
         status.SetError("undefined context");
         cerr << status << " (" << key << ")" << endl;
-        return NULL;
+        return nullptr;
     }
     AbcIp* abc = new AbcIp(stack.c_str(), user.c_str(), writer);
     sessions[key] = abc;
@@ -226,7 +226,7 @@ AbcIp* AbcIoImpl::Load (Command& cmd) {
     AbcIp* abc = Find(cmd);
 
     if ( !abc )
-        return NULL;
+        return nullptr;
 
     int i = 0;
     Option* opt = cmd[i++];
@@ -256,7 +256,7 @@ AbcIp* AbcIoImpl::Load (Command& cmd) {
             cerr << "=" << opt->value;
 
         cerr << ")" << endl;
-        return NULL;
+        return nullptr;
     }
     return abc;
 }

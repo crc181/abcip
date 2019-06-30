@@ -79,7 +79,7 @@ PcapWriter::PcapWriter (
     int dlt = GetDataLinkType(root);
 
     pcap_t* dummy = pcap_open_dead(dlt, max);
-    my->pcap = dummy ? pcap_dump_open(dummy, name) : NULL;
+    my->pcap = dummy ? pcap_dump_open(dummy, name) : nullptr;
 
     if ( !my->pcap ) {
         cerr << "Error - can't open pcap: ";
@@ -89,7 +89,7 @@ PcapWriter::PcapWriter (
     my->numPkts = 0;
 
     //memset (&my->ptime, 0, sizeof(my->ptime));
-    gettimeofday(&my->ptime, NULL);
+    gettimeofday(&my->ptime, nullptr);
     my->last = my->ptime;
 }
 
@@ -100,7 +100,7 @@ PcapWriter::~PcapWriter () {
 }
 
 bool PcapWriter::Ok () {
-    return my->pcap != NULL;
+    return my->pcap != nullptr;
 }
 
 void PcapWriter::operator<< (const Packet& p) {
@@ -113,7 +113,7 @@ void PcapWriter::operator<< (const Packet& p) {
 
     struct timeval now;
     //memset (&now, 0, sizeof(now));
-    gettimeofday(&now, NULL);
+    gettimeofday(&now, nullptr);
 
     long ds, du;
 

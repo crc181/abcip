@@ -39,7 +39,7 @@ public:
 
 Cake::Cake (unsigned n) {
     my = new CakeImpl;
-    my->attribs = NULL;
+    my->attribs = nullptr;
     Restart(n);
 }
 
@@ -223,5 +223,5 @@ double Cake::GetReal (const char* s, double dflt) {
     return dflt;
 }
 
-Cake* cake = NULL;
+Cake* cake = nullptr;
 

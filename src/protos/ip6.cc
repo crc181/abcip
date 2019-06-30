@@ -158,7 +158,7 @@ static Field s_fields[] = {
     { FT_PKT, "next", "u8", "set next header" },
     { FT_PKT, "hops", "u8", "set hop limit" },
     { FT_PKT, "tot", "u16", "set payload length" },
-    { FT_MAX, NULL, NULL, NULL }
+    { FT_MAX, nullptr, nullptr, nullptr }
 };
 
 class Ip6Pimp : public Pimp {

@@ -47,7 +47,7 @@ public:
     const string& GetType() { return type; };
     virtual bool Bind(const string&) { return true; };
 
-    virtual PseudoHdr* GetPseudoHdr(unsigned /*lyr*/) { return NULL; };
+    virtual PseudoHdr* GetPseudoHdr(unsigned /*lyr*/) { return nullptr; };
 
     // Packet should really be const but phy needs access
     // for now, only phy should be directly changing Packet!
@@ -55,10 +55,10 @@ public:
     virtual const uint8_t* GetTrailer(const Packet&, uint32_t& len);
 
     virtual const uint8_t* GetOptions(const Packet&, uint32_t& len) {
-        len = 0; return NULL;
+        len = 0; return nullptr;
     };
     virtual const uint8_t* GetPayload(const Packet&, uint32_t& len) {
-        len = 0; return NULL;
+        len = 0; return nullptr;
     };
     virtual bool HasPayload() { return false; }
 

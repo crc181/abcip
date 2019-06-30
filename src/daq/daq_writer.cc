@@ -81,7 +81,7 @@ DaqWriterImpl::DaqWriterImpl(uint32_t pool_size, uint32_t snaplen, bool real_tim
     pool.info.available = pool.info.size;
 
     if (real_time)
-        gettimeofday(&last, NULL);
+        gettimeofday(&last, nullptr);
     else
         last = { 946684800, 0 }; // Defaults to Y2K
 }

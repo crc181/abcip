@@ -213,7 +213,7 @@ void CommandParser::GetLocation (int& y, int& x) {
 bool CommandParser::Load (Command& cmd) {
     string tok, key, proto, null = " ";
     unsigned index = 0;
-    const char* err = NULL;
+    const char* err = nullptr;
 
     int state = 0;
 

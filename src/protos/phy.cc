@@ -86,15 +86,15 @@ void PhyImpl::Permute (unsigned n) {
 void PhyImpl::Clear () {
     delete[] buf;
     delete[] order;
-    buf = NULL;
-    order = NULL;
+    buf = nullptr;
+    order = nullptr;
     max = nIn = nOut = 0;
 }
 
 PhyProtocol::PhyProtocol () : Protocol(s_type) {
     my = new PhyImpl;
-    my->buf = NULL;
-    my->order = NULL;
+    my->buf = nullptr;
+    my->order = nullptr;
     my->max = my->nIn = my->nOut = 0;
     my->snap = 0;
     my->late = 0.0;
@@ -283,7 +283,7 @@ static Field s_fields[] = {
     { FT_PKT, "rev", "u32", "output packets in reverse order" },
     { FT_PKT, "perm", "u32", "randomly permute packets" },
     { FT_PKT, "dt", "r32", "set time delta for this packet" },
-    { FT_MAX, NULL, NULL, NULL }
+    { FT_MAX, nullptr, nullptr, nullptr }
 };
 
 class PhyPimp : public Pimp {

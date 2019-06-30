@@ -93,7 +93,7 @@ void Icmp4Protocol::Checksum (const Packet& p) {
         // padded payload
         { (uint16_t*)data, (uint16_t)(dlen>>1) },  // alignment
         { (uint16_t*)dend, dadj },
-        { NULL, 0 }
+        { nullptr, 0 }
     };
     my->h.cksum = 0x0000;
     my->h.cksum = Protocol::Checksum(f);
@@ -109,7 +109,7 @@ static Field s_fields[] = {
     { FT_PKT, "id", "u16", "set id" },
     { FT_PKT, "seq", "u16", "set sequence number" },
     { FT_PKT, "u32", "u32", "set in lieu of id/seq" },
-    { FT_MAX, NULL, NULL, NULL }
+    { FT_MAX, nullptr, nullptr, nullptr }
 };
 
 class Icmp4Pimp : public Pimp {

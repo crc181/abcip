@@ -147,7 +147,7 @@ static Field s_fields[] = {
     { FT_PKT, "src", "a6", "set source mac address" },
     { FT_PKT, "dst", "a6", "set dest mac address" },
     { FT_PKT, "type", "u16", "set type" },
-    { FT_MAX, NULL, NULL, NULL }
+    { FT_MAX, nullptr, nullptr, nullptr }
 };
 
 class EthPimp : public Pimp {

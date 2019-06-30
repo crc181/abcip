@@ -29,12 +29,12 @@ using namespace std;
 class Status {
 public:
     Status()
-        { ok = true; row = col = 0; err = NULL; };
+        { ok = true; row = col = 0; err = nullptr; };
 
     void SetError(const char* s, unsigned r, unsigned c)
         { err = s; ok = false; row = r; col = c; };
 
-    void SetError(const char* s = NULL)
+    void SetError(const char* s = nullptr)
         { err = s; ok = false; };
 
     void SetPos(unsigned r, unsigned c)
