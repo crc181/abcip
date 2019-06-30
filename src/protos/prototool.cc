@@ -73,7 +73,7 @@ ProtoMapper::ProtoMapper () {
 ProtoMapper::~ProtoMapper () {
     ProtoMap::iterator it;
 
-    for ( it = protos.begin(); it != protos.end(); it++ )
+    for ( it = protos.begin(); it != protos.end(); ++it )
         delete it->second;
 }
 
@@ -84,7 +84,7 @@ void ProtoTool::HelpTypes (ostream& out) {
 
     ProtoMap::iterator it;
 
-    for ( it = protos.begin(); it != protos.end(); it++ ) {
+    for ( it = protos.begin(); it != protos.end(); ++it ) {
         Pimp* h = it->second;
         cout << h->Type() << endl;
     }
@@ -95,21 +95,21 @@ void ProtoTool::HelpBind (ostream& out) {
 
     ProtoMap::iterator it;
 
-    for ( it = protos.begin(); it != protos.end(); it++ )
+    for ( it = protos.begin(); it != protos.end(); ++it )
         it->second->HelpBind(out);
 }
 
 void ProtoTool::HelpConfig (ostream& out) {
     ProtoMap::iterator it;
 
-    for ( it = protos.begin(); it != protos.end(); it++ )
+    for ( it = protos.begin(); it != protos.end(); ++it )
         it->second->HelpConfig(out);
 }
 
 void ProtoTool::HelpPacket (ostream& out) {
     ProtoMap::iterator it;
 
-    for ( it = protos.begin(); it != protos.end(); it++ )
+    for ( it = protos.begin(); it != protos.end(); ++it )
         it->second->HelpPacket(out);
 }
 

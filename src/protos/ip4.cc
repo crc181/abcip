@@ -112,7 +112,7 @@ void Ip4Protocol::Store (Cake& cake, bool a2b) {
     const char* ip4_a = ss.str().c_str();
 #else
     char ip4_a[16];
-    snprintf(ip4_a, sizeof(ip4_a), "%s.%d", IP4_A, cake.GetLayer());
+    snprintf(ip4_a, sizeof(ip4_a), "%s.%u", IP4_A, cake.GetLayer());
 #endif
 
     cake.Store("src", a2b ? ip4_a : IP4_B, true);

@@ -29,14 +29,8 @@
 class Option {
 public:
     Option(unsigned u, const std::string& k,
-        const std::string& v, const std::string& p)
-    {
-        index = u;
-        key = k;
-        value = v;
-        proto = p;
-        row = col = 0;
-    }
+        const std::string& v, const std::string& p) :
+        index(u), key(k), value(v), proto(p) { }
     void SetPos(unsigned r, unsigned c)
         { row = r; col = c; }
 
@@ -45,7 +39,8 @@ public:
     std::string key;
     std::string value;
     std::string proto;
-    unsigned row, col;
+    unsigned row = 0;
+    unsigned col = 0;
 };
 
 typedef std::vector<Option*> OptVector;

@@ -74,11 +74,11 @@ public:
     Protocol* GetPeer() { return peer; }
 
 protected:
-    Protocol(const char* s) { type = s; }
+    Protocol(const char* s) : type(s) { }
 
 private:
     std::string type;
-    Protocol* peer;
+    Protocol* peer = nullptr;
 };
 
 // never enabled externally

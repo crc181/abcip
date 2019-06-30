@@ -132,9 +132,11 @@ int AbcDaq::Init(const DAQ_ModuleConfig_h modcfg, DAQ_ModuleInstance_h modinst)
 
     Reader* reader = new StreamReader(impl->daq_base_api->config_get_input(modcfg));
 
-    Parser* parser = impl->raw ?
-        (Parser*)new DataParser(reader) :
-        (Parser*)new CommandParser(reader, "a,b,c,d");
+    Parser* parser;
+    if (impl->raw)
+        parser = new DataParser(reader);
+    else
+        parser = new CommandParser(reader, "a,b,c,d");
 
     uint32_t pool_size = impl->daq_base_api->config_get_msg_pool_size(modcfg);
     if (pool_size == 0)

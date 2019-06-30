@@ -223,7 +223,7 @@ const uint8_t* TcpProtocol::GetHeader (
     int ecn = p.cake.GetValue("ecn", 0);
 
     my->h.off = (int)p.cake.GetValue("off", off);
-    my->h.off = (my->h.off << 4) | ((res&0x7) << 1) | (ecn&0x4?1:0);
+    my->h.off = (my->h.off << 4) | ((res & 0x7) << 1) | ((ecn & 0x4) ? 1 : 0);
 
     my->h.ctl = ctl;
     my->h.ctl |= (ecn & 0x3) << 6;

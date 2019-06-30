@@ -35,9 +35,6 @@ using namespace std;
 //-------------------------------------------------------------------------
 // help for base level attributes
 
-Pimp::Pimp (const char* s, const Field* f)
-    { type = s; fields = f; }
-
 static Field s_fields[] = {
     { FT_PKT, "head", "s*", "set header octets" },
     { FT_PKT, "tail", "s*", "set trailer octets" },

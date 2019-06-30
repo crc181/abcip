@@ -115,7 +115,7 @@ bool Ip6Protocol::Bind (const string& type) {
 
 void Ip6Protocol::Store (Cake& cake, bool a2b) {
     char ip6_a[48];
-    snprintf(ip6_a, sizeof(ip6_a), "%s.%d", IP6_A, cake.GetLayer());
+    snprintf(ip6_a, sizeof(ip6_a), "%s.%u", IP6_A, cake.GetLayer());
 
     cake.Store("src", a2b ? ip6_a : IP6_B, true);
     cake.Store("dst", a2b ? IP6_B : ip6_a, true);

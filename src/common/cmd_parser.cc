@@ -183,7 +183,7 @@ public:
 
     Lexer lexer;
     string commands;
-    bool bad;
+    bool bad = false;
 };
 
 Option* CommandParserImpl::NewOption (
@@ -200,7 +200,6 @@ Option* CommandParserImpl::NewOption (
 CommandParser::CommandParser (Reader* in, const char* s) {
     my = new CommandParserImpl(in);
     my->commands = s;
-    my->bad = false;
 } 
 
 CommandParser::~CommandParser () {

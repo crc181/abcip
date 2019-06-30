@@ -53,7 +53,7 @@ public:
     uint16_t GetLength() override { return sizeof(h); }
 
 private:
-    uint16_t h[6];
+    uint16_t h[6] = { };
 };
 
 class PseudoHdr6 : public PseudoHdr {
@@ -66,7 +66,7 @@ public:
     uint16_t GetLength() override { return sizeof(h); }
 
 private:
-    uint32_t h[10];
+    uint32_t h[10] = { };
 };
 
 #endif
