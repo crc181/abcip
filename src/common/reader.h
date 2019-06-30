@@ -25,12 +25,12 @@
 
 class Reader {
 public:
-    virtual ~Reader() { };
+    virtual ~Reader() = default;
 
     virtual bool operator>>(char&) = 0;
 
 protected:
-    Reader() { };
+    Reader() = default;
 };
 
 #endif

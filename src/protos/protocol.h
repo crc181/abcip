@@ -39,7 +39,7 @@ struct CheckField {
 
 class Protocol {
 public:
-    virtual ~Protocol() { };
+    virtual ~Protocol() = default;
 
     virtual void Store(Cake&, bool a2b);
     virtual void Fetch(Cake&, bool a2b);

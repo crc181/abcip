@@ -25,14 +25,14 @@
 
 class Parser {
 public:
-    virtual ~Parser() { };
+    virtual ~Parser() = default;
 
     virtual bool Load(class Command&) = 0;
     virtual bool Good() = 0;
     virtual void GetLocation(int& y, int& x) = 0;
 
 protected:
-    Parser() { };
+    Parser() = default;
 };
 
 #endif

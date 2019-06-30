@@ -27,7 +27,7 @@ static const char* s_type = "raw";
 
 RawProtocol::RawProtocol () : Protocol(s_type) { }
 
-RawProtocol::~RawProtocol () { }
+RawProtocol::~RawProtocol () = default;
 
 bool RawProtocol::Bind (const string&) {
     return true;
