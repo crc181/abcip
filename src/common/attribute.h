@@ -32,7 +32,7 @@ using namespace std;
 class Attribute {
 public:
     Attribute(bool b = false) { sticky = b; };
-    virtual ~Attribute() { };
+    virtual ~Attribute() = default;
 
     void Clear() { value.clear(); };
     void Reset() { if ( !sticky ) value.clear(); };

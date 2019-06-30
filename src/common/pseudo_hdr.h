@@ -29,7 +29,7 @@
 
 class PseudoHdr {
 public:
-    virtual ~PseudoHdr() { };
+    virtual ~PseudoHdr() = default;
     virtual uint8_t* GetData(const Packet&, uint16_t) = 0;
     virtual uint16_t GetLength() = 0;
     virtual void SetProto(int proto) = 0;
@@ -46,7 +46,7 @@ private:
 class PseudoHdr4 : public PseudoHdr {
 public:
     PseudoHdr4(Protocol* p, unsigned lyr) : PseudoHdr(p, lyr) { };
-    ~PseudoHdr4() override { };
+    ~PseudoHdr4() override = default;
     
     uint8_t* GetData(const Packet&, uint16_t) override;
     void SetProto(int proto) override { h[4] = htons(proto); };
@@ -59,7 +59,7 @@ private:
 class PseudoHdr6 : public PseudoHdr {
 public:
     PseudoHdr6(Protocol* p, unsigned lyr) : PseudoHdr(p, lyr) { };
-    ~PseudoHdr6() override { };
+    ~PseudoHdr6() override = default;
     
     uint8_t* GetData(const Packet&, uint16_t) override;
     void SetProto(int proto) override { h[9] = htonl(proto); };

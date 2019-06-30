@@ -36,7 +36,7 @@ class PseudoHdr;
 
 class Pimp {
 public:
-    virtual ~Pimp() { };
+    virtual ~Pimp() = default;
 
     const string& Type() { return type; };
 

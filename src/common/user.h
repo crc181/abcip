@@ -32,7 +32,7 @@ using namespace std;
 class User {
 public:
     static User* New(const string&);
-    virtual ~User() { };
+    virtual ~User() = default;
 
     virtual void Setup(const char* id) = 0;
 
@@ -48,7 +48,7 @@ public:
     Cake& GetCake() { return cake; }
 
 protected:
-    User() { };
+    User() = default;
 
 private:
     Cake cake;

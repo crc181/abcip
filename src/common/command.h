@@ -53,8 +53,8 @@ typedef vector<Option*> OptVector;
 
 class Command {
 public:
-    Command() { };
-    virtual ~Command() { };
+    Command() = default;
+    virtual ~Command() = default;
 
     void SetName(string& s) { name = s; };
     string& GetName() { return name; };

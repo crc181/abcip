@@ -23,7 +23,7 @@
 
 class Daq {
 public:
-    virtual ~Daq() { };
+    virtual ~Daq() = default;
 
     virtual int Init(const DAQ_ModuleConfig_h modcfg, DAQ_ModuleInstance_h modinst) = 0;
 
@@ -48,7 +48,7 @@ public:
     virtual int GetMsgPoolInfo(DAQ_MsgPoolInfo_t* info);
 
 protected:
-    Daq() { };
+    Daq() = default;
 };
 
 #endif
