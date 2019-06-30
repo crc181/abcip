@@ -28,12 +28,12 @@
 class DumbUser : public User {
 public:
     DumbUser();
-    virtual ~DumbUser();
+    ~DumbUser() override;
 
-    virtual void Setup(const char* id);
+    void Setup(const char* id) override;
 
-    virtual const uint8_t* Send(Packet&, uint32_t&);
-    virtual void Recv(Packet&);
+    const uint8_t* Send(Packet&, uint32_t&) override;
+    void Recv(Packet&) override;
 
     static const char* Type() { return "user"; };
 

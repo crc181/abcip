@@ -6,9 +6,9 @@
 class ModbusProtocol : public Protocol {
 public:
     ModbusProtocol();
-    virtual ~ ModbusProtocol();
+    ~ ModbusProtocol() override;
 
-    virtual const uint8_t* GetHeader(Packet&, uint32_t&);
+    const uint8_t* GetHeader(Packet&, uint32_t&) override;
 
     static Pimp* GetPimp();
 

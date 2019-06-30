@@ -110,11 +110,11 @@ class Hop6Pimp : public Pimp {
 public:
     Hop6Pimp() : Pimp(s_hop, s_fields) { };
 
-    Protocol* New(PseudoHdr*) {
+    Protocol* New(PseudoHdr*) override {
         return new Hop6Protocol();
     };
 
-    void HelpBind(ostream&);
+    void HelpBind(ostream&) override;
 };
 
 void Hop6Pimp::HelpBind (ostream& out) {
@@ -131,11 +131,11 @@ class Dst6Pimp : public Pimp {
 public:
     Dst6Pimp() : Pimp(s_dst, s_fields) { };
 
-    Protocol* New(PseudoHdr*) {
+    Protocol* New(PseudoHdr*) override {
         return new Dst6Protocol();
     };
 
-    void HelpBind(ostream&);
+    void HelpBind(ostream&) override;
 };
 
 void Dst6Pimp::HelpBind (ostream& out) {

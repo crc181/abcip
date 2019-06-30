@@ -28,11 +28,11 @@
 class MplsProtocol : public Protocol {
 public:
     MplsProtocol();
-    virtual ~MplsProtocol();
+    ~MplsProtocol() override;
 
-    virtual bool Bind(const string&);
+    bool Bind(const string&) override;
 
-    virtual const uint8_t* GetHeader(Packet&, uint32_t&);
+    const uint8_t* GetHeader(Packet&, uint32_t&) override;
 
     static Pimp* GetPimp();
 

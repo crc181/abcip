@@ -28,11 +28,11 @@
 class CommandParser : public Parser {
 public:
     CommandParser(class Reader*, const char*);
-    virtual ~CommandParser();
+    ~CommandParser() override;
 
-    virtual bool Load(Command&);
-    virtual bool Good();
-    virtual void GetLocation(int& y, int& x);
+    bool Load(Command&) override;
+    bool Good() override;
+    void GetLocation(int& y, int& x) override;
 
 private:
     class CommandParserImpl* my;

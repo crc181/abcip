@@ -89,11 +89,11 @@ class PPPoEPimp : public Pimp {
 public:
     PPPoEPimp() : Pimp(s_type, s_fields) { };
 
-    Protocol* New(PseudoHdr*) {
+    Protocol* New(PseudoHdr*) override {
         return new PPPoEProtocol();
     };
 
-    void HelpBind(ostream&);
+    void HelpBind(ostream&) override;
 };
 
 void PPPoEPimp::HelpBind (ostream& out) {

@@ -28,12 +28,12 @@
 class GreProtocol : public Protocol {
 public:
     GreProtocol();
-    virtual ~GreProtocol();
+    ~GreProtocol() override;
 
-    virtual bool Bind(const string&);
+    bool Bind(const string&) override;
 
-    virtual const uint8_t* GetHeader(Packet&, uint32_t&);
-    virtual const uint8_t* GetOptions(const Packet&, uint32_t&);
+    const uint8_t* GetHeader(Packet&, uint32_t&) override;
+    const uint8_t* GetOptions(const Packet&, uint32_t&) override;
 
     static Pimp* GetPimp();
 

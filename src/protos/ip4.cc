@@ -264,11 +264,11 @@ class Ip4Pimp : public Pimp {
 public:
     Ip4Pimp() : Pimp(s_type, s_fields) { };
 
-    Protocol* New(PseudoHdr*) {
+    Protocol* New(PseudoHdr*) override {
         return new Ip4Protocol();
     };
 
-    void HelpBind(ostream&);
+    void HelpBind(ostream&) override;
 };
 
 void Ip4Pimp::HelpBind (ostream& out) {

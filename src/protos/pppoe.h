@@ -28,10 +28,10 @@
 class PPPoEProtocol : public Protocol {
 public:
     PPPoEProtocol();
-    virtual ~PPPoEProtocol();
+    ~PPPoEProtocol() override;
 
-    virtual bool Bind(const string&);
-    virtual const uint8_t* GetHeader(Packet&, uint32_t&);
+    bool Bind(const string&) override;
+    const uint8_t* GetHeader(Packet&, uint32_t&) override;
 
     static Pimp* GetPimp();
 

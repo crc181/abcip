@@ -31,10 +31,10 @@ using namespace std;
 class PcapWriter : public Writer {
 public:
     PcapWriter(const char* name, const char* root, uint32_t snap=0);
-    virtual ~PcapWriter();
+    ~PcapWriter() override;
 
-    virtual void operator<<(const Packet&);
-    virtual bool Ok();
+    void operator<<(const Packet&) override;
+    bool Ok() override;
 
 private:
     class PcapWriterImpl* my;

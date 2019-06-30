@@ -116,7 +116,7 @@ class Icmp4Pimp : public Pimp {
 public:
     Icmp4Pimp() : Pimp(s_type, s_fields) { };
 
-    Protocol* New(PseudoHdr*) {
+    Protocol* New(PseudoHdr*) override {
         return new Icmp4Protocol();
     };
 };

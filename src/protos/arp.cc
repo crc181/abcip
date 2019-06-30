@@ -156,7 +156,7 @@ class ArpPimp : public Pimp {
 public:
     ArpPimp() : Pimp(s_type, s_fields) { };
 
-    Protocol* New(PseudoHdr*) {
+    Protocol* New(PseudoHdr*) override {
         return new ArpProtocol();
     };
 };

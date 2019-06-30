@@ -28,12 +28,12 @@
 class EthProtocol : public Protocol {
 public:
     EthProtocol();
-    virtual ~EthProtocol();
+    ~EthProtocol() override;
 
-    virtual void Store(Cake&, bool);
-    virtual bool Bind(const string&);
+    void Store(Cake&, bool) override;
+    bool Bind(const string&) override;
 
-    virtual const uint8_t* GetHeader(Packet&, uint32_t&);
+    const uint8_t* GetHeader(Packet&, uint32_t&) override;
 
     static Pimp* GetPimp();
 

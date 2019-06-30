@@ -62,11 +62,11 @@ class PppPimp : public Pimp {
 public:
     PppPimp() : Pimp(s_type, nullptr) { };
 
-    Protocol* New(PseudoHdr*) {
+    Protocol* New(PseudoHdr*) override {
         return new PppProtocol();
     };
 
-    void HelpBind(ostream&);
+    void HelpBind(ostream&) override;
 };
 
 void PppPimp::HelpBind (ostream& out) {

@@ -61,7 +61,7 @@ class ModbusPimp : public Pimp {
 public:
     ModbusPimp() : Pimp(s_type, s_fields) { };
 
-    Protocol* New(PseudoHdr*) {
+    Protocol* New(PseudoHdr*) override {
         return new ModbusProtocol();
     };
 };

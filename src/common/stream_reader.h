@@ -32,9 +32,9 @@ class StreamReader : public Reader {
 public:
     StreamReader(const char* filename = nullptr);
     StreamReader(istream*);
-    virtual ~StreamReader();
+    ~StreamReader() override;
 
-    virtual bool operator>>(char&);
+    bool operator>>(char&) override;
 
 private:
     istream* sin;

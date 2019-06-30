@@ -98,11 +98,11 @@ class VlanPimp : public Pimp {
 public:
     VlanPimp() : Pimp(s_type, s_fields) { };
 
-    Protocol* New(PseudoHdr*) {
+    Protocol* New(PseudoHdr*) override {
         return new VlanProtocol();
     };
 
-    void HelpBind(ostream&);
+    void HelpBind(ostream&) override;
 };
 
 void VlanPimp::HelpBind (ostream& out) {

@@ -28,9 +28,9 @@
 class Icmp6Protocol : public Protocol {
 public:
     Icmp6Protocol(PseudoHdr*);
-    virtual ~Icmp6Protocol();
+    ~Icmp6Protocol() override;
 
-    virtual const uint8_t* GetHeader(Packet&, uint32_t&);
+    const uint8_t* GetHeader(Packet&, uint32_t&) override;
 
     static Pimp* GetPimp();
 

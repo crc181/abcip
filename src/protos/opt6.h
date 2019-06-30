@@ -27,12 +27,12 @@
 
 class Opt6Protocol : public Protocol {
 public:
-    virtual ~Opt6Protocol();
+    ~Opt6Protocol() override;
 
-    virtual bool Bind(const string&);
+    bool Bind(const string&) override;
 
-    virtual const uint8_t* GetHeader(Packet&, uint32_t&);
-    virtual const uint8_t* GetOptions(const Packet&, uint32_t&);
+    const uint8_t* GetHeader(Packet&, uint32_t&) override;
+    const uint8_t* GetOptions(const Packet&, uint32_t&) override;
 
 protected:
     Opt6Protocol(const char*);

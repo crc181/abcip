@@ -121,7 +121,7 @@ class Icmp6Pimp : public Pimp {
 public:
     Icmp6Pimp() : Pimp(s_type, s_fields) { };
 
-    Protocol* New(PseudoHdr* ph) {
+    Protocol* New(PseudoHdr* ph) override {
         return new Icmp6Protocol(ph);
     };
 };

@@ -124,11 +124,11 @@ class UdpPimp : public Pimp {
 public:
     UdpPimp() : Pimp(s_type, s_fields) { };
 
-    Protocol* New(PseudoHdr* ph) {
+    Protocol* New(PseudoHdr* ph) override {
         return new UdpProtocol(ph);
     };
 
-    void HelpBind(ostream&);
+    void HelpBind(ostream&) override;
 };
 
 void UdpPimp::HelpBind (ostream& out) {

@@ -113,11 +113,11 @@ class MplsPimp : public Pimp {
 public:
     MplsPimp() : Pimp(s_type, s_fields) { };
 
-    Protocol* New(PseudoHdr*) {
+    Protocol* New(PseudoHdr*) override {
         return new MplsProtocol();
     };
 
-    void HelpBind(ostream&);
+    void HelpBind(ostream&) override;
 };
 
 void MplsPimp::HelpBind (ostream& out) {

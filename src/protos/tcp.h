@@ -28,15 +28,15 @@
 class TcpProtocol : public Protocol {
 public:
     TcpProtocol(PseudoHdr*);
-    virtual ~TcpProtocol();
+    ~TcpProtocol() override;
 
-    virtual void Store(Cake&, bool);
+    void Store(Cake&, bool) override;
 
-    virtual const uint8_t* GetHeader(Packet&, uint32_t&);
-    virtual const uint8_t* GetOptions(const Packet&, uint32_t&);
-    virtual const uint8_t* GetPayload(const Packet&, uint32_t&);
+    const uint8_t* GetHeader(Packet&, uint32_t&) override;
+    const uint8_t* GetOptions(const Packet&, uint32_t&) override;
+    const uint8_t* GetPayload(const Packet&, uint32_t&) override;
 
-    virtual bool HasPayload();
+    bool HasPayload() override;
 
     static Pimp* GetPimp();
 

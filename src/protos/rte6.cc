@@ -112,11 +112,11 @@ class Rte6Pimp : public Pimp {
 public:
     Rte6Pimp() : Pimp(s_type, s_fields) { };
 
-    Protocol* New(PseudoHdr*) {
+    Protocol* New(PseudoHdr*) override {
         return new Rte6Protocol();
     };
 
-    void HelpBind(ostream&);
+    void HelpBind(ostream&) override;
 };
 
 void Rte6Pimp::HelpBind (ostream& out) {

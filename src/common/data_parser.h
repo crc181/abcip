@@ -29,11 +29,11 @@ class DataParser : public Parser {
 public:
     DataParser(class Reader*,
         const char* cmd = "a", const char* key = "pay");
-    virtual ~DataParser();
+    ~DataParser() override;
 
-    virtual bool Load(Command&);
-    virtual bool Good();
-    virtual void GetLocation(int& y, int& x);
+    bool Load(Command&) override;
+    bool Good() override;
+    void GetLocation(int& y, int& x) override;
 
 private:
     class DataParserImpl* my;
