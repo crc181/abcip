@@ -32,12 +32,17 @@
 #include <cstring>
 #include <vector>
 
+#ifndef s6_addr32
+#define s6_addr32 __u6_addr.__u6_addr32
+#endif
+
 using namespace std;
 
 struct DaqWriterPktDesc
 {
     DAQ_Msg_t msg;
     DAQ_PktHdr_t pkthdr;
+    DAQ_NAPTInfo_t napti;
 };
 
 struct DaqWriterMsgPool
@@ -50,7 +55,7 @@ struct DaqWriterMsgPool
 class DaqWriterImpl
 {
 public:
-    DaqWriterImpl(uint32_t pool_size, uint32_t snaplen, bool real_time);
+    DaqWriterImpl(DAQ_ModuleInstance_h modinst, uint32_t pool_size, uint32_t snaplen, bool real_time);
     ~DaqWriterImpl();
 
     struct timeval last;
@@ -62,7 +67,7 @@ public:
     unsigned msg_count = 0;
 };
 
-DaqWriterImpl::DaqWriterImpl(uint32_t pool_size, uint32_t snaplen, bool real_time)
+DaqWriterImpl::DaqWriterImpl(DAQ_ModuleInstance_h modinst, uint32_t pool_size, uint32_t snaplen, bool real_time)
 {
     snap = snaplen;
 
@@ -76,6 +81,7 @@ DaqWriterImpl::DaqWriterImpl(uint32_t pool_size, uint32_t snaplen, bool real_tim
         msg->hdr_len = sizeof(desc->pkthdr);
         msg->hdr = &desc->pkthdr;
         msg->data = new uint8_t[snap];
+        msg->owner = modinst;
         msg->priv = desc;
         pool.freelist.push_back(desc);
         pool.info.mem_size += snap;
@@ -96,9 +102,9 @@ DaqWriterImpl::~DaqWriterImpl()
     delete[] pool.pool;
 }
 
-DaqWriter::DaqWriter(uint32_t pool_size, uint32_t snaplen, bool real_time)
+DaqWriter::DaqWriter(DAQ_ModuleInstance_h modinst, uint32_t pool_size, uint32_t snaplen, bool real_time)
 {
-    impl = new DaqWriterImpl(pool_size, snaplen, real_time);
+    impl = new DaqWriterImpl(modinst, pool_size, snaplen, real_time);
 }
 
 DaqWriter::~DaqWriter()
@@ -161,8 +167,35 @@ void DaqWriter::operator<<(const Packet& p)
     DAQ_Msg_t* msg = &desc->msg;
     uint32_t data_len = (p.snap && hdr->pktlen > p.snap) ? p.snap : hdr->pktlen;
     data_len = (data_len > impl->snap) ? impl->snap : data_len;
-    msg->data_len = data_len;
     memcpy(msg->data, p.Data(), data_len);
+    msg->data_len = data_len;
+    /* If the "real" address info is present, fill out and provide the NAPT Info metadata. */
+    if (p.real_src_family != AF_UNSPEC && p.real_dst_family != AF_UNSPEC)
+    {
+        DAQ_NAPTInfo_t* napti = &desc->napti;
+        napti->flags = 0;
+
+        if (p.real_src_family == AF_INET6)
+        {
+            memcpy(&napti->src_addr.s6_addr32, &p.real_src_ip, sizeof(napti->src_addr.s6_addr32));
+            napti->flags |= DAQ_NAPT_INFO_FLAG_SIP_V6;
+        }
+        else
+            napti->src_addr.s6_addr32[0] = p.real_src_ip[0];
+        napti->src_port = p.real_src_port;
+
+        if (p.real_dst_family == AF_INET6)
+        {
+            memcpy(&napti->dst_addr.s6_addr32, &p.real_dst_ip, sizeof(napti->dst_addr.s6_addr32));
+            napti->flags |= DAQ_NAPT_INFO_FLAG_DIP_V6;
+        }
+        else
+            napti->dst_addr.s6_addr32[0] = p.real_dst_ip[0];
+        napti->dst_port = p.real_dst_port;
+        msg->meta[DAQ_PKT_META_NAPT_INFO] = napti;
+    }
+    else
+        msg->meta[DAQ_PKT_META_NAPT_INFO] = nullptr;
 
     impl->msg_vector[impl->msg_count++] = &desc->msg;
 
