@@ -27,6 +27,7 @@
 #include "cake.h"
 
 #include <iostream>
+#include <map>
 
 #include "attribute.h"
 

@@ -26,8 +26,6 @@
 
 #include "pimp.h"
 
-#include <cstdlib>
-
 #include "status.h"
 
 using namespace std;

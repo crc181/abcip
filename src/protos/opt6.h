@@ -44,7 +44,7 @@ private:
 class Hop6Protocol : public Opt6Protocol {
 public:
     Hop6Protocol() : Opt6Protocol("hop6") { }
-    static Pimp* GetPimp();
+    static class Pimp* GetPimp();
 };
 
 class Dst6Protocol : public Opt6Protocol {

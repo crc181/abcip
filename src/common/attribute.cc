@@ -26,7 +26,6 @@
 
 #include "attribute.h"
 
-#include <cstdlib>
 #include <ostream>
 
 using namespace std;

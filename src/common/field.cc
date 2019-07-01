@@ -20,17 +20,21 @@
 #include "config.h"
 #endif
 
-#include <arpa/inet.h>
-#include <net/ethernet.h>
+#include "field.h"
 
-#ifdef LINUX
+#include <arpa/inet.h>
+
+#if defined(__FreeBSD__) || defined(__APPLE__) || defined(__darwin__) || defined(__OpenBSD__)
+#include <sys/socket.h>     // Needed for struct sockaddr and int types
+#include <sys/types.h>
+#include <netinet/if_ether.h>
+#include <netinet/in.h>
+#elif defined(__linux__)
 #include <netinet/ether.h>
 #endif
 
-#include <cstdlib>
 #include <cstring>
 
-#include "field.h"
 #include "status.h"
 
 using namespace std;

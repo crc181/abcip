@@ -40,7 +40,7 @@ public:
     const uint8_t* GetPayload(const Packet&, uint32_t&) override;
 
     bool HasPayload() override;
-    static Pimp* GetPimp();
+    static class Pimp* GetPimp();
 
 protected:
     virtual void Checksum(const Packet&);

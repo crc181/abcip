@@ -30,6 +30,8 @@
 
 #include "cake.h"
 #include "ip6.h"
+#include "packet.h"
+#include "pimp.h"
 
 using namespace std;
 

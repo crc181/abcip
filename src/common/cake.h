@@ -23,7 +23,7 @@
 #ifndef __CAKE_H__
 #define __CAKE_H__
 
-#include "attribute.h"
+#include <string>
 
 class Cake {
 public:

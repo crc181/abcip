@@ -27,10 +27,7 @@
 #include "cmd_parser.h"
 
 #include <cstring>
-#include <cstdlib>
-#include <iostream>
 
-#include "attribute.h"
 #include "command.h"
 #include "reader.h"
 #include "status.h"

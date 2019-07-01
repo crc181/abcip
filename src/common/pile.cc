@@ -29,8 +29,8 @@
 #include <vector>
 
 #include "cake.h"
+#include "packet.h"
 #include "protocol.h"
-#include "pseudo_hdr.h"
 #include "user.h"
 
 using namespace std;

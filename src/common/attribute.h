@@ -23,9 +23,6 @@
 #ifndef __ATTRIBUTE_H__
 #define __ATTRIBUTE_H__
 
-#include <cstdint>
-
-#include <map>
 #include <string>
 
 class Attribute {

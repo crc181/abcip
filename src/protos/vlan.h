@@ -36,7 +36,7 @@ public:
 
     void Store(Cake&, bool) override;
 
-    static Pimp* GetPimp();
+    static class Pimp* GetPimp();
 
 private:
     class VlanImpl* my;

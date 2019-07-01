@@ -26,10 +26,10 @@
 
 #include "pppoe.h"
 
-#include <cstdio>
-#include <ostream>
-
 #include "cake.h"
+#include "field.h"
+#include "packet.h"
+#include "pimp.h"
 
 using namespace std;
 

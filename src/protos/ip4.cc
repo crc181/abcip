@@ -26,13 +26,18 @@
 
 #include "ip4.h"
 
-#include <netinet/in.h>
+#if defined(__FreeBSD__) || defined(__APPLE__) || defined(__darwin__) || defined(__OpenBSD__)
+#include <sys/socket.h>     // Needed for struct sockaddr and int types
+#include <sys/types.h>
+#endif
+
+#include <arpa/inet.h>
 #include <netinet/ip.h>
 
-#include <cstdio>
-#include <sstream>
-
 #include "cake.h"
+#include "field.h"
+#include "packet.h"
+#include "pimp.h"
 #include "pseudo_hdr.h"
 
 using namespace std;

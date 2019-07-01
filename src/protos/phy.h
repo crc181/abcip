@@ -37,7 +37,7 @@ public:
     const uint8_t* GetPayload(const Packet&, uint32_t&) override;
 
     bool HasPayload() override;
-    static Pimp* GetPimp();
+    static class Pimp* GetPimp();
 
 private:
 #ifdef HAVE_DAQ

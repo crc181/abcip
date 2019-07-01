@@ -38,7 +38,7 @@ public:
 
     bool HasPayload() override;
 
-    static Pimp* GetPimp();
+    static class Pimp* GetPimp();
 
 protected:
     virtual void Checksum(const Packet&);

@@ -26,21 +26,22 @@
 
 #include "arp.h"
 
-#ifdef LINUX
+#include <arpa/inet.h>
+
+#if defined(__FreeBSD__) || defined(__APPLE__) || defined(__darwin__) || defined(__OpenBSD__)
+#include <sys/socket.h>     // Needed for struct sockaddr and int types
+#include <sys/types.h>
+#include <netinet/if_ether.h>
+#include <netinet/in.h>
+#elif defined(__linux__)
 #include <netinet/ether.h>
 #endif
 
-#ifdef MACOSX
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <net/ethernet.h>
-#endif
-
-#include <cstdlib>
 #include <cstring>
-#include <iostream>
 
 #include "cake.h"
+#include "packet.h"
+#include "pimp.h"
 
 using namespace std;
 

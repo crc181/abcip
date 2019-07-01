@@ -26,8 +26,8 @@
 
 #include "protocol.h"
 
-#include <cstdlib>
-
+#include "cake.h"
+#include "packet.h"
 #include "pseudo_hdr.h"
 
 using namespace std;
