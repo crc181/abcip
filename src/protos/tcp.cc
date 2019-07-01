@@ -29,6 +29,9 @@
 #include <netinet/tcp.h>
 
 #include "cake.h"
+#include "field.h"
+#include "packet.h"
+#include "pimp.h"
 #include "pseudo_hdr.h"
 
 using namespace std;

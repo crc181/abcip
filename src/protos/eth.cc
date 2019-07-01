@@ -26,16 +26,23 @@
 
 #include "eth.h"
 
-#include <net/ethernet.h>
+#include <arpa/inet.h>
 
-#ifdef LINUX
+#if defined(__FreeBSD__) || defined(__APPLE__) || defined(__darwin__) || defined(__OpenBSD__)
+#include <sys/socket.h>     // Needed for struct sockaddr and int types
+#include <sys/types.h>
+#include <netinet/if_ether.h>
+#include <netinet/in.h>
+#elif defined(__linux__)
 #include <netinet/ether.h>
 #endif
 
-#include <cstdlib>
 #include <cstring>
 
 #include "cake.h"
+#include "field.h"
+#include "packet.h"
+#include "pimp.h"
 
 using namespace std;
 

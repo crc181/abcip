@@ -26,9 +26,6 @@
 
 #include "data_parser.h"
 
-#include <iostream>
-
-#include "attribute.h"
 #include "command.h"
 #include "reader.h"
 

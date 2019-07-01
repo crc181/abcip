@@ -26,11 +26,18 @@
 
 #include "phy.h"
 
-#include <cstdlib>
+#if defined(__FreeBSD__) || defined(__APPLE__) || defined(__darwin__) || defined(__OpenBSD__)
+#include <sys/socket.h>     // Needed for struct sockaddr and int types
+#endif
+
+#include <arpa/inet.h>
+
 #include <cstring>
-#include <string>
 
 #include "cake.h"
+#include "field.h"
+#include "packet.h"
+#include "pimp.h"
 
 using namespace std;
 

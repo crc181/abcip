@@ -25,7 +25,6 @@
 #include <daq_dlt.h>
 #include <daq_module_api.h>
 
-#include <cstdio>
 #include <cstring>
 
 #include "abc_io.h"

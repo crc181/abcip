@@ -26,18 +26,12 @@
 
 #include "abc_ip.h"
 
-#include <cstdlib>
 #include <cstring>
 
-#include "../protos/protocol.h"
-#include "../protos/prototool.h"
-
-#include "packet.h"
-#include "parser.h"
 #include "pile.h"
+#include "protocol.h"
+#include "prototool.h"
 #include "status.h"
-#include "user.h"
-#include "writer.h"
 
 using namespace std;
 

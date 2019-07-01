@@ -26,6 +26,8 @@
 
 #include "user.h"
 
+#include <iostream>
+
 #include "dumb_user.h"
 
 using namespace std;

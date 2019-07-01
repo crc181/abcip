@@ -24,8 +24,6 @@
 
 #include <daq_module_api.h>
 
-#include <cstdio>
-#include <cstdlib>
 #include <cstring>
 
 #include "base_daq.h"

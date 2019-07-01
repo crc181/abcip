@@ -26,16 +26,6 @@ AX_CXX_COMPILE_STDCXX_11
 # Checks for libraries.
 AC_CHECK_LIB([pcap], [pcap_lib_version],,AC_MSG_ERROR(Missing libpcap >= 1.0.0))
 
-# Checks for host.
-case "$host" in
-    *darwin*)
-    AC_DEFINE([MACOSX], [1], [Define if MacOSX])
-    ;;
-    *-linux*)
-    AC_DEFINE([LINUX], [1], [Define if Linux])
-    ;;
-esac
-
 # Checks for header files.
 AC_HEADER_STDC
 AC_CHECK_HEADERS([arpa/inet.h netinet/in.h stdint.h stdlib.h string.h])

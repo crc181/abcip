@@ -26,7 +26,11 @@
 
 #include "pseudo_hdr.h"
 
-#include <cstdint>
+#include <sys/socket.h>
+
+#include "cake.h"
+#include "packet.h"
+#include "protocol.h"
 
 void PseudoHdr::GetAddresses (
     const Packet& p, const char*& src, const char*& dst

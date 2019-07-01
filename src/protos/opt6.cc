@@ -26,10 +26,10 @@
 
 #include "opt6.h"
 
-#include <netinet/in.h>
-
 #include "cake.h"
 #include "ip6.h"
+#include "pimp.h"
+#include "packet.h"
 
 using namespace std;
 

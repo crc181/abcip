@@ -23,9 +23,12 @@
 #ifndef __PSEUDO_HDR_H__
 #define __PSEUDO_HDR_H__
 
-#include <cstdint>
 #include <arpa/inet.h>
-#include "protocol.h"
+
+#include <cstdint>
+
+class Packet;
+class Protocol;
 
 class PseudoHdr {
 public:

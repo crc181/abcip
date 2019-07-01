@@ -34,7 +34,7 @@ public:
 
     const uint8_t* GetHeader(Packet&, uint32_t&) override;
 
-    static Pimp* GetPimp();
+    static class Pimp* GetPimp();
 
 private:
     class MplsImpl* my;

@@ -26,19 +26,14 @@
 
 #include "abc_io.h"
 
-#include <cassert>
-#include <cstdlib>
-#include <iostream>
 #include <map>
 
 #include "abc_ip.h"
-#include "cake.h"
 #include "command.h"
 #include "field.h"
 #include "parser.h"
 #include "prototool.h"
 #include "status.h"
-#include "writer.h"
 
 using namespace std;
 

@@ -26,10 +26,17 @@
 
 #include "vlan.h"
 
+#if defined(__FreeBSD__) || defined(__APPLE__) || defined(__darwin__) || defined(__OpenBSD__)
+#include <sys/types.h>
+#endif
+
 #include <net/ethernet.h>
 
 #include "cake.h"
 #include "eth.h"
+#include "field.h"
+#include "packet.h"
+#include "pimp.h"
 
 using namespace std;
 

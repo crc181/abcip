@@ -27,6 +27,8 @@
 #include "raw.h"
 
 #include "cake.h"
+#include "packet.h"
+#include "pimp.h"
 
 using namespace std;
 

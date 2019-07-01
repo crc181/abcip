@@ -36,7 +36,7 @@ public:
     PseudoHdr* GetPseudoHdr(unsigned lyr) override;
     const uint8_t* GetHeader(Packet&, uint32_t&) override;
 
-    static Pimp* GetPimp();
+    static class Pimp* GetPimp();
     static const char* GetBindings();
     static bool GetBinding(const std::string& s, uint8_t& et);
 

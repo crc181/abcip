@@ -23,10 +23,9 @@
 #ifndef __USER_H__
 #define __USER_H__
 
-#include <string>
-
 #include "cake.h"
-#include "packet.h"
+
+class Packet;
 
 class User {
 public:

@@ -29,6 +29,8 @@
 #include <ostream>
 
 #include "cake.h"
+#include "packet.h"
+#include "pimp.h"
 #include "pseudo_hdr.h"
 
 using namespace std;

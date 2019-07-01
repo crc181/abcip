@@ -24,12 +24,10 @@
 #define __PROTOCOL_H__
 
 #include <cstdint>
-#include <arpa/inet.h>
+#include <string>
 
-#include "cake.h"
-#include "packet.h"
-#include "pimp.h"
-
+class Cake;
+class Packet;
 class PseudoHdr;
 
 struct CheckField {

@@ -26,10 +26,11 @@
 
 #include "gre.h"
 
-#include <netinet/in.h>
-
-#include "eth.h"
 #include "cake.h"
+#include "eth.h"
+#include "field.h"
+#include "packet.h"
+#include "pimp.h"
 
 using namespace std;
 

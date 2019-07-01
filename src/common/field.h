@@ -16,11 +16,11 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //--------------------------------------------------------------------- EOL
 
-#include <iostream>
-#include <string>
-
 #ifndef __FIELD_H__
 #define __FIELD_H__
+
+#include <iostream>
+#include <string>
 
 enum FieldType {
     FT_DEF, FT_CFG, FT_PKT, FT_MAX
