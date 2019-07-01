@@ -140,7 +140,7 @@ int AbcDaq::Init(const DAQ_ModuleConfig_h modcfg, DAQ_ModuleInstance_h modinst)
     uint32_t pool_size = impl->daq_base_api->config_get_msg_pool_size(modcfg);
     if (pool_size == 0)
         pool_size = ABC_DAQ_DEFAULT_POOL_SIZE;
-    impl->writer = new DaqWriter(pool_size, impl->snap, impl->real_time);
+    impl->writer = new DaqWriter(modinst, pool_size, impl->snap, impl->real_time);
 
     impl->abc = new AbcIo(
         parser, impl->writer,
