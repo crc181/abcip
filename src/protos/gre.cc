@@ -26,6 +26,8 @@
 
 #include "gre.h"
 
+#include <arpa/inet.h>
+
 #include "cake.h"
 #include "eth.h"
 #include "field.h"

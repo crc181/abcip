@@ -30,6 +30,7 @@
 #include <sys/types.h>
 #endif
 
+#include <arpa/inet.h>
 #include <net/ethernet.h>
 
 #include "cake.h"

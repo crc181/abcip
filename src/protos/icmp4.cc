@@ -26,6 +26,8 @@
 
 #include "icmp4.h"
 
+#include <arpa/inet.h>
+
 #include "cake.h"
 #include "packet.h"
 #include "pimp.h"

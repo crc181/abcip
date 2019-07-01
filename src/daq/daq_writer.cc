@@ -132,14 +132,9 @@ void DaqWriter::operator<<(const Packet& p)
 {
     DaqWriterPktDesc* desc = impl->pool.freelist.back();
     impl->pool.freelist.pop_back();
-    desc->pkthdr = p.daqhdr;
 
-    desc->pkthdr.pktlen = p.Length();
-    uint32_t data_len = (p.snap && desc->pkthdr.pktlen > p.snap) ? p.snap : desc->pkthdr.pktlen;
-    data_len = (data_len > impl->snap) ? impl->snap : data_len;
-    desc->msg.data_len = data_len;
-    memcpy(desc->msg.data, p.Data(), desc->msg.data_len);
-
+    /* Set up the DAQ packet header. */
+    DAQ_PktHdr_t* hdr = &desc->pkthdr;
     // Per-packet override of the timing interval
     if (p.late)
     {
@@ -150,6 +145,24 @@ void DaqWriter::operator<<(const Packet& p)
     }
     else
         timeradd(&impl->last, &impl->interval, &desc->pkthdr.ts);
+    hdr->pktlen = p.Length();
+    hdr->ingress_index = (p.ingress_intf_id >= 0) ? p.ingress_intf_id : DAQ_PKTHDR_UNKNOWN;
+    hdr->egress_index = (p.egress_intf_id >= 0) ? p.egress_intf_id : DAQ_PKTHDR_UNKNOWN;
+    hdr->ingress_group = (p.ingress_intf_group >= 0) ? p.ingress_intf_group : DAQ_PKTHDR_UNKNOWN;
+    hdr->egress_group = (p.egress_intf_group >= 0) ? p.egress_intf_group : DAQ_PKTHDR_UNKNOWN;
+    hdr->opaque = 0;
+    hdr->flow_id = p.flow_id;
+    hdr->flags = 0;
+    if (p.flow_id_set)
+        hdr->flags |= DAQ_PKT_FLAG_FLOWID_IS_VALID;
+    hdr->address_space_id = p.address_space_id;
+
+    /* Set up the DAQ message, copying the packet data. */
+    DAQ_Msg_t* msg = &desc->msg;
+    uint32_t data_len = (p.snap && hdr->pktlen > p.snap) ? p.snap : hdr->pktlen;
+    data_len = (data_len > impl->snap) ? impl->snap : data_len;
+    msg->data_len = data_len;
+    memcpy(msg->data, p.Data(), data_len);
 
     impl->msg_vector[impl->msg_count++] = &desc->msg;
 

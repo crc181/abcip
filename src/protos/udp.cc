@@ -26,6 +26,8 @@
 
 #include "udp.h"
 
+#include <netinet/in.h>
+
 #include <ostream>
 
 #include "cake.h"

@@ -23,6 +23,8 @@
 #ifndef __DAQ_WRITER_H__
 #define __DAQ_WRITER_H__
 
+#include <daq_common.h>
+
 #include "writer.h"
 
 class DaqWriter : public Writer {

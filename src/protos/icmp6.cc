@@ -26,6 +26,8 @@
 
 #include "icmp6.h"
 
+#include <netinet/in.h>
+
 #include "cake.h"
 #include "packet.h"
 #include "pimp.h"

@@ -25,13 +25,11 @@
 #ifndef __PACKET_H__
 #define __PACKET_H__
 
+#include <sys/socket.h>
+
 #include <cstdint>
 #include <string>
 #include <iostream>
-
-#ifdef HAVE_DAQ
-#include <daq_common.h>
-#endif
 
 class Cake;
 
@@ -50,13 +48,24 @@ public:
 public:
     Cake& cake;
 
-#ifdef HAVE_DAQ
-    DAQ_PktHdr_t daqhdr;
-#endif
-
+    // Various bits of additional information about the Packet that are not
+    // part of the generated packet data itself.
     bool drop = false;
     uint32_t snap = 0;
     float late = 0.0;
+    int32_t ingress_intf_id = -1;
+    int32_t ingress_intf_group = -1;
+    int32_t egress_intf_id = -1;
+    int32_t egress_intf_group = -1;
+    uint32_t flow_id = 0;
+    bool flow_id_set = false;
+    uint32_t address_space_id = 0;
+    uint32_t real_src_ip[4] = { };
+    uint16_t real_src_family = AF_UNSPEC;
+    uint16_t real_src_port = 0;
+    uint32_t real_dst_ip[4] = { };
+    uint16_t real_dst_family = AF_UNSPEC;
+    uint16_t real_dst_port = 0;
 
 private:
     std::string buf;

@@ -40,10 +40,8 @@ public:
     static class Pimp* GetPimp();
 
 private:
-#ifdef HAVE_DAQ
     void FetchA2B(Cake&);
     void FetchB2A(Cake&);
-#endif
 
 private:
     struct PhyImpl* my;
