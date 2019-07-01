@@ -26,6 +26,7 @@
 
 #include "tcp.h"
 
+#include <netinet/in.h>
 #include <netinet/tcp.h>
 
 #include "cake.h"

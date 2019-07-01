@@ -26,10 +26,6 @@
 
 #include "phy.h"
 
-#if defined(__FreeBSD__) || defined(__APPLE__) || defined(__darwin__) || defined(__OpenBSD__)
-#include <sys/socket.h>     // Needed for struct sockaddr and int types
-#endif
-
 #include <arpa/inet.h>
 
 #include <cstring>
@@ -50,12 +46,24 @@ struct PhyImpl {
     unsigned nIn = 0;
     unsigned nOut = 0;
 
+    // Various bits of additional information about the Packet that are not
+    // part of the generated packet data itself.  These match up to those in
+    // the Packet structure.
     uint32_t snap = 0;
     float late = 0.0;
-
-#ifdef HAVE_DAQ
-    DAQ_PktHdr_t daqhdr;
-#endif
+    int32_t ingress_intf_id = -1;
+    int32_t ingress_intf_group = -1;
+    int32_t egress_intf_id = -1;
+    int32_t egress_intf_group = -1;
+    uint32_t flow_id = 0;
+    bool flow_id_set = false;
+    uint32_t address_space_id = 0;
+    uint32_t real_src_ip[4];
+    uint16_t real_src_family = AF_UNSPEC;
+    uint16_t real_src_port = 0;
+    uint32_t real_dst_ip[4];
+    uint16_t real_dst_family = AF_UNSPEC;
+    uint16_t real_dst_port = 0;
 
     void Reverse(unsigned);
     void Permute(unsigned);
@@ -107,20 +115,13 @@ void PhyImpl::Clear () {
 
 PhyProtocol::PhyProtocol () : Protocol(s_type) {
     my = new PhyImpl;
-
-#ifdef HAVE_DAQ
-    memset(&my->daqhdr, 0, sizeof(my->daqhdr));
-
-    my->daqhdr.ingress_index = DAQ_PKTHDR_UNKNOWN;
-    my->daqhdr.egress_index = DAQ_PKTHDR_UNKNOWN;
-    my->daqhdr.ingress_group = DAQ_PKTHDR_UNKNOWN;
-    my->daqhdr.egress_group = DAQ_PKTHDR_UNKNOWN;
-#endif
 }
 
 PhyProtocol::~PhyProtocol () {
-    if ( my->buf ) delete[] my->buf;
-    if ( my->order ) delete[] my->order;
+    if ( my->buf )
+        delete[] my->buf;
+    if ( my->order )
+        delete[] my->order;
     delete my;
 }
 
@@ -135,104 +136,113 @@ void PhyProtocol::Fetch (Cake& cake, bool a2b) {
     my->snap = cake.GetValue("snap", my->snap);
     my->late = cake.GetReal("sec", my->late);
 
-#ifdef HAVE_DAQ
     if (cake.IsSet("fid"))
     {
-        my->daqhdr.flow_id = cake.GetValue("fid", my->daqhdr.flow_id);
-        my->daqhdr.flags |= DAQ_PKT_FLAG_FLOWID_IS_VALID;
+        my->flow_id = cake.GetValue("fid", my->flow_id);
+        my->flow_id_set = true;
     }
 
-    my->daqhdr.address_space_id = cake.GetValue("as", my->daqhdr.address_space_id);
+    my->address_space_id = cake.GetValue("as", my->address_space_id);
 
     if (a2b)
         FetchA2B(cake);
     else
         FetchB2A(cake);
-#endif
 }
 
-#ifdef HAVE_DAQ
 void PhyProtocol::FetchA2B (Cake& cake)
 {
-    my->daqhdr.ingress_index = cake.GetValue("a.if", my->daqhdr.ingress_index);
-    my->daqhdr.egress_index = cake.GetValue("b.if", my->daqhdr.egress_index);
-    my->daqhdr.ingress_group = cake.GetValue("a.gr", my->daqhdr.ingress_group);
-    my->daqhdr.egress_group = cake.GetValue("b.gr", my->daqhdr.egress_group);
+    my->ingress_intf_id = cake.GetValue("a.if", my->ingress_intf_id);
+    my->ingress_intf_group = cake.GetValue("a.gr", my->ingress_intf_group);
+    my->egress_intf_id = cake.GetValue("b.if", my->egress_intf_id);
+    my->egress_intf_group = cake.GetValue("b.gr", my->egress_intf_group);
 
     if (cake.IsSet("a.rip"))
     {
-        inet_pton(AF_INET, cake.GetCValue("a.rip"), &my->daqhdr.real_sIP);
-        my->daqhdr.flags |= DAQ_PKT_FLAG_REAL_ADDRESSES;
+        inet_pton(AF_INET, cake.GetCValue("a.rip"), &my->real_src_ip);
+        my->real_src_family = AF_INET;
     }
+    else if (cake.IsSet("a.rip6"))
+    {
+        inet_pton(AF_INET6, cake.GetCValue("a.rip6"), &my->real_src_ip);
+        my->real_src_family = AF_INET6;
+    }
+    my->real_src_port = htons(cake.GetValue("a.rpt", my->real_src_port));
+
     if (cake.IsSet("b.rip"))
     {
-        inet_pton(AF_INET, cake.GetCValue("b.rip"), &my->daqhdr.real_dIP);
-        my->daqhdr.flags |= DAQ_PKT_FLAG_REAL_ADDRESSES;
+        inet_pton(AF_INET, cake.GetCValue("b.rip"), &my->real_dst_ip);
+        my->real_dst_family = AF_INET;
     }
-    if (cake.IsSet("a.rip6"))
+    else if (cake.IsSet("b.rip6"))
     {
-        inet_pton(AF_INET6, cake.GetCValue("a.rip6"), &my->daqhdr.real_sIP);
-        my->daqhdr.flags |= (DAQ_PKT_FLAG_REAL_ADDRESSES | DAQ_PKT_FLAG_REAL_SIP_V6);
+        inet_pton(AF_INET6, cake.GetCValue("b.rip6"), &my->real_dst_ip);
+        my->real_dst_family = AF_INET6;
     }
-    if (cake.IsSet("b.rip6"))
-    {
-        inet_pton(AF_INET6, cake.GetCValue("b.rip6"), &my->daqhdr.real_dIP);
-        my->daqhdr.flags |= (DAQ_PKT_FLAG_REAL_ADDRESSES | DAQ_PKT_FLAG_REAL_SIP_V6);
-    }
-    my->daqhdr.n_real_sPort = htons(cake.GetValue("a.rpt", my->daqhdr.n_real_sPort));
-    my->daqhdr.n_real_dPort = htons(cake.GetValue("b.rpt", my->daqhdr.n_real_dPort));
+    my->real_dst_port = htons(cake.GetValue("b.rpt", my->real_dst_port));
 }
 
-// Swap directional DAQ components for the B-to-A case.
+// Swap directional attributes for the B-to-A case.
 void PhyProtocol::FetchB2A (Cake& cake)
 {
-    my->daqhdr.ingress_index = cake.GetValue("b.if", my->daqhdr.ingress_index);
-    my->daqhdr.egress_index = cake.GetValue("a.if", my->daqhdr.egress_index);
-    my->daqhdr.ingress_group = cake.GetValue("b.gr", my->daqhdr.ingress_group);
-    my->daqhdr.egress_group = cake.GetValue("a.gr", my->daqhdr.egress_group);
+    my->ingress_intf_id = cake.GetValue("b.if", my->ingress_intf_id);
+    my->ingress_intf_group = cake.GetValue("b.gr", my->ingress_intf_group);
+    my->egress_intf_id = cake.GetValue("a.if", my->egress_intf_id);
+    my->egress_intf_group = cake.GetValue("a.gr", my->egress_intf_group);
 
     if (cake.IsSet("b.rip"))
     {
-        inet_pton(AF_INET, cake.GetCValue("b.rip"), &my->daqhdr.real_sIP);
-        my->daqhdr.flags |= DAQ_PKT_FLAG_REAL_ADDRESSES;
+        inet_pton(AF_INET, cake.GetCValue("b.rip"), &my->real_src_ip);
+        my->real_src_family = AF_INET;
     }
+    else if (cake.IsSet("b.rip6"))
+    {
+        inet_pton(AF_INET6, cake.GetCValue("b.rip6"), &my->real_src_ip);
+        my->real_src_family = AF_INET6;
+    }
+    my->real_src_port = htons(cake.GetValue("b.rpt", my->real_src_port));
+
     if (cake.IsSet("a.rip"))
     {
-        inet_pton(AF_INET, cake.GetCValue("a.rip"), &my->daqhdr.real_dIP);
-        my->daqhdr.flags |= DAQ_PKT_FLAG_REAL_ADDRESSES;
+        inet_pton(AF_INET, cake.GetCValue("a.rip"), &my->real_dst_ip);
+        my->real_dst_family = AF_INET;
     }
-    if (cake.IsSet("b.rip6"))
+    else if (cake.IsSet("a.rip6"))
     {
-        inet_pton(AF_INET6, cake.GetCValue("b.rip6"), &my->daqhdr.real_sIP);
-        my->daqhdr.flags |= (DAQ_PKT_FLAG_REAL_ADDRESSES | DAQ_PKT_FLAG_REAL_SIP_V6);
+        inet_pton(AF_INET6, cake.GetCValue("a.rip6"), &my->real_dst_ip);
+        my->real_dst_family = AF_INET6;
     }
-    if (cake.IsSet("a.rip6"))
-    {
-        inet_pton(AF_INET6, cake.GetCValue("a.rip6"), &my->daqhdr.real_dIP);
-        my->daqhdr.flags |= (DAQ_PKT_FLAG_REAL_ADDRESSES | DAQ_PKT_FLAG_REAL_SIP_V6);
-    }
-    my->daqhdr.n_real_sPort = htons(cake.GetValue("b.rpt", my->daqhdr.n_real_sPort));
-    my->daqhdr.n_real_dPort = htons(cake.GetValue("a.rpt", my->daqhdr.n_real_dPort));
+    my->real_dst_port = htons(cake.GetValue("a.rpt", my->real_dst_port));
 }
-#endif
 
 const uint8_t* PhyProtocol::GetHeader (
     Packet& p, uint32_t& len
 ) {
+    // Set all of the esoteric Packet attributes
     p.drop = p.cake.IsSet("drop");
-
     p.snap = my->snap;
     p.late = p.cake.GetReal("dt", my->late);
+    p.ingress_intf_id = my->ingress_intf_id;
+    p.ingress_intf_group = my->ingress_intf_group;
+    p.egress_intf_id = my->egress_intf_id;
+    p.egress_intf_group = my->egress_intf_group;
+    p.flow_id = my->flow_id;
+    p.flow_id_set = my->flow_id_set;
+    p.address_space_id = my->address_space_id;
+    memcpy(&p.real_src_ip, &my->real_src_ip, sizeof(p.real_src_ip));
+    p.real_src_family = my->real_src_family;
+    p.real_src_port = my->real_src_port;
+    memcpy(&p.real_dst_ip, &my->real_dst_ip, sizeof(p.real_dst_ip));
+    p.real_dst_family = my->real_dst_family;
+    p.real_dst_port = my->real_dst_port;
 
-    if ( my->max && my->nOut == my->max )
-        my->Clear();
-
-    if ( my->max && !my->nOut )
-        p.drop = true;
-
-#ifdef HAVE_DAQ
-    p.daqhdr = my->daqhdr;
-#endif
+    if (my->max)
+    {
+        if (my->nOut == my->max)
+            my->Clear();
+        else if (!my->nOut)
+            p.drop = true;
+    }
 
     return Protocol::GetHeader(p, len);
 }

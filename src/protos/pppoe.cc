@@ -26,6 +26,8 @@
 
 #include "pppoe.h"
 
+#include <arpa/inet.h>
+
 #include "cake.h"
 #include "field.h"
 #include "packet.h"

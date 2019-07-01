@@ -50,19 +50,20 @@ AC_CHECK_FUNCS([gettimeofday memset strcasecmp strncasecmp strtol])
 
 # abc daq
 AC_ARG_ENABLE([daq],
-    AS_HELP_STRING([--disable-daq],[disable building with libdaq support (including the abcip DAQ module)]))
+    AS_HELP_STRING([--disable-daq],[disable building the abcip DAQ module (default=auto)]))
 
 if test "x$enable_daq" != "xno" ; then
     # Checks for the LibDAQ headers.
     AC_CHECK_DAQ_HEADERS
     if test "x$HAVE_DAQ_HEADERS" != "xyes"; then
-        AC_MSG_ERROR([Could not find LibDAQ headers!])
+        AC_MSG_WARN([Could not find LibDAQ headers, disabling DAQ module build...])
+        enable_daq=no
+    else
+        enable_daq=yes
     fi
-
-    AC_DEFINE([HAVE_DAQ],[1],[can build DAQ code])
 fi
 
-AM_CONDITIONAL([BUILD_DAQ], [test "x$enable_daq" != xno])
+AM_CONDITIONAL([BUILD_DAQ], [test "x$enable_daq" = "xyes"])
 
 # Check for asciidoc.  If it's present, enable rebuilding the HTML documentation.
 AC_CHECK_PROG([have_asciidoc], [asciidoc], yes)
@@ -100,4 +101,6 @@ AC_MSG_RESULT([
     ldflags:         ${LDFLAGS}
     am_ldflags:      ${AM_LDFLAGS}
     libs:            ${LIBS}
+
+    Build DAQ module : $enable_daq
 ])
