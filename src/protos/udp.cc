@@ -106,7 +106,7 @@ void UdpProtocol::Checksum (const Packet& p) {
         // udp header
         { (uint16_t*)&my->h, sizeof(my->h)>>1 },
         // padded payload
-        { (uint16_t*)data, (uint16_t)(dlen>>1) },
+        { (const uint16_t*)data, (uint16_t)(dlen>>1) },
         { (uint16_t*)dend, dadj },
         { nullptr, 0 }
     };

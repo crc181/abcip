@@ -109,16 +109,15 @@ const uint8_t* ArpProtocol::GetHeader (
     return (uint8_t*)&my->h;
 }
 
-#define ETH_NULL ((uint8_t*)"\0\0\0\0\0\0")
-
 const uint8_t* ArpProtocol::GetOptions (
     const Packet& p, uint32_t& len
 ) {
+    constexpr uint8_t ETH_NULL[] = "\0\0\0\0\0\0";
     const string& s = p.cake.GetValue("addr");
     len = s.length();
 
     if ( len )
-        return (uint8_t*)s.data();
+        return (const uint8_t*)s.data();
 
     const char* hw = p.cake.GetCValue("shw");
     const uint8_t* l2 = (uint8_t*)ether_aton(hw);

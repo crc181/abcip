@@ -93,7 +93,7 @@ const uint8_t* Opt6Protocol::GetOptions (
     }
 
     len = my->opt.length();
-    return len ? (uint8_t*)my->opt.data() : nullptr;
+    return len ? (const uint8_t*)my->opt.data() : nullptr;
 }
 
 //-------------------------------------------------------------------------

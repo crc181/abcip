@@ -37,12 +37,14 @@ using namespace std;
 static const char* s_type = "phy";
 
 struct PhyImpl {
-    string* buf;
-    unsigned* order;
-    unsigned max, nIn, nOut;
+    string* buf = nullptr;
+    unsigned* order = nullptr;
+    unsigned max = 0;
+    unsigned nIn = 0;
+    unsigned nOut = 0;
 
-    uint32_t snap;
-    float late;
+    uint32_t snap = 0;
+    float late = 0.0;
 
 #ifdef HAVE_DAQ
     DAQ_PktHdr_t daqhdr;
@@ -90,19 +92,14 @@ void PhyImpl::Permute (unsigned n) {
 
 void PhyImpl::Clear () {
     delete[] buf;
-    delete[] order;
     buf = nullptr;
+    delete[] order;
     order = nullptr;
     max = nIn = nOut = 0;
 }
 
 PhyProtocol::PhyProtocol () : Protocol(s_type) {
     my = new PhyImpl;
-    my->buf = nullptr;
-    my->order = nullptr;
-    my->max = my->nIn = my->nOut = 0;
-    my->snap = 0;
-    my->late = 0.0;
 
 #ifdef HAVE_DAQ
     memset(&my->daqhdr, 0, sizeof(my->daqhdr));
@@ -186,7 +183,8 @@ void PhyProtocol::FetchB2A (Cake& cake)
     my->daqhdr.egress_index = cake.GetValue("a.if", my->daqhdr.egress_index);
     my->daqhdr.ingress_group = cake.GetValue("b.gr", my->daqhdr.ingress_group);
     my->daqhdr.egress_group = cake.GetValue("a.gr", my->daqhdr.egress_group);
-     if (cake.IsSet("b.rip"))
+
+    if (cake.IsSet("b.rip"))
     {
         inet_pton(AF_INET, cake.GetCValue("b.rip"), &my->daqhdr.real_sIP);
         my->daqhdr.flags |= DAQ_PKT_FLAG_REAL_ADDRESSES;
@@ -248,12 +246,12 @@ const uint8_t* PhyProtocol::GetPayload (
         p.cake.Clear("perm");
     }
     if ( my->max && (my->nIn < my->max) )
-        my->buf[my->nIn++].assign((char*)p.Data(), p.Length());
+        my->buf[my->nIn++].assign((const char*)p.Data(), p.Length());
 
     if ( HasPayload() ) {
         string& buf = my->buf[my->order[my->nOut++]];
         len = buf.length();
-        return (uint8_t*)buf.data();
+        return (const uint8_t*)buf.data();
     }    
     return Protocol::GetPayload(p, len);
 }

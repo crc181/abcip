@@ -116,11 +116,11 @@ bool EthProtocol::Bind (const string& type) {
     return true;
 }
 
-#define ETH_NULL ((uint8_t*)"\0\0\0\0\0\0")
 
 const uint8_t* EthProtocol::GetHeader (
     Packet& p, uint32_t& len
 ) {
+    constexpr uint8_t ETH_NULL[] = "\0\0\0\0\0\0";
     const uint8_t* raw = Protocol::GetHeader(p, len);
     if ( raw ) return raw;
 

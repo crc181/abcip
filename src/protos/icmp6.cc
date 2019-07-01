@@ -100,7 +100,7 @@ void Icmp6Protocol::Checksum (const Packet& p) {
         // icmp6 header
         { (uint16_t*)&my->h, sizeof(my->h)>>1 },
         // padded payload
-        { (uint16_t*)data, (uint16_t)(dlen>>1) },  // alignment
+        { (const uint16_t*)data, (uint16_t)(dlen>>1) },  // alignment
         { (uint16_t*)dend, dadj },
         { nullptr, 0 }
     };

@@ -46,7 +46,7 @@ const uint8_t* RawProtocol::GetHeader(
     return Protocol::GetHeader(p, len);
     const string& s = p.cake.GetValue("hdr");
     len = s.length();
-    return (uint8_t*)s.data();
+    return (const uint8_t*)s.data();
 }
 
 //-------------------------------------------------------------------------

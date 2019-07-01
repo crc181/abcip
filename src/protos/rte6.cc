@@ -100,7 +100,7 @@ const uint8_t* Rte6Protocol::GetOptions (
     }
 
     len = my->addr.length();
-    return len ? (uint8_t*)my->addr.data() : nullptr;
+    return len ? (const uint8_t*)my->addr.data() : nullptr;
 }
 
 //-------------------------------------------------------------------------

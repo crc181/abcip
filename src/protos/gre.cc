@@ -132,7 +132,7 @@ const uint8_t* GreProtocol::GetOptions (const Packet& p, uint32_t& len) {
     }
 
     len = my->opt.length();
-    return len ? (uint8_t*)my->opt.data() : nullptr;
+    return len ? (const uint8_t*)my->opt.data() : nullptr;
 }
 
 //-------------------------------------------------------------------------
