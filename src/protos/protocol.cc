@@ -73,7 +73,7 @@ const uint8_t* Protocol::GetHeader (
 ) {
     const string& s = p.cake.GetValue("head");
     len = s.length();
-    return len ? (uint8_t*)s.data() : nullptr;
+    return len ? (const uint8_t*)s.data() : nullptr;
 }
 
 const uint8_t* Protocol::GetTrailer (
@@ -81,6 +81,6 @@ const uint8_t* Protocol::GetTrailer (
 ) {
     const string& s = p.cake.GetValue("tail");
     len = s.length();
-    return len ? (uint8_t*)s.data() : nullptr;
+    return len ? (const uint8_t*)s.data() : nullptr;
 }
 

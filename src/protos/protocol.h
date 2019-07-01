@@ -33,7 +33,7 @@
 class PseudoHdr;
 
 struct CheckField {
-    uint16_t* data;
+    const uint16_t* data;
     uint16_t len; // number of shorts at data
 };
 

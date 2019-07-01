@@ -271,7 +271,7 @@ const uint8_t* TcpProtocol::GetOptions (
     else while ( my->opt.length() % 4 ) my->opt += '\0';
 
     len = my->opt.length();
-    return (uint8_t*)my->opt.data();
+    return (const uint8_t*)my->opt.data();
 }
 
 const uint8_t* TcpProtocol::GetPayload (
@@ -287,14 +287,14 @@ const uint8_t* TcpProtocol::GetPayload (
         len = 0;
         return nullptr;
     }
-    my->buf.append((char*)p.Data(), p.Length());
+    my->buf.append((const char*)p.Data(), p.Length());
 
     if ( !max || my->buf.length() <= max ) {
         len = my->last = my->buf.length();
-        return (uint8_t*)my->buf.data();
+        return (const uint8_t*)my->buf.data();
     }
     len = my->last = max;
-    return (uint8_t*)my->buf.data();
+    return (const uint8_t*)my->buf.data();
 }
 
 bool TcpProtocol::HasPayload () {
@@ -328,7 +328,7 @@ void TcpProtocol::Checksum (const Packet& p) {
         // tcp header
         { (uint16_t*)&my->h, sizeof(my->h)>>1 },
         // padded payload
-        { (uint16_t*)data, (uint16_t)(dlen>>1) },  // alignment
+        { (const uint16_t*)data, (uint16_t)(dlen>>1) },  // alignment
         { (uint16_t*)dend, dadj },
         { nullptr, 0 }
     };

@@ -190,7 +190,7 @@ const uint8_t* DumbUser::Send (Packet& p, uint32_t& len) {
             my->pay += b;
         }
     }
-    return (uint8_t*)my->pay.data();
+    return (const uint8_t*)my->pay.data();
 }
 
 void DumbUser::Recv (Packet&) { }

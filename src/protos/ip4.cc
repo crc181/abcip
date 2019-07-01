@@ -185,7 +185,7 @@ const uint8_t* Ip4Protocol::GetOptions (
     }
 
     len = my->opt.length();
-    return len ? (uint8_t*)my->opt.data() : nullptr;
+    return len ? (const uint8_t*)my->opt.data() : nullptr;
 }
 
 const uint8_t* Ip4Protocol::GetPayload (
@@ -206,14 +206,14 @@ const uint8_t* Ip4Protocol::GetPayload (
             return nullptr;
         }
     }   
-    my->buf.append((char*)p.Data(), p.Length());
+    my->buf.append((const char*)p.Data(), p.Length());
 
     if ( !max || my->buf.length() <= max ) { 
         len = my->last = my->buf.length();
-        return (uint8_t*)my->buf.data();
+        return (const uint8_t*)my->buf.data();
     }   
     len = my->last = max;
-    return (uint8_t*)my->buf.data();
+    return (const uint8_t*)my->buf.data();
 }
 
 bool Ip4Protocol::HasPayload () {
@@ -224,7 +224,7 @@ bool Ip4Protocol::HasPayload () {
 // indicated below.  Same for Tcp/UdpProtocol::Checksum().
 void Ip4Protocol::Checksum (const Packet&) {
     uint16_t olen = my->opt.length();
-    const uint8_t* opts = (uint8_t*)my->opt.data();
+    const uint8_t* opts = (const uint8_t*)my->opt.data();
 
     uint16_t oadj = 0;
     uint8_t oend[2] = { 0, 0 };
@@ -233,7 +233,7 @@ void Ip4Protocol::Checksum (const Packet&) {
     CheckField f[] = {
         { (uint16_t*)&my->h, (int)sizeof(my->h) / 2 },
         // padded options
-        { (uint16_t*)opts, (uint16_t)(olen>>1) },  // alignment
+        { (const uint16_t*)opts, (uint16_t)(olen>>1) },  // alignment
         { (uint16_t*)oend, oadj },
         { nullptr, 0 }
     };

@@ -46,11 +46,11 @@ struct Frag6Hdr {
 
 class Frag6Impl {
 public:
-    Frag6Hdr h;
-    uint32_t id;
+    Frag6Hdr h = { };
+    uint32_t id = 1;
 
-    uint16_t last;
-    uint16_t offset;
+    uint16_t last = 0;
+    uint16_t offset = 0;
 
     string buf;
 };
@@ -58,8 +58,6 @@ public:
 Frag6Protocol::Frag6Protocol () : Protocol(s_type) {
     my = new Frag6Impl;
     my->h.next = IPPROTO_NONE;
-    my->last = my->offset = 0;
-    my->id = 1;
 }
 
 Frag6Protocol::~Frag6Protocol () {
@@ -109,7 +107,7 @@ const uint8_t* Frag6Protocol::GetHeader (
     my->h.ctl = htons(ctl);
 
     len = sizeof(my->h);
-    return (uint8_t*)&my->h;
+    return (const uint8_t*)&my->h;
 }
 
 const uint8_t* Frag6Protocol::GetPayload (
@@ -130,14 +128,14 @@ const uint8_t* Frag6Protocol::GetPayload (
             return nullptr;
         }
     }
-    my->buf.append((char*)p.Data(), p.Length());
+    my->buf.append((const char*)p.Data(), p.Length());
 
     if ( !max || my->buf.length() <= max ) {
         len = my->last = my->buf.length();
-        return (uint8_t*)my->buf.data();
+        return (const uint8_t*)my->buf.data();
     }
     len = my->last = max;
-    return (uint8_t*)my->buf.data();
+    return (const uint8_t*)my->buf.data();
 }
 
 bool Frag6Protocol::HasPayload () {

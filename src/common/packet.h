@@ -37,7 +37,7 @@ class Cake;
 
 class Packet {
 public:
-    Packet(Cake&);
+    Packet(Cake& c) : cake(c) { }
 
     void Zero();
 
@@ -54,19 +54,13 @@ public:
     DAQ_PktHdr_t daqhdr;
 #endif
 
-    bool drop;
-    uint32_t snap;
-    float late;
+    bool drop = false;
+    uint32_t snap = 0;
+    float late = 0.0;
 
 private:
     std::string buf;
 };
-
-inline Packet::Packet (Cake& c) : cake(c) {
-    drop = false;
-    snap = 0;
-    late = 0.0;
-}
 
 inline void Packet::Zero () { 
     buf.clear();
@@ -74,16 +68,16 @@ inline void Packet::Zero () {
 
 inline void Packet::Prepend (const uint8_t* d, uint32_t n) {
     if ( !d || !n ) return;
-    buf.insert(0, (char*)d, n);
+    buf.insert(0, (const char*)d, n);
 }
 
 inline void Packet::Append (const uint8_t* d, uint32_t n) {
     if ( !d || !n ) return;
-    buf.append((char*)d, n);
+    buf.append((const char*)d, n);
 }
 
 inline const uint8_t* Packet::Data() const {
-    return (uint8_t*)buf.data();
+    return (const uint8_t*)buf.data();
 }
 
 inline uint32_t Packet::Length() const {
