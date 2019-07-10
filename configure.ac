@@ -64,6 +64,10 @@ fi
 
 AM_CONDITIONAL([BUILD_DAQ], [test "x$enable_daq" != xno])
 
+# Check for asciidoc.  If it's present, enable rebuilding the HTML documentation.
+AC_CHECK_PROG([have_asciidoc], [asciidoc], yes)
+AM_CONDITIONAL([HAVE_ASCIIDOC], [test "x$have_asciidoc" = "xyes"])
+
 AM_CPPFLAGS="-Wall -Wextra -Wformat -Wformat-security -pedantic ${LIBDAQ_CPPFLAGS}"
 
 AC_SUBST([AM_CPPFLAGS])
