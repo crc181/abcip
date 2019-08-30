@@ -6,12 +6,12 @@
 // the terms of the GNU General Public License as published by the Free
 // Software Foundation, either version 3 of the License, or (at your
 // option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful, but
 // WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //--------------------------------------------------------------------- EOL
@@ -206,15 +206,15 @@ bool Compress (string& s) {
 void PrintTCP (uint8_t u, string& s) {
     s = "UAPRSF";
 
-    for ( int i = 0; i < 6; i++) 
-        if ( !((1<<(5-i)) & u) ) s[i] = '-'; 
+    for ( int i = 0; i < 6; i++)
+        if ( !((1<<(5-i)) & u) ) s[i] = '-';
 }
 
 void PrintECN (uint8_t u, string& s) {
     s = "ECN";
 
-    for ( int i = 0; i < 3; i++) 
-        if ( !((1<<(2-i)) & u) ) s[i] = '-'; 
+    for ( int i = 0; i < 3; i++)
+        if ( !((1<<(2-i)) & u) ) s[i] = '-';
 }
 #endif
 

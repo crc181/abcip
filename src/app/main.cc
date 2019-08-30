@@ -6,12 +6,12 @@
 // the terms of the GNU General Public License as published by the Free
 // Software Foundation, either version 3 of the License, or (at your
 // option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful, but
 // WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //--------------------------------------------------------------------- EOL
@@ -22,7 +22,7 @@
 // the goal is a simple way to generate packets with various
 // encapsulations.
 //
-// it will use defaults that create a valid session but can be 
+// it will use defaults that create a valid session but can be
 // overridden as needed to create a flawed session.
 //
 // the emphasis here is on flexibility and correctness (ie
@@ -227,7 +227,7 @@ int main (int argc, char* argv[]) {
     else
         parser = new CommandParser(reader, "a,b,c,d");
 
-    Writer* writer = c.pcap ? 
+    Writer* writer = c.pcap ?
         new PcapWriter(c.pcap, c.stack, c.snap) : nullptr;
 
     AbcIo abc(parser, writer, c.stack, c.user, c.trace);

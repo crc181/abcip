@@ -6,12 +6,12 @@
 // the terms of the GNU General Public License as published by the Free
 // Software Foundation, either version 3 of the License, or (at your
 // option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful, but
 // WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //--------------------------------------------------------------------- EOL
@@ -104,7 +104,7 @@ bool Ip6Protocol::GetBinding (const string& s, uint8_t& et) {
     else if ( s == "ip6" )
         et = IPPROTO_IPV6;
 
-    else 
+    else
         return false;
 
     return true;
@@ -141,14 +141,14 @@ const uint8_t* Ip6Protocol::GetHeader (
     if ( raw ) return raw;
 
     // flow is actually setting ver=6, class=0, flow=1
-    my->h.ip6_ctlun.ip6_un1.ip6_un1_flow = 
+    my->h.ip6_ctlun.ip6_un1.ip6_un1_flow =
         htonl((uint32_t)p.cake.GetValue("vcl", 0x60000001));
 
-    my->h.ip6_ctlun.ip6_un1.ip6_un1_hlim = 
+    my->h.ip6_ctlun.ip6_un1.ip6_un1_hlim =
         (uint8_t)p.cake.GetValue("hops", IPDEFTTL);
 
     uint8_t next = my->h.ip6_ctlun.ip6_un1.ip6_un1_nxt;
-    my->h.ip6_ctlun.ip6_un1.ip6_un1_nxt = 
+    my->h.ip6_ctlun.ip6_un1.ip6_un1_nxt =
         (uint8_t)p.cake.GetValue("next", next);
 
     uint16_t n = (uint16_t)p.cake.GetValue("tot", p.Length());

@@ -6,12 +6,12 @@
 // the terms of the GNU General Public License as published by the Free
 // Software Foundation, either version 3 of the License, or (at your
 // option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful, but
 // WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //--------------------------------------------------------------------- EOL
@@ -101,7 +101,7 @@ bool Ip4Protocol::Bind (const string& type) {
     else if ( type == "ip6" )
         my->h.ip_p = IPPROTO_IPV6;
 
-    else 
+    else
         return false;
 
     return true;
@@ -168,7 +168,7 @@ const uint8_t* Ip4Protocol::GetHeader (
     inet_aton(SrcAddr(p), (struct in_addr*)&my->h.ip_src);
     inet_aton(DstAddr(p), (struct in_addr*)&my->h.ip_dst);
 
-    if ( p.cake.IsSet("pro") ) 
+    if ( p.cake.IsSet("pro") )
         my->h.ip_p = (uint8_t)p.cake.GetValue("pro", my->h.ip_p);
 
     if ( !p.cake.IsSet("cks") ) Checksum(p);
@@ -195,27 +195,27 @@ const uint8_t* Ip4Protocol::GetOptions (
 const uint8_t* Ip4Protocol::GetPayload (
     const Packet& p, uint32_t& len
 ) {
-    if ( my->last ) { 
+    if ( my->last ) {
         my->buf.erase(0, my->last);
         my->offset += my->last;
         my->last = 0;
-    }  
-    uint16_t max = p.cake.GetValue("max", 0); 
+    }
+    uint16_t max = p.cake.GetValue("max", 0);
     max = (max / 8) * 8;
 
-    if ( !my->buf.length() ) { 
+    if ( !my->buf.length() ) {
         my->offset = 0;
         if ( !max ) {
             len = 0;
             return nullptr;
         }
-    }   
+    }
     my->buf.append((const char*)p.Data(), p.Length());
 
-    if ( !max || my->buf.length() <= max ) { 
+    if ( !max || my->buf.length() <= max ) {
         len = my->last = my->buf.length();
         return (const uint8_t*)my->buf.data();
-    }   
+    }
     len = my->last = max;
     return (const uint8_t*)my->buf.data();
 }

@@ -6,12 +6,12 @@
 // the terms of the GNU General Public License as published by the Free
 // Software Foundation, either version 3 of the License, or (at your
 // option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful, but
 // WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //--------------------------------------------------------------------- EOL
@@ -257,7 +257,7 @@ const uint8_t* PhyProtocol::GetPayload (
         if ( rev ) my->Reverse(rev);
         else if ( perm ) my->Permute(perm);
 
-        // otherwise this repeats and, absent 
+        // otherwise this repeats and, absent
         // a flush at the end, we lose packets
         p.cake.Clear("rev");
         p.cake.Clear("perm");
@@ -269,7 +269,7 @@ const uint8_t* PhyProtocol::GetPayload (
         string& buf = my->buf[my->order[my->nOut++]];
         len = buf.length();
         return (const uint8_t*)buf.data();
-    }    
+    }
     return Protocol::GetPayload(p, len);
 }
 
