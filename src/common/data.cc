@@ -6,12 +6,12 @@
 // the terms of the GNU General Public License as published by the Free
 // Software Foundation, either version 3 of the License, or (at your
 // option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful, but
 // WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //--------------------------------------------------------------------- EOL
@@ -28,7 +28,7 @@ using namespace std;
 // this is the text of scene 5 from Monty Python and the Holy Grail
 //-------------------------------------------------------------------------
 
-const string s_fullMonty = 
+const string s_fullMonty =
     "CROWD:  A witch!  A witch!  A witch!  We've got a witch!  A witch!\n"
     "VILLAGER #1:  We have found a witch, might we burn her?\n"
     "CROWD:  Burn her!  Burn!\n"
@@ -117,7 +117,7 @@ const string s_fullMonty =
 // a fish called dubya ...
 //-------------------------------------------------------------------------
 
-static const string s_fullDubya = 
+static const string s_fullDubya =
    "CROWD: A packet!  A packet!  A packet!  We've got a packet!  A packet!\n"
    "BIDEN: We have found a packet, might we route her?\n"
    "CROWD: Route her!  Route!\n"
@@ -202,7 +202,7 @@ static const string s_fullDubya =
 // text ripped from www.lipsum.com
 //-------------------------------------------------------------------------
 
-static const string s_loremIpsum = 
+static const string s_loremIpsum =
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam "
     "suscipit, quam at scelerisque ultricies, nisi nulla fermentum orci, a "
     "imperdiet lacus enim a felis. Cum sociis natoque penatibus et magnis "

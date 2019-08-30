@@ -6,12 +6,12 @@
 // the terms of the GNU General Public License as published by the Free
 // Software Foundation, either version 3 of the License, or (at your
 // option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful, but
 // WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //--------------------------------------------------------------------- EOL
@@ -54,7 +54,7 @@ static const char* s_type = "tcp";
 
 // system defined tcphdr is too cumbersome:
 // typedef struct tcphdr TcpHdr;
-// so we roll our own wheel, and 
+// so we roll our own wheel, and
 // mix metaphors for good measure:
 
 struct TcpHdr {
@@ -137,12 +137,12 @@ void TcpImpl::Send (
     ctl = p.cake.GetValue("ctl", ctl);
     seq = p.cake.GetValue("seq", seq);
 
-    if ( IsSet(ctl, TCP_SYN) ) { 
+    if ( IsSet(ctl, TCP_SYN) ) {
         // we start at 1 to avoid wireshark weirdness
         if ( !p.cake.IsSet("seq") ) seq = 1;
         localIsn = seq;
         seq = 0;
-    }   
+    }
 
     // FIXTHIS localIsn handling should simplified
     // above and below

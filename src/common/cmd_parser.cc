@@ -6,12 +6,12 @@
 // the terms of the GNU General Public License as published by the Free
 // Software Foundation, either version 3 of the License, or (at your
 // option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful, but
 // WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //--------------------------------------------------------------------- EOL
@@ -197,7 +197,7 @@ Option* CommandParserImpl::NewOption (
 CommandParser::CommandParser (Reader* in, const char* s) {
     my = new CommandParserImpl(in);
     my->commands = s;
-} 
+}
 
 CommandParser::~CommandParser () {
     delete my;
@@ -261,7 +261,7 @@ bool CommandParser::Load (Command& cmd) {
                 err = "unknown command";
             }
             break;
-         
+
         case 3:
             if ( tok == "(" ) {
                 state = 4;
@@ -350,7 +350,7 @@ bool CommandParser::Load (Command& cmd) {
                 err = "expected ',' or ')'";
             }
             break;
-         
+
         default:
             err = "unknown state";
         }

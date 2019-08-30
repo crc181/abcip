@@ -6,12 +6,12 @@
 // the terms of the GNU General Public License as published by the Free
 // Software Foundation, either version 3 of the License, or (at your
 // option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful, but
 // WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //--------------------------------------------------------------------- EOL
@@ -89,7 +89,7 @@ const uint8_t* GreProtocol::GetHeader (
         my->h.aux[my->nAux++] = (cks << 16) | off;
     }
     // FIXTHIS automatically set len from payLen for ver 1
-    if ( p.cake.IsSet("len") || p.cake.IsSet("cid") ) 
+    if ( p.cake.IsSet("len") || p.cake.IsSet("cid") )
     {
         uint16_t cks = htons(p.cake.GetValue("len", 0));
         uint16_t off = htons(p.cake.GetValue("cid", 0));
@@ -119,7 +119,7 @@ const uint8_t* GreProtocol::GetHeader (
     if ( p.cake.IsSet("ver") )
         my->h.ver = (uint8_t)p.cake.GetValue("ver", 0x0);
 
-    if ( p.cake.IsSet("pro") ) 
+    if ( p.cake.IsSet("pro") )
         my->h.proto = htons(p.cake.GetValue("pro", my->h.proto));
 
     len = 4 * (my->nAux + 1);
