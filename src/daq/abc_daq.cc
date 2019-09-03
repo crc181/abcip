@@ -240,7 +240,7 @@ int AbcDaq::GetSnaplen ()
 
 uint32_t AbcDaq::GetCapabilities ()
 {
-    uint32_t caps = DAQ_CAPA_INTERRUPT;
+    uint32_t caps = DAQ_CAPA_REPLACE | DAQ_CAPA_UNPRIV_START | DAQ_CAPA_INTERRUPT;
     return caps;
 }
 
