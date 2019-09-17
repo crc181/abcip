@@ -51,18 +51,19 @@ struct UdpHdr {
 
 class UdpImpl {
 public:
+    UdpImpl(PseudoHdr* ph) : ph(ph) { }
+
+public:
     UdpHdr h;
     PseudoHdr* ph;
 };
 
 UdpProtocol::UdpProtocol (PseudoHdr* ph) : Protocol(s_type) {
-    my = new UdpImpl;
-    my->ph = ph;
     ph->SetProto(IPPROTO_UDP);
+    my = new UdpImpl(ph);
 }
 
 UdpProtocol::~UdpProtocol () {
-    delete my->ph;
     delete my;
 }
 
