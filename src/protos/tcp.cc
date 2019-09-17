@@ -71,37 +71,32 @@ struct TcpHdr {
 
 class TcpImpl {
 public:
+    TcpImpl(PseudoHdr* ph) : ph(ph) { }
     void Send(const Packet&, uint32_t, uint8_t&, uint32_t&, uint32_t&);
     void Recv(uint8_t, uint32_t, uint32_t, uint32_t);
 
 public:
     TcpHdr h;
     PseudoHdr* ph;
-    uint16_t last;
+    uint16_t last = 0;
     string opt;
     string buf;
 
-    uint32_t localIsn, remoteIsn;
-    uint32_t seq, ack, lack;
+    uint32_t localIsn = 0;
+    uint32_t remoteIsn = 0;
+    uint32_t seq = 0;
+    uint32_t ack = 0;
+    uint32_t lack = 0;
 
-    bool reply;
+    bool reply = false;
 };
 
 TcpProtocol::TcpProtocol (PseudoHdr* ph) : Protocol(s_type) {
-    my = new TcpImpl;
-    my->ph = ph;
     ph->SetProto(IPPROTO_TCP);
-
-    my->seq = my->localIsn = 0;
-    my->ack = my->remoteIsn = 0;
-
-    my->reply = false;
-    my->last = 0;
-    my->lack = 0;
+    my = new TcpImpl(ph);
 }
 
 TcpProtocol::~TcpProtocol () {
-    delete my->ph;
     delete my;
 }
 

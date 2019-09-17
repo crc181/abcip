@@ -31,6 +31,7 @@
 #include "cake.h"
 #include "packet.h"
 #include "protocol.h"
+#include "pseudo_hdr.h"
 #include "user.h"
 
 using namespace std;
@@ -40,6 +41,7 @@ typedef vector<Protocol*> ProtoList;
 class PileImpl {
 public:
     PileImpl(User& a) : user(a) { }
+    ~PileImpl() { delete ph; }
 
     ProtoList protos;
     PseudoHdr* ph = nullptr;
@@ -51,7 +53,6 @@ public:
 
 Pile::Pile (User& a) {
     my = new PileImpl(a);
-    my->ph = nullptr;
 }
 
 Pile::~Pile () {
@@ -97,7 +98,11 @@ void Pile::Push (Protocol* pro, bool a2b) {
 
     // only change if not null
     if ( ph )
+    {
+        if ( my->ph )
+            delete my->ph;
         my->ph = ph;
+    }
 
     my->user.GetCake().Next();
 }
