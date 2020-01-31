@@ -66,6 +66,7 @@ public:
     uint32_t real_dst_ip[4] = { };
     uint16_t real_dst_family = AF_UNSPEC;
     uint16_t real_dst_port = 0;
+    std::string user_annotation;
 
 private:
     std::string buf;

@@ -27,6 +27,7 @@
 
 #include <cstring>
 
+#include "abc_daq_ioctl.h"
 #include "abc_io.h"
 #include "cmd_parser.h"
 #include "daq_writer.h"
@@ -249,3 +250,24 @@ int AbcDaq::GetDatalinkType ()
     return impl->dlt;
 }
 
+//-------------------------------------------------------------------------
+// ioctl
+
+int AbcDaq::Ioctl(DAQ_IoctlCmd cmd, void* arg, size_t len)
+{
+    if (cmd == DAQ_IOCTL_GET_MSG_USER_ANNOTATION)
+    {
+        if (sizeof(DIOCTL_GetMsgUserAnnotation) != len)
+        {
+            return DAQ_ERROR_INVAL;
+        }
+
+        DIOCTL_GetMsgUserAnnotation* get_annotation = static_cast<DIOCTL_GetMsgUserAnnotation*>(arg);
+        const std::string& annotation_string = impl->writer->GetUserAnnotation(get_annotation->msg);
+        get_annotation->annotation = annotation_string.empty() ? nullptr : annotation_string.c_str();
+
+        return DAQ_SUCCESS;
+    }
+
+    return DAQ_ERROR_NOTSUP;
+}

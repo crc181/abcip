@@ -43,6 +43,8 @@ public:
     int MsgFinalize(const DAQ_Msg_t* msg, DAQ_Verdict verdict) override;
     int GetMsgPoolInfo(DAQ_MsgPoolInfo_t* info) override;
 
+    int Ioctl(DAQ_IoctlCmd, void*, size_t) override;
+
 private:
     class AbcImpl* impl;
 };

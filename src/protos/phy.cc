@@ -220,6 +220,7 @@ const uint8_t* PhyProtocol::GetHeader (
 ) {
     // Set all of the esoteric Packet attributes
     p.drop = p.cake.IsSet("drop");
+    p.user_annotation = p.cake.GetValue("user");
     p.snap = my->snap;
     p.late = p.cake.GetReal("dt", my->late);
     p.ingress_intf_id = my->ingress_intf_id;
@@ -303,6 +304,7 @@ static Field s_fields[] = {
     { FT_PKT, "rev", "u32", "output packets in reverse order" },
     { FT_PKT, "perm", "u32", "randomly permute packets" },
     { FT_PKT, "dt", "r32", "set time delta for this packet" },
+    { FT_PKT, "user", "s*", "user-defined annotation" },
     { FT_MAX, nullptr, nullptr, nullptr }
 };
 
