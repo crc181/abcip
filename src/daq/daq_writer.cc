@@ -43,6 +43,7 @@ struct DaqWriterPktDesc
     DAQ_Msg_t msg;
     DAQ_PktHdr_t pkthdr;
     DAQ_NAPTInfo_t napti;
+    std::string user_annotation;
 };
 
 struct DaqWriterMsgPool
@@ -123,6 +124,12 @@ unsigned DaqWriter::GetMsgCount()
     return impl->msg_count;
 }
 
+const std::string& DaqWriter::GetUserAnnotation(const DAQ_Msg_t* msg) const
+{
+    DaqWriterPktDesc* desc = static_cast<DaqWriterPktDesc*>(msg->priv);
+    return desc->user_annotation;
+}
+
 void DaqWriter::ReleaseMsg(const DAQ_Msg_t* msg)
 {
     DaqWriterPktDesc* desc = static_cast<DaqWriterPktDesc*>(msg->priv);
@@ -139,6 +146,9 @@ void DaqWriter::operator<<(const Packet& p)
     DaqWriterPktDesc* desc = impl->pool.freelist.back();
     impl->pool.freelist.pop_back();
 
+    /* Copy the annotation of the packet (if any) to the appropriate descriptor,
+     * the descriptor can be easily referenced (see ::GetUserAnnotation) */
+    desc->user_annotation = p.user_annotation;
     /* Set up the DAQ packet header. */
     DAQ_PktHdr_t* hdr = &desc->pkthdr;
     // Per-packet override of the timing interval

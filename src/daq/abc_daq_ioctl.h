@@ -16,38 +16,21 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //--------------------------------------------------------------------- EOL
 
-#ifndef __ABC_DAQ_H__
-#define __ABC_DAQ_H__
+#ifndef __ABC_DAQ_IOCTL_H__
+#define __ABC_DAQ_IOCTL_H__
 
-#include "base_daq.h"
+#include <daq_common.h>
 
-class AbcDaq : public Daq {
-public:
-    AbcDaq(const DAQ_BaseAPI_t* base_api);
-    ~AbcDaq() override;
+#define DAQ_IOCTL_GET_MSG_USER_ANNOTATION (static_cast<DAQ_IoctlCmd>(0xFCFF))
 
-    int Init(const DAQ_ModuleConfig_h modcfg, DAQ_ModuleInstance_h modinst) override;
+/*
+ * An IOCTL call to obtain user annotation (phy:user="...") attached to specific DAQ message
+ */
 
-    int Start() override;
-    int Interrupt() override;
-    int Stop() override;
+typedef struct
+{
+    DAQ_Msg_h msg;              // Message to get an annotation from
+    const char* annotation;     // Will be stored here
+} DIOCTL_GetMsgUserAnnotation;
 
-    int GetStats(DAQ_Stats_t*) override;
-    void ResetStats() override;
-
-    int GetSnaplen() override;
-    uint32_t GetCapabilities() override;
-    int GetDatalinkType() override;
-
-    unsigned MsgReceive(const unsigned max_recv, const DAQ_Msg_t* msgs[], DAQ_RecvStatus* rstat) override;
-    int MsgFinalize(const DAQ_Msg_t* msg, DAQ_Verdict verdict) override;
-    int GetMsgPoolInfo(DAQ_MsgPoolInfo_t* info) override;
-
-    int Ioctl(DAQ_IoctlCmd, void*, size_t) override;
-
-private:
-    class AbcImpl* impl;
-};
-
-#endif
-
+#endif //__ABC_DAQ_IOCTL_H__

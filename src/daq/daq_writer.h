@@ -24,6 +24,7 @@
 #define __DAQ_WRITER_H__
 
 #include <daq_common.h>
+#include <string>
 
 #include "writer.h"
 
@@ -36,6 +37,7 @@ public:
     unsigned GetMsgCount();
     void ReleaseMsg(const DAQ_Msg_t* msg);
     void GetMsgPoolInfo(DAQ_MsgPoolInfo_t* info);
+    const std::string& GetUserAnnotation(const DAQ_Msg_t* msg) const;
 
     void operator<<(const Packet&) override;
 
