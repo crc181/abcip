@@ -276,6 +276,7 @@ bool CommandParser::Load (Command& cmd) {
                 state = 5;
                 break;
             }
+            // Fall through
         case 6:
             if ( tok == ")" ) {
                 return true;
@@ -312,6 +313,7 @@ bool CommandParser::Load (Command& cmd) {
                 state = 11;
                 break;
             }
+            // Fall through
         case 7:
             if ( tok == ")" ) {
                 cmd.AddOption(my->NewOption(index, key, null, proto));
