@@ -122,16 +122,13 @@ void DumbUser::Setup (const char* id) {
 
     bool ok = my->stream->good();
 
-    if ( ok )
-    {
+    if ( ok ) {
         streampos pos = my->stream->tellg();
         my->stream->seekg(0, my->stream->end);
         ok = my->stream->tellg() > 0;
         my->stream->seekg(pos);
-    }
-
-    if ( !ok )
-    {
+    } else {
+        delete my->stream;
         my->stream = new istringstream(GetData());
         *my->stream >> noskipws;
     }
