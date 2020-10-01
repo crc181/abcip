@@ -2,9 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-AC_INIT([abcip],
-        m4_esyscmd([build-aux/git-version-gen .tarball-version]),
-        [crc181@gmail.com])
+AC_INIT([abcip],[m4_esyscmd(build-aux/git-version-gen .tarball-version)],[crc181@gmail.com])
 
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_SRCDIR([src/])
@@ -13,7 +11,6 @@ AM_INIT_AUTOMAKE([-Wall -Wno-extra-portability -Werror foreign])
 AC_CONFIG_MACRO_DIR([m4])
 
 # Checks for programs.
-AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_GREP
 AC_PROG_INSTALL
@@ -27,15 +24,12 @@ AX_CXX_COMPILE_STDCXX_11
 AC_CHECK_LIB([pcap], [pcap_lib_version],,AC_MSG_ERROR(Missing libpcap >= 1.0.0))
 
 # Checks for header files.
-AC_HEADER_STDC
-AC_CHECK_HEADERS([arpa/inet.h netinet/in.h stdint.h stdlib.h string.h])
+AC_HEADER_STDBOOL
+AC_CHECK_HEADERS([arpa/inet.h netinet/in.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
 AC_C_INLINE
-
-AC_HEADER_STDBOOL
-AC_HEADER_TIME
 
 AC_TYPE_UINT8_T
 AC_TYPE_UINT16_T
