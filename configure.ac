@@ -48,6 +48,15 @@ CPPFLAGS="$CFLAG_VISIBILITY $CPPFLAGS"
 # Checks for library functions.
 AC_CHECK_FUNCS([gettimeofday memset strcasecmp strncasecmp strtol])
 
+# Enable address sanitizer
+AC_ARG_ENABLE(address-sanitizer,
+    AS_HELP_STRING([--enable-address-sanitizer],[enable address sanitizer support]),
+    [
+        AX_CHECK_COMPILE_FLAG([-fsanitize=address], [SANITIZER_CXXFLAGS="$SANITIZER_CXXFLAGS -fsanitize=address"])
+        AX_CHECK_COMPILE_FLAG([-fno-omit-frame-pointer], [SANITIZER_CXXFLAGS="$SANITIZER_CXXFLAGS -fno-omit-frame-pointer"])
+        AX_CHECK_LINK_FLAG([-fsanitize=address], [SANITIZER_LDFLAGS="$SANITIZER_LDFLAGS -fsanitize=address"], [], [$SANITIZER_LDFLAGS])
+    ])
+
 # abc daq
 AC_ARG_ENABLE([daq],
     AS_HELP_STRING([--disable-daq],[disable building the abcip DAQ module (default=auto)]))
@@ -70,6 +79,13 @@ AC_CHECK_PROG([have_asciidoc], [asciidoc], yes)
 AM_CONDITIONAL([HAVE_ASCIIDOC], [test "x$have_asciidoc" = "xyes"])
 
 AM_CPPFLAGS="-Wall -Wextra -Wformat -Wformat-security -pedantic ${LIBDAQ_CPPFLAGS}"
+
+if test -n "$SANITIZER_CXXFLAGS" ; then
+    CXXFLAGS="$SANITIZER_CXXFLAGS $CXXFLAGS"
+fi
+if test -n "$SANITIZER_LDFLAGS" ; then
+    LDFLAGS="$SANITIZER_LDFLAGS $LDFLAGS"
+fi
 
 AC_SUBST([AM_CPPFLAGS])
 
