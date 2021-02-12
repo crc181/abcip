@@ -101,6 +101,9 @@ bool Ip4Protocol::Bind (const string& type) {
     else if ( type == "ip6" )
         my->h.ip_p = IPPROTO_IPV6;
 
+    else if ( type == "mpls" )
+        my->h.ip_p = IPPROTO_MPLS;
+
     else
         return false;
 
