@@ -104,6 +104,9 @@ bool Ip6Protocol::GetBinding (const string& s, uint8_t& et) {
     else if ( s == "ip6" )
         et = IPPROTO_IPV6;
 
+    else if ( s == "mpls" )
+        et = IPPROTO_MPLS;
+
     else
         return false;
 
