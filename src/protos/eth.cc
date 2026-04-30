@@ -46,11 +46,12 @@
 
 using namespace std;
 
-#define ETHERTYPE_IP6   0x86dd
-#define ETHERTYPE_VLAN  0x8100
-#define ETHERTYPE_RAW   0x0101
-#define ETHERTYPE_MPLS  0x8847  // default to unicast
-#define ETHERTYPE_PPPOE 0x8864  // session, not discovery
+#define ETHERTYPE_IP6               0x86dd
+#define ETHERTYPE_VLAN              0x8100
+#define ETHERTYPE_RAW               0x0101
+#define ETHERTYPE_MPLS              0x8847  // default to unicast
+#define ETHERTYPE_PPPOE             0x8864  // session, not discovery
+#define ETHERTYPE_CISCO_METADATA    0x8909
 
 #define ETH_A "2:1:2:3:4:5"
 #define ETH_B "2:9:8:7:6:5"
@@ -80,7 +81,7 @@ void EthProtocol::Store (Cake& cake, bool a2b) {
 }
 
 const char* EthProtocol::GetBindings () {
-    return "arp|ip4|ip6|mpls|pppoe|raw|vlan";
+    return "arp|ip4|ip6|mpls|pppoe|raw|vlan|cisco";
 }
 
 bool EthProtocol::GetBinding (const string& s, uint16_t& et) {
@@ -106,6 +107,9 @@ bool EthProtocol::GetBinding (const string& s, uint16_t& et) {
 
     else if ( s == "vlan" )
         et = ETHERTYPE_VLAN;
+
+    else if ( s == "cisco" )
+        et = ETHERTYPE_CISCO_METADATA;
 
     else
         return false;

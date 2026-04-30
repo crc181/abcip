@@ -1,0 +1,12 @@
+d ( stack="eth:cisco:ip4:tcp" )
+
+a(syn)
+b(syn, ack)
+a(ack)
+
+a(cisco:sgt=42; ack, len=8)
+b(ack)
+
+a(fin,ack)
+b(fin,ack)
+a(ack)

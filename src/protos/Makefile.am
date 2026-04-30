@@ -3,6 +3,7 @@ noinst_LTLIBRARIES = libproto.la
 
 libproto_la_SOURCES = \
 arp.cc arp.h \
+cisco_metadata.cc cisco_metadata.h \
 eth.cc eth.h \
 frag6.cc frag6.h \
 gre.cc gre.h \
