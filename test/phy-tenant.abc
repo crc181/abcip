@@ -1,0 +1,12 @@
+c( phy:tenant=42 )
+
+a(syn)
+b(syn, ack)
+a(ack)
+
+a(ack, len=8)
+b(ack)
+
+a(fin,ack)
+b(fin,ack)
+a(ack)

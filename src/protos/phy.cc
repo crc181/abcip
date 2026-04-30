@@ -58,6 +58,7 @@ struct PhyImpl {
     uint32_t flow_id = 0;
     bool flow_id_set = false;
     uint32_t address_space_id = 0;
+    uint32_t tenant_id = 0;
     uint32_t real_src_ip[4];
     uint16_t real_src_family = AF_UNSPEC;
     uint16_t real_src_port = 0;
@@ -143,6 +144,7 @@ void PhyProtocol::Fetch (Cake& cake, bool a2b) {
     }
 
     my->address_space_id = cake.GetValue("as", my->address_space_id);
+    my->tenant_id = cake.GetValue("tenant", my->tenant_id);
 
     if (a2b)
         FetchA2B(cake);
@@ -230,6 +232,7 @@ const uint8_t* PhyProtocol::GetHeader (
     p.flow_id = my->flow_id;
     p.flow_id_set = my->flow_id_set;
     p.address_space_id = my->address_space_id;
+    p.tenant_id = my->tenant_id;
     memcpy(&p.real_src_ip, &my->real_src_ip, sizeof(p.real_src_ip));
     p.real_src_family = my->real_src_family;
     p.real_src_port = my->real_src_port;
@@ -298,7 +301,8 @@ static Field s_fields[] = {
     { FT_CFG, "a.rpt", "u16", "set host a real port" },
     { FT_CFG, "b.rpt", "u16", "set host b real port" },
     { FT_CFG, "fid", "u32", "set flow id" },
-    { FT_CFG, "as", "u16", "set address space id" },
+    { FT_CFG, "as", "u32", "set address space id" },
+    { FT_CFG, "tenant", "u32", "set tenant id" },
 
     { FT_PKT, "drop", "b", "don't log packet" },
     { FT_PKT, "rev", "u32", "output packets in reverse order" },

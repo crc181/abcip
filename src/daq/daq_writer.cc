@@ -183,6 +183,7 @@ void DaqWriter::operator<<(const Packet& p)
     if (p.flow_id_set)
         hdr->flags |= DAQ_PKT_FLAG_FLOWID_IS_VALID;
     hdr->address_space_id = p.address_space_id;
+    hdr->tenant_id = p.tenant_id;
 
     /* Set up the DAQ message, copying the packet data. */
     DAQ_Msg_t* msg = &desc->msg;
@@ -213,7 +214,6 @@ void DaqWriter::operator<<(const Packet& p)
         else
             napti->dst_addr.s6_addr32[0] = p.real_dst_ip[0];
         napti->dst_port = p.real_dst_port;
-        napti->ip_layer = p.real_ip_layer;
         msg->meta[DAQ_PKT_META_NAPT_INFO] = napti;
     }
     else
