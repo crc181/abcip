@@ -6,6 +6,7 @@ arp.cc arp.h \
 cisco_metadata.cc cisco_metadata.h \
 eth.cc eth.h \
 frag6.cc frag6.h \
+geneve.cc geneve.h \
 gre.cc gre.h \
 icmp4.cc icmp4.h \
 icmp6.cc icmp6.h \

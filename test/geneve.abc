@@ -1,0 +1,14 @@
+d ( stack="eth:ip4:udp:geneve:eth:ip4:tcp" )
+
+c ( geneve:vni=100 )
+
+a(syn)
+b(syn, ack)
+a(ack)
+
+a(ack, len=8)
+b(ack)
+
+a(fin,ack)
+b(fin,ack)
+a(ack)
