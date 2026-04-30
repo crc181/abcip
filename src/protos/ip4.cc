@@ -33,6 +33,10 @@
 #include <netinet/in.h>
 #include <netinet/ip.h>
 
+#ifndef IPPROTO_MPLS
+#define IPPROTO_MPLS 137
+#endif
+
 #include "cake.h"
 #include "field.h"
 #include "packet.h"
