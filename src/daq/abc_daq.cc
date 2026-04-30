@@ -92,6 +92,8 @@ bool AbcImpl::LoadVars(const DAQ_ModuleConfig_h modcfg)
 
         else
             break;
+
+        daq_base_api->config_next_variable(modcfg, &varKey, &varValue);
     }
     if ( varKey )
         SET_ERROR(modinst, "ERROR: bad var (%s = %s)\n", varKey, varValue);
@@ -226,6 +228,7 @@ int AbcDaq::Interrupt ()
 int AbcDaq::GetStats (DAQ_Stats_t* stats)
 {
     *stats = impl->stats;
+    stats->hw_packets_received = stats->packets_received + stats->packets_filtered;
     return DAQ_SUCCESS;
 }
 
