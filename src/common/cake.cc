@@ -105,7 +105,7 @@ bool Cake::Prev () {
 void Cake::Store (const char* key, const char* val, bool icky) {
     AttributeMap& m = my->attribs[my->layer];
     Attribute& a = m[key];
-    a.Set(val);
+    a.Set(string(val));
     a.SetSticky(icky);
 }
 
@@ -133,7 +133,7 @@ void Cake::Reset () {
             it->second.Reset();
         }
     }
-    SetLayer();
+    SetFirstLayer();
 }
 
 void Cake::Reset (const char* s) {

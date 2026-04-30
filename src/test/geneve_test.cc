@@ -169,8 +169,7 @@ TEST_CASE("Geneve GetOptions returns data when opt is set", "[geneve]") {
     GeneveProtocol g;
     Cake cake(2);
     Packet pkt(cake);
-    // Use Set(string) so Compress() decodes the pipe-hex into binary bytes
-    cake.Set("opt", std::string("|01020304|"));
+    cake.Store("opt", "|01020304|");
     g.Fetch(cake, true);
     uint32_t olen = 0;
     const uint8_t* opts = g.GetOptions(pkt, olen);

@@ -127,10 +127,8 @@ TEST_CASE("Cake::Reset clears non-sticky attributes on all layers", "[cake]") {
 
 TEST_CASE("Cake::Reset preserves sticky attributes", "[cake]") {
     Cake c(2);
-    // Store on layer 1; Reset moves layer to max (2), so go back to check
     c.Store("s", "sticky", true);
     c.Reset();
-    c.SetFirstLayer();
     CHECK(c.IsSet("s"));
 }
 
