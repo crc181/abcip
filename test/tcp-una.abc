@@ -1,0 +1,10 @@
+a(syn)
+b(syn, ack)
+a(ack)
+
+# una=10, max=5: b should ack after exactly 10 bytes (2 segments)
+a(ack, len=10, max=5, una=10)
+
+a(fin,ack)
+b(fin,ack)
+a(ack)

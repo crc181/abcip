@@ -194,7 +194,7 @@ void TcpImpl::Recv (
 
     ack = rseq + len - remoteIsn;
 
-    if ( una && (int)(ack - lack) > (int)una )
+    if ( una && (int)(ack - lack) >= (int)una )
         reply = true;
 }
 
