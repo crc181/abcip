@@ -41,14 +41,22 @@ typedef vector<Protocol*> ProtoList;
 class PileImpl {
 public:
     PileImpl(User& a) : user(a) { }
-    ~PileImpl() { delete ph; }
+    ~PileImpl() {
+        for (vector<PseudoHdr*>::iterator hdr = ph.begin(); hdr != ph.end(); hdr++)
+            delete *hdr;
+        ph.clear();
+    }
 
     ProtoList protos;
-    PseudoHdr* ph = nullptr;
+    vector<PseudoHdr*> ph;
 
     User& user;
 
     void Generate(Packet&, ProtoList::iterator&);
+
+    void Stash(PseudoHdr* hdr) {
+        ph.push_back(hdr);
+    }
 };
 
 Pile::Pile (User& a) {
@@ -68,8 +76,12 @@ const string& Pile::GetRootId () {
     return dummy;
 }
 
-PseudoHdr* Pile::GetPseudoHdr () {
-    return my->ph;
+PseudoHdr* Pile::GetPseudoHdr ()
+{
+    if (my->ph.size())
+        return my->ph.back();
+    else
+        return nullptr;
 }
 
 Protocol* Pile::GetProtocol (unsigned lyr) {
@@ -96,13 +108,8 @@ void Pile::Push (Protocol* pro, bool a2b) {
     unsigned lyr = my->user.GetCake().GetLayer();
     PseudoHdr* ph = pro->GetPseudoHdr(lyr);
 
-    // only change if not null
-    if ( ph )
-    {
-        if ( my->ph )
-            delete my->ph;
-        my->ph = ph;
-    }
+    if (ph)
+        my->Stash(ph);
 
     my->user.GetCake().Next();
 }
@@ -159,6 +166,12 @@ void Pile::Flush (Packet& p) {
 
     if ( it != my->protos.end() )
         my->Generate(p, ++it);
+}
+
+void Pile::SkipLeftover(Packet& p)
+{
+    while (p.Length())
+        Flush(p);
 }
 
 void PileImpl::Generate (

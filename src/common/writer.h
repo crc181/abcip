@@ -31,6 +31,8 @@ public:
 
     virtual void operator<<(const Packet&) = 0;
     virtual bool Ok() { return true; }
+    virtual unsigned GetWrittenAmount() = 0;
+    virtual void SetMaxWrittenSize(unsigned) { };
 
 protected:
     Writer() = default;

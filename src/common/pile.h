@@ -45,6 +45,7 @@ public:
 
     void Send(class Packet&);
     void Flush(class Packet&);
+    void SkipLeftover(class Packet&);
 
 private:
     class PileImpl* my;

@@ -40,9 +40,13 @@ public:
     const std::string& GetUserAnnotation(const DAQ_Msg_t* msg) const;
 
     void operator<<(const Packet&) override;
+    bool Ok() override;
+    unsigned GetWrittenAmount() override;
+    void SetMaxWrittenSize(unsigned) override;
 
 private:
     class DaqWriterImpl* impl;
+    unsigned max_written_pkts;
 };
 
 #endif

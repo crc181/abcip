@@ -117,6 +117,7 @@ void DaqWriter::SetMsgVector(const DAQ_Msg_t* msgs[])
 {
     impl->msg_count = 0;
     impl->msg_vector = msgs;
+    max_written_pkts = 0U;
 }
 
 unsigned DaqWriter::GetMsgCount()
@@ -143,6 +144,16 @@ void DaqWriter::GetMsgPoolInfo(DAQ_MsgPoolInfo_t* info)
 
 void DaqWriter::operator<<(const Packet& p)
 {
+    if (impl->pool.freelist.empty())
+    {
+        cerr << "Warning: mempool exhausted due to traffic generation\n";
+        return;
+    }
+    else if (impl->msg_count >= max_written_pkts)
+    {
+        cerr << "Warning: batch threshold reached during traffic generation\n";
+        return;
+    }
     DaqWriterPktDesc* desc = impl->pool.freelist.back();
     impl->pool.freelist.pop_back();
 
@@ -202,6 +213,7 @@ void DaqWriter::operator<<(const Packet& p)
         else
             napti->dst_addr.s6_addr32[0] = p.real_dst_ip[0];
         napti->dst_port = p.real_dst_port;
+        napti->ip_layer = p.real_ip_layer;
         msg->meta[DAQ_PKT_META_NAPT_INFO] = napti;
     }
     else
@@ -212,3 +224,20 @@ void DaqWriter::operator<<(const Packet& p)
     impl->last = desc->pkthdr.ts;
 }
 
+unsigned DaqWriter::GetWrittenAmount()
+{
+    return GetMsgCount();
+}
+
+void DaqWriter::SetMaxWrittenSize(unsigned value)
+{
+    max_written_pkts = value;
+}
+
+bool DaqWriter::Ok()
+{
+    bool threshold_not_met = max_written_pkts > impl->msg_count;
+    bool mempool_not_exhausted = impl->pool.freelist.size();
+
+    return threshold_not_met && mempool_not_exhausted;
+}

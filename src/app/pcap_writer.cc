@@ -150,3 +150,8 @@ void PcapWriter::operator<< (const Packet& p) {
     my->last = now;
 }
 
+unsigned PcapWriter::GetWrittenAmount()
+{
+    return my->numPkts;
+}
+

@@ -60,6 +60,7 @@ public:
     uint32_t flow_id = 0;
     bool flow_id_set = false;
     uint32_t address_space_id = 0;
+    uint8_t real_ip_layer = 1;
     uint32_t real_src_ip[4] = { };
     uint16_t real_src_family = AF_UNSPEC;
     uint16_t real_src_port = 0;

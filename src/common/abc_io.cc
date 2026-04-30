@@ -290,12 +290,14 @@ void AbcIo::Interrupt () {
 
 //-------------------------------------------------------------------------
 
-int AbcIo::Execute (int maxPkts) {
+int AbcIo::Execute (unsigned maxPkts) {
     Command cmd;
     unsigned numCmds = 0;
-    int numPkts = 0;
 
-    while ( maxPkts <= 0 || numPkts < maxPkts )
+    if ( my->writer )
+        my->writer->SetMaxWrittenSize(maxPkts);
+
+    while ( !my->writer || my->writer->GetWrittenAmount() < maxPkts )
     {
         if ( my->stop )
         {
@@ -313,12 +315,10 @@ int AbcIo::Execute (int maxPkts) {
         if ( cmd.GetName() == CMD_A2B ) {
             AbcIp* abc = my->Load(cmd);
             ok = abc && abc->AtoB();
-            numPkts++;
         }
         else if ( cmd.GetName() == CMD_B2A ) {
             AbcIp* abc = my->Load(cmd);
             ok = abc && abc->BtoA();
-            numPkts++;
         }
         else if ( cmd.GetName() == CMD_CFG ) {
             AbcIp* abc = my->Load(cmd);

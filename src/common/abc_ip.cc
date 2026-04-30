@@ -237,7 +237,8 @@ void AbcIpImpl::Generate (
     Respond(a2b);
     pkt.drop = false;
 
-    do {
+    while ( writer->Ok() )
+    {
         stack->Flush(pkt);
 
         if ( !pkt.Length() )
@@ -248,7 +249,8 @@ void AbcIpImpl::Generate (
 
         Respond(a2b);
     }
-    while ( true );
+
+    stack->SkipLeftover(pkt);
 }
 
 void AbcIpImpl::Respond (bool a2b) {

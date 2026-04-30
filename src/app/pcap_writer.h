@@ -34,6 +34,7 @@ public:
 
     void operator<<(const Packet&) override;
     bool Ok() override;
+    unsigned GetWrittenAmount() override;
 
 private:
     class PcapWriterImpl* my;

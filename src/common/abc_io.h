@@ -34,7 +34,7 @@ public:
         const char* stk, const char* user, bool trace);
     virtual ~AbcIo();
 
-    int Execute(int maxPkts = 0);
+    int Execute(unsigned maxPkts = 0);
     void Interrupt();
 
     static void HelpDefine(std::ostream&);
