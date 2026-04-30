@@ -1,0 +1,194 @@
+#include <catch2/catch_all.hpp>
+#include "cake.h"
+#include "packet.h"
+#include "phy.h"
+
+// -------------------------------------------------------------------------
+// Bind
+// -------------------------------------------------------------------------
+
+TEST_CASE("PhyProtocol::Bind always returns true", "[phy]") {
+    PhyProtocol p;
+    CHECK(p.Bind("eth"));
+    CHECK(p.Bind("ip4"));
+    CHECK(p.Bind("anything"));
+}
+
+// -------------------------------------------------------------------------
+// tenant_id propagation
+// -------------------------------------------------------------------------
+
+TEST_CASE("Phy tenant_id default is 0", "[phy]") {
+    PhyProtocol p;
+    Cake cake(2);
+    Packet pkt(cake);
+    uint32_t len = 0;
+    p.GetHeader(pkt, len);
+    CHECK(pkt.tenant_id == 0u);
+}
+
+TEST_CASE("Phy tenant_id is set from Fetch", "[phy]") {
+    PhyProtocol p;
+    Cake cake(2);
+    cake.Store("tenant", "42");
+    p.Fetch(cake, true);
+
+    Packet pkt(cake);
+    uint32_t len = 0;
+    p.GetHeader(pkt, len);
+    CHECK(pkt.tenant_id == 42u);
+}
+
+// -------------------------------------------------------------------------
+// snap / flow_id / address_space_id
+// -------------------------------------------------------------------------
+
+TEST_CASE("Phy snap is set from Fetch", "[phy]") {
+    PhyProtocol p;
+    Cake cake(2);
+    cake.Store("snap", "128");
+    p.Fetch(cake, true);
+
+    Packet pkt(cake);
+    uint32_t len = 0;
+    p.GetHeader(pkt, len);
+    CHECK(pkt.snap == 128u);
+}
+
+TEST_CASE("Phy flow_id is set from Fetch", "[phy]") {
+    PhyProtocol p;
+    Cake cake(2);
+    cake.Store("fid", "7");
+    p.Fetch(cake, true);
+
+    Packet pkt(cake);
+    uint32_t len = 0;
+    p.GetHeader(pkt, len);
+    CHECK(pkt.flow_id == 7u);
+    CHECK(pkt.flow_id_set);
+}
+
+TEST_CASE("Phy address_space_id is set from Fetch", "[phy]") {
+    PhyProtocol p;
+    Cake cake(2);
+    cake.Store("as", "5");
+    p.Fetch(cake, true);
+
+    Packet pkt(cake);
+    uint32_t len = 0;
+    p.GetHeader(pkt, len);
+    CHECK(pkt.address_space_id == 5u);
+}
+
+// -------------------------------------------------------------------------
+// LCG determinism: same seed → same permutation order
+// -------------------------------------------------------------------------
+
+TEST_CASE("Phy perm with same seed produces same HasPayload sequence", "[phy]") {
+    const uint8_t data[4] = { 1, 2, 3, 4 };
+
+    // Run 1: seed=1, perm=4 — collect output order
+    std::vector<uint8_t> run1, run2;
+    {
+        PhyProtocol p;
+        Cake cake(2);
+        cake.Store("seed", "1");
+        p.Fetch(cake, true);
+        cake.Store("perm", "4");
+        for (int i = 0; i < 4; i++) {
+            Packet pkt(cake);
+            pkt.Append(data + i, 1);
+            uint32_t len = 0;
+            p.GetPayload(pkt, len);
+            if (len) run1.push_back(*(const uint8_t*)p.GetPayload(pkt, len));
+            cake.Clear("perm");
+        }
+        // drain remaining
+        Cake cake2(2);
+        while (p.HasPayload()) {
+            Packet pkt2(cake2);
+            uint32_t len = 0;
+            const uint8_t* out = p.GetPayload(pkt2, len);
+            if (out && len) run1.push_back(*out);
+        }
+    }
+
+    // Run 2: same seed=1
+    {
+        PhyProtocol p;
+        Cake cake(2);
+        cake.Store("seed", "1");
+        p.Fetch(cake, true);
+        cake.Store("perm", "4");
+        for (int i = 0; i < 4; i++) {
+            Packet pkt(cake);
+            pkt.Append(data + i, 1);
+            uint32_t len = 0;
+            p.GetPayload(pkt, len);
+            if (len) run2.push_back(*(const uint8_t*)p.GetPayload(pkt, len));
+            cake.Clear("perm");
+        }
+        Cake cake2(2);
+        while (p.HasPayload()) {
+            Packet pkt2(cake2);
+            uint32_t len = 0;
+            const uint8_t* out = p.GetPayload(pkt2, len);
+            if (out && len) run2.push_back(*out);
+        }
+    }
+
+    CHECK(run1 == run2);
+    CHECK_FALSE(run1.empty());
+}
+
+// -------------------------------------------------------------------------
+// Reverse ordering
+// -------------------------------------------------------------------------
+
+TEST_CASE("Phy rev=4 emits packets in reverse order", "[phy]") {
+    PhyProtocol p;
+    const uint8_t data[4] = { 10, 20, 30, 40 };
+    std::vector<uint8_t> out;
+
+    Cake cake(2);
+    cake.Store("rev", "4");
+    for (int i = 0; i < 4; i++) {
+        Packet pkt(cake);
+        pkt.Append(data + i, 1);
+        uint32_t len = 0;
+        const uint8_t* r = p.GetPayload(pkt, len);
+        if (r && len) out.push_back(*r);
+        cake.Clear("rev");
+    }
+    Cake cake2(2);
+    while (p.HasPayload()) {
+        Packet pkt2(cake2);
+        uint32_t len = 0;
+        const uint8_t* r = p.GetPayload(pkt2, len);
+        if (r && len) out.push_back(*r);
+    }
+
+    REQUIRE(out.size() == 4u);
+    CHECK(out[0] == 40);
+    CHECK(out[1] == 30);
+    CHECK(out[2] == 20);
+    CHECK(out[3] == 10);
+}
+
+// -------------------------------------------------------------------------
+// Interface IDs (a2b direction)
+// -------------------------------------------------------------------------
+
+TEST_CASE("Phy ingress/egress intf ids set from a.if/b.if in a2b direction", "[phy]") {
+    PhyProtocol p;
+    Cake cake(2);
+    cake.Store("a.if", "3");
+    cake.Store("b.if", "7");
+    p.Fetch(cake, true);
+
+    Packet pkt(cake);
+    uint32_t len = 0;
+    p.GetHeader(pkt, len);
+    CHECK(pkt.ingress_intf_id == 3);
+    CHECK(pkt.egress_intf_id == 7);
+}

@@ -68,6 +68,28 @@ fi
 
 AM_CONDITIONAL([BUILD_DAQ], [test "x$enable_daq" = "xyes"])
 
+# Unit tests via Catch2
+AC_ARG_ENABLE([unit-tests],
+    AS_HELP_STRING([--enable-unit-tests],[build unit tests (requires Catch2)]),
+    [enable_unit_tests=$enableval], [enable_unit_tests=no])
+
+if test "x$enable_unit_tests" = "xyes" ; then
+    # Catch2 v3 requires C++14; probe with a flag-overriding compile check
+    save_CXXFLAGS="$CXXFLAGS"
+    CXXFLAGS="$CXXFLAGS -std=c++14"
+    AC_CHECK_HEADER([catch2/catch_all.hpp], [],
+        AC_MSG_ERROR([Catch2 header not found; install catch2 or use --disable-unit-tests]))
+    CXXFLAGS="$save_CXXFLAGS"
+    CATCH2_CPPFLAGS=""
+    CATCH2_CXXFLAGS="-std=c++14"
+    CATCH2_LIBS="-lCatch2Main -lCatch2"
+    AC_SUBST([CATCH2_CPPFLAGS])
+    AC_SUBST([CATCH2_CXXFLAGS])
+    AC_SUBST([CATCH2_LIBS])
+fi
+
+AM_CONDITIONAL([BUILD_UNIT_TESTS], [test "x$enable_unit_tests" = "xyes"])
+
 # Check for asciidoc.  If it's present, enable rebuilding the HTML documentation.
 AC_CHECK_PROG([have_asciidoc], [asciidoc], yes)
 AM_CONDITIONAL([HAVE_ASCIIDOC], [test "x$have_asciidoc" = "xyes"])
@@ -90,6 +112,7 @@ AC_CONFIG_FILES([ \
     src/protos/Makefile \
     src/app/Makefile \
     src/daq/Makefile \
+    src/test/Makefile \
     doc/Makefile \
     test/Makefile \
 ])

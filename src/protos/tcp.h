@@ -38,13 +38,14 @@ public:
 
     bool HasPayload() override;
 
+    void Recv(uint8_t ctl, uint32_t len, uint32_t rseq, uint32_t rack);
+
     static class Pimp* GetPimp();
 
 protected:
     virtual void Checksum(const Packet&);
 
 private:
-    void Recv(uint8_t ctl, uint32_t len, uint32_t rseq, uint32_t rack);
     class TcpImpl* my;
 };
 
