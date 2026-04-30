@@ -28,6 +28,7 @@
 
 #include <arpa/inet.h>
 
+#include <cstdlib>
 #include <cstring>
 
 #include "cake.h"
@@ -39,12 +40,20 @@ using namespace std;
 
 static const char* s_type = "phy";
 
+// Portable LCG matching glibc rand() parameters — cross-platform determinism.
+static uint32_t phy_rand(uint32_t& state)
+{
+    state = state * 1103515245u + 12345u;
+    return (state >> 16) & 0x7fff;
+}
+
 struct PhyImpl {
     string* buf = nullptr;
     unsigned* order = nullptr;
     unsigned max = 0;
     unsigned nIn = 0;
     unsigned nOut = 0;
+    uint32_t seed = 1;
 
     // Various bits of additional information about the Packet that are not
     // part of the generated packet data itself.  These match up to those in
@@ -96,9 +105,7 @@ void PhyImpl::Permute (unsigned n) {
 
     // fisher-yates
     for ( i = n-1; i > 0; i-- ) {
-        // maybe lame on the rand-o-meter but
-        // more than sufficient for our purposes
-        unsigned j = rand() % i;
+        unsigned j = phy_rand(seed) % i;
 
         unsigned tmp = order[i];
         order[i] = order[j];
@@ -132,7 +139,7 @@ bool PhyProtocol::Bind (const string&) {
 
 void PhyProtocol::Fetch (Cake& cake, bool a2b) {
     if ( cake.IsSet("seed") )
-        srand(cake.GetValue("seed", 1));
+        my->seed = cake.GetValue("seed", 1u);
 
     my->snap = cake.GetValue("snap", my->snap);
     my->late = cake.GetReal("sec", my->late);

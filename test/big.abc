@@ -2,6 +2,7 @@ a(syn)
 b(syn, ack)
 a(ack)
 
+c(phy:seed=1)
 a(phy:perm=8571, ip4:max=8; ack, len=65495, max=512)
 b(ack)
 
