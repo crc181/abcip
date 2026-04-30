@@ -23,6 +23,7 @@
 #ifndef __CAKE_H__
 #define __CAKE_H__
 
+#include <cstdint>
 #include <string>
 
 class Cake {
