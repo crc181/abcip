@@ -29,7 +29,8 @@ check_PROGRAMS = \
     daq_test \
     conf_test \
     abc_io_test \
-    cmd_parser_test
+    cmd_parser_test \
+    field_test
 
 attribute_test_SOURCES       = attribute_test.cc
 cake_test_SOURCES            = cake_test.cc
@@ -62,6 +63,8 @@ cmd_parser_test_LDADD        = \
     $(top_builddir)/src/common/libcommon.la \
     $(CATCH2_LIBS) \
     -lpcap
+
+field_test_SOURCES           = field_test.cc
 
 daq_test_CXXFLAGS            = \
     $(AM_CXXFLAGS) \
