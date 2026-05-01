@@ -26,8 +26,6 @@
 
 #include "raw.h"
 
-#include "cake.h"
-#include "packet.h"
 #include "pimp.h"
 
 using namespace std;
@@ -40,15 +38,6 @@ RawProtocol::~RawProtocol () = default;
 
 bool RawProtocol::Bind (const string&) {
     return true;
-}
-
-const uint8_t* RawProtocol::GetHeader(
-    Packet& p, uint32_t& len
-) {
-    return Protocol::GetHeader(p, len);
-    const string& s = p.cake.GetValue("hdr");
-    len = s.length();
-    return (const uint8_t*)s.data();
 }
 
 //-------------------------------------------------------------------------

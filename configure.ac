@@ -42,6 +42,18 @@ CPPFLAGS="$CFLAG_VISIBILITY $CPPFLAGS"
 # Checks for library functions.
 AC_CHECK_FUNCS([gettimeofday memset strcasecmp strncasecmp strtol])
 
+# Enable code coverage
+AC_ARG_ENABLE([coverage],
+    AS_HELP_STRING([--enable-coverage],[enable gcov code coverage instrumentation]),
+    [
+        AX_CHECK_COMPILE_FLAG([--coverage], [COVERAGE_CXXFLAGS="--coverage"])
+        AX_CHECK_LINK_FLAG([--coverage], [COVERAGE_LDFLAGS="--coverage"])
+        AC_SUBST([COVERAGE_CXXFLAGS])
+        AC_SUBST([COVERAGE_LDFLAGS])
+    ])
+
+AM_CONDITIONAL([ENABLE_COVERAGE], [test "x$enable_coverage" = "xyes"])
+
 # Enable address sanitizer
 AC_ARG_ENABLE(address-sanitizer,
     AS_HELP_STRING([--enable-address-sanitizer],[enable address sanitizer support]),
@@ -56,13 +68,14 @@ AC_ARG_ENABLE([daq],
     AS_HELP_STRING([--disable-daq],[disable building the abcip DAQ module (default=auto)]))
 
 if test "x$enable_daq" != "xno" ; then
-    # Checks for the LibDAQ headers.
-    AC_CHECK_DAQ_HEADERS
-    if test "x$HAVE_DAQ_HEADERS" != "xyes"; then
-        AC_MSG_WARN([Could not find LibDAQ headers, disabling DAQ module build...])
+    AC_CHECK_DAQ
+    if test "x$HAVE_DAQ" != "xyes"; then
+        AC_MSG_WARN([Could not find libdaq via pkg-config, disabling DAQ module build...])
         enable_daq=no
     else
         enable_daq=yes
+        AC_SUBST([LIBDAQ_CFLAGS])
+        AC_SUBST([LIBDAQ_LIBS])
     fi
 fi
 
@@ -94,13 +107,20 @@ AM_CONDITIONAL([BUILD_UNIT_TESTS], [test "x$enable_unit_tests" = "xyes"])
 AC_CHECK_PROG([have_asciidoc], [asciidoc], yes)
 AM_CONDITIONAL([HAVE_ASCIIDOC], [test "x$have_asciidoc" = "xyes"])
 
-AM_CPPFLAGS="-Wall -Wextra -Wformat -Wformat-security -pedantic ${LIBDAQ_CPPFLAGS}"
+AM_CPPFLAGS="-Wall -Wextra -Wformat -Wformat-security -pedantic ${LIBDAQ_CFLAGS}"
 
 if test -n "$SANITIZER_CXXFLAGS" ; then
     CXXFLAGS="$SANITIZER_CXXFLAGS $CXXFLAGS"
 fi
 if test -n "$SANITIZER_LDFLAGS" ; then
     LDFLAGS="$SANITIZER_LDFLAGS $LDFLAGS"
+fi
+
+if test -n "$COVERAGE_CXXFLAGS" ; then
+    CXXFLAGS="$COVERAGE_CXXFLAGS $CXXFLAGS"
+fi
+if test -n "$COVERAGE_LDFLAGS" ; then
+    LDFLAGS="$COVERAGE_LDFLAGS $LDFLAGS"
 fi
 
 AC_SUBST([AM_CPPFLAGS])

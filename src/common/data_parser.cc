@@ -83,6 +83,7 @@ bool DataParser::Load (Command& cmd) {
     if ( tok.size() ) {
         unsigned index = 4;
         cmd.SetName(my->name);
+        tok = "\"" + tok + "\"";
         cmd.AddOption(new Option(index, my->key, tok, proto));
         cmd.AddOption(new Option(index, ack, flag, proto));
         return true;
