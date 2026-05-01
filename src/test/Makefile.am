@@ -28,7 +28,8 @@ check_PROGRAMS = \
     data_parser_test \
     daq_test \
     conf_test \
-    abc_io_test
+    abc_io_test \
+    cmd_parser_test
 
 attribute_test_SOURCES       = attribute_test.cc
 cake_test_SOURCES            = cake_test.cc
@@ -50,6 +51,13 @@ conf_test_LDADD              = \
 
 abc_io_test_SOURCES          = abc_io_test.cc
 abc_io_test_LDADD            = \
+    $(top_builddir)/src/protos/libproto.la \
+    $(top_builddir)/src/common/libcommon.la \
+    $(CATCH2_LIBS) \
+    -lpcap
+
+cmd_parser_test_SOURCES      = cmd_parser_test.cc
+cmd_parser_test_LDADD        = \
     $(top_builddir)/src/protos/libproto.la \
     $(top_builddir)/src/common/libcommon.la \
     $(CATCH2_LIBS) \
