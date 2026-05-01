@@ -1,0 +1,14 @@
+# TCP options: mss, window scale, timestamps
+c( ip4:a="10.0.0.1", b="10.0.0.2"; tcp:a=1234, b=80 )
+
+a( syn, mss=1460 )
+b( syn, ack, mss=1460 )
+a( ack )
+
+a( syn, wis=7 )
+b( syn, ack )
+a( ack )
+
+a( syn, tsv=12345, tse=0 )
+b( syn, ack, tsv=67890, tse=12345 )
+a( ack )

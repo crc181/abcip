@@ -1,0 +1,6 @@
+# hop6 and dst6 with explicit next field, and with opt field
+d( stack="eth:ip6:hop6:dst6:tcp" )
+c( ip6:a="fc00::1", b="fc00::2"; tcp:a=6666, b=80 )
+a( syn, hop6:next=60, hop6:opt="| 1 0 |", dst6:opt="| 1 0 |" )
+b( syn, ack )
+a( ack )

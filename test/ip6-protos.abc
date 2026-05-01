@@ -1,0 +1,24 @@
+# IPv6 with gre, ip4-in-ip6, ip6-in-ip6, and mpls next-proto bindings
+d( stack="eth:ip6:gre:ip4:tcp" )
+c( ip6:a="fc00::1", b="fc00::2"; tcp:a=1111, b=80 )
+a( syn )
+b( syn, ack )
+a( ack )
+
+d( stack="eth:ip6:ip4:tcp" )
+c( ip6:a="fc00::1", b="fc00::2"; tcp:a=2222, b=80 )
+a( syn )
+b( syn, ack )
+a( ack )
+
+d( stack="eth:ip6:ip6:tcp" )
+c( ip6:a="fc00::1", b="fc00::2"; 4:a="fd00::1", b="fd00::2"; tcp:a=3333, b=80 )
+a( syn )
+b( syn, ack )
+a( ack )
+
+d( stack="eth:ip6:mpls:ip4:tcp" )
+c( ip6:a="fc00::1", b="fc00::2"; tcp:a=4444, b=80 )
+a( syn, mpls:lab=100 )
+b( syn, ack )
+a( ack )

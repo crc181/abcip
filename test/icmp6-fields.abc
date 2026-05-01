@@ -1,0 +1,5 @@
+# ICMPv6 with u32 combined field and explicit checksum
+d( stack="eth:ip6:icmp6" )
+
+a( u32=0x00010001 )
+a( type=128, code=0, cks=0 )
