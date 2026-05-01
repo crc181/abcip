@@ -7,7 +7,7 @@ AC_INIT([abcip],[m4_esyscmd(build-aux/git-version-gen .tarball-version)],[crc181
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_SRCDIR([src/])
 AC_CONFIG_HEADER([config.h])
-AM_INIT_AUTOMAKE([-Wall -Wno-extra-portability -Werror foreign])
+AM_INIT_AUTOMAKE([-Wall -Wno-extra-portability -Werror foreign subdir-objects])
 AC_CONFIG_MACRO_DIR([m4])
 
 # Checks for programs.

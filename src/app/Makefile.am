@@ -2,6 +2,7 @@
 bin_PROGRAMS = abcip
 
 abcip_SOURCES = \
+conf.h conf.cc \
 main.cc \
 pcap_writer.cc pcap_writer.h
 

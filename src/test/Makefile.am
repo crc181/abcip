@@ -3,7 +3,8 @@ AM_CPPFLAGS = \
     $(LIBDAQ_CFLAGS) \
     -I$(top_srcdir)/src/common \
     -I$(top_srcdir)/src/protos \
-    -I$(top_srcdir)/src/daq
+    -I$(top_srcdir)/src/daq \
+    -I$(top_srcdir)/src/app
 
 AM_CXXFLAGS = $(CATCH2_CXXFLAGS) -Wno-c++17-extensions
 
@@ -25,7 +26,8 @@ check_PROGRAMS = \
     prototool_test \
     raw_test \
     data_parser_test \
-    daq_test
+    daq_test \
+    conf_test
 
 attribute_test_SOURCES       = attribute_test.cc
 cake_test_SOURCES            = cake_test.cc
@@ -37,6 +39,14 @@ phy_test_SOURCES             = phy_test.cc
 prototool_test_SOURCES       = prototool_test.cc
 raw_test_SOURCES             = raw_test.cc
 data_parser_test_SOURCES     = data_parser_test.cc
+conf_test_SOURCES            = conf_test.cc $(top_srcdir)/src/app/conf.cc
+conf_test_CXXFLAGS           = $(AM_CXXFLAGS) -I$(top_srcdir)/src/app
+conf_test_LDADD              = \
+    $(top_builddir)/src/protos/libproto.la \
+    $(top_builddir)/src/common/libcommon.la \
+    $(CATCH2_LIBS) \
+    -lpcap
+
 daq_test_CXXFLAGS            = \
     $(AM_CXXFLAGS) \
     -DARP_ABC=\"$(top_srcdir)/test/arp.abc\" \
