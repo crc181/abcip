@@ -207,7 +207,9 @@ const uint8_t* TcpProtocol::GetHeader (
     uint32_t una = p.cake.GetValue("una", 0);
 
     my->Send(p, slen, ctl, seq, ack);
-    ((TcpProtocol*)GetPeer())->Recv(ctl, slen, seq, una);
+
+    if ( auto* peer = (TcpProtocol*)GetPeer() )
+        peer->Recv(ctl, slen, seq, una);
 
     const uint8_t* raw = Protocol::GetHeader(p, len);
     if ( raw ) return raw;
