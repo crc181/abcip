@@ -1,0 +1,5 @@
+d ( stack="eth:ip6:tcp" )
+
+a ( syn, ip6:hops=32, ip6:vcl=0x60000000 )
+b ( syn, ack, ip6:next=6, ip6:tot=24 )
+a ( ack )

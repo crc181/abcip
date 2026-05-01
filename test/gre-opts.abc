@@ -1,0 +1,6 @@
+d ( stack="eth:ip4:gre:ip4:tcp" )
+
+a ( syn, gre:key=0xdeadbeef )
+b ( syn, ack, gre:seq=1 )
+a ( ack, gre:ack=1, gre:len=10, gre:cid=42 )
+a ( ack, len=8, gre:cks=0, gre:off=0 )
