@@ -1,0 +1,7 @@
+# raw protocol with payload
+d( stack="eth:raw" )
+a( raw:pay="hello" )
+
+d( stack="eth:ip6:raw" )
+c( ip6:a="fc00::1", b="fc00::2" )
+a( raw:pay="world" )

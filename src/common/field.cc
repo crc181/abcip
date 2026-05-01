@@ -215,6 +215,9 @@ bool Field::Validate (
     const Field* f, FieldType ft,
     const string& key, const string& val
 ) {
+    if ( !f )
+        return false;
+
     while ( f->name ) {
         if ( f->use == ft && f->name == key )
             return ::Validate(f->type, val);
