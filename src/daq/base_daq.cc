@@ -24,6 +24,7 @@
 
 #include <daq_dlt.h>
 
+// GCOVR_EXCL_START -- base class stubs; all overridden by AbcDaq
 int Daq::SetFilter(const char*) { return DAQ_ERROR_NOTSUP; }
 
 int Daq::Start() { return DAQ_SUCCESS; }
@@ -43,3 +44,4 @@ int Daq::GetDatalinkType() { return DLT_NULL; }
 unsigned Daq::MsgReceive(const unsigned, const DAQ_Msg_t**, DAQ_RecvStatus*) { return DAQ_ERROR_NOTSUP; }
 int Daq::MsgFinalize(const DAQ_Msg_t*, DAQ_Verdict) { return DAQ_ERROR_NOTSUP; }
 int Daq::GetMsgPoolInfo(DAQ_MsgPoolInfo_t*) { return DAQ_ERROR_NOTSUP; }
+// GCOVR_EXCL_STOP

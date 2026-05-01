@@ -103,10 +103,10 @@ bool Lexer::GetToken (string& tok) {
                 continue;
             }
             if ( ispunct(c) && !strchr("+-", c) ) {
-                if ( !tok.empty() ) {
+                if ( !tok.empty() ) {  // GCOVR_EXCL_START -- state 0 tok is always empty
                     prev = c;
                     return true;
-                }
+                }                      // GCOVR_EXCL_STOP
                 tok += c;
                 return true;
             }
@@ -353,8 +353,8 @@ bool CommandParser::Load (Command& cmd) {
             }
             break;
 
-        default:
-            err = "unknown state";
+        default:                       // GCOVR_EXCL_LINE
+            err = "unknown state";     // GCOVR_EXCL_LINE
         }
     }
     if ( state && !err )
