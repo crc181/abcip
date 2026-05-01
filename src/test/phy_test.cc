@@ -3,6 +3,9 @@
 #include "packet.h"
 #include "phy.h"
 
+#include <arpa/inet.h>
+#include <sys/socket.h>
+
 // -------------------------------------------------------------------------
 // Bind
 // -------------------------------------------------------------------------
@@ -191,4 +194,88 @@ TEST_CASE("Phy ingress/egress intf ids set from a.if/b.if in a2b direction", "[p
     p.GetHeader(pkt, len);
     CHECK(pkt.ingress_intf_id == 3);
     CHECK(pkt.egress_intf_id == 7);
+}
+
+TEST_CASE("Phy ingress/egress intf ids swapped in b2a direction", "[phy]") {
+    PhyProtocol p;
+    Cake cake(2);
+    cake.Store("a.if", "3");
+    cake.Store("b.if", "7");
+    p.Fetch(cake, false);   // b2a: b.if -> ingress, a.if -> egress
+
+    Packet pkt(cake);
+    uint32_t len = 0;
+    p.GetHeader(pkt, len);
+    CHECK(pkt.ingress_intf_id == 7);
+    CHECK(pkt.egress_intf_id == 3);
+}
+
+// -------------------------------------------------------------------------
+// Real IP fields (a2b direction)
+// -------------------------------------------------------------------------
+
+TEST_CASE("Phy real src IPv4 address set from a.rip in a2b direction", "[phy]") {
+    PhyProtocol p;
+    Cake cake(2);
+    cake.Store("a.rip", "10.0.0.1");
+    cake.Store("a.rpt", "1234");
+    p.Fetch(cake, true);
+
+    Packet pkt(cake);
+    uint32_t len = 0;
+    p.GetHeader(pkt, len);
+    CHECK(pkt.real_src_family == AF_INET);
+    CHECK(pkt.real_src_port == htons(1234));
+}
+
+TEST_CASE("Phy real dst IPv4 address set from b.rip in a2b direction", "[phy]") {
+    PhyProtocol p;
+    Cake cake(2);
+    cake.Store("b.rip", "10.0.0.2");
+    cake.Store("b.rpt", "5678");
+    p.Fetch(cake, true);
+
+    Packet pkt(cake);
+    uint32_t len = 0;
+    p.GetHeader(pkt, len);
+    CHECK(pkt.real_dst_family == AF_INET);
+    CHECK(pkt.real_dst_port == htons(5678));
+}
+
+TEST_CASE("Phy real src IPv6 address set from a.rip6 in a2b direction", "[phy]") {
+    PhyProtocol p;
+    Cake cake(2);
+    cake.Store("a.rip6", "::1");
+    p.Fetch(cake, true);
+
+    Packet pkt(cake);
+    uint32_t len = 0;
+    p.GetHeader(pkt, len);
+    CHECK(pkt.real_src_family == AF_INET6);
+}
+
+TEST_CASE("Phy real src/dst swapped in b2a direction", "[phy]") {
+    PhyProtocol p;
+    Cake cake(2);
+    cake.Store("b.rip", "10.0.0.2");
+    cake.Store("a.rip", "10.0.0.1");
+    p.Fetch(cake, false);   // b2a: b.rip -> src, a.rip -> dst
+
+    Packet pkt(cake);
+    uint32_t len = 0;
+    p.GetHeader(pkt, len);
+    CHECK(pkt.real_src_family == AF_INET);
+    CHECK(pkt.real_dst_family == AF_INET);
+}
+
+TEST_CASE("Phy real dst IPv6 set from b.rip6 in b2a direction", "[phy]") {
+    PhyProtocol p;
+    Cake cake(2);
+    cake.Store("a.rip6", "::1");
+    p.Fetch(cake, false);   // b2a: a.rip6 -> dst
+
+    Packet pkt(cake);
+    uint32_t len = 0;
+    p.GetHeader(pkt, len);
+    CHECK(pkt.real_dst_family == AF_INET6);
 }
