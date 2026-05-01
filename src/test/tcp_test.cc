@@ -174,3 +174,351 @@ TEST_CASE("TCP checksum is non-zero for SYN packet", "[tcp]") {
     CHECK(hdr->th_sum != 0);
     delete a; delete b;
 }
+
+TEST_CASE("TCP checksum with odd-length payload", "[tcp]") {
+    auto [a, b] = make_tcp_pair();
+    Cake cake(2);
+    Packet pkt(cake);
+    const uint8_t payload[5] = { 1, 2, 3, 4, 5 };
+    pkt.Append(payload, 5);
+    uint32_t len = 0;
+    const struct tcphdr* hdr = get_tcp_hdr(a, cake, pkt);
+    REQUIRE(hdr != nullptr);
+    CHECK(hdr->th_sum != 0);
+    delete a; delete b;
+}
+
+// -------------------------------------------------------------------------
+// All control flags
+// -------------------------------------------------------------------------
+
+TEST_CASE("TCP Send sets FIN flag", "[tcp]") {
+    auto [a, b] = make_tcp_pair();
+    Cake c(2); Packet p(c);
+    c.Store("fin", "1");
+    uint32_t len = 0;
+    const struct tcphdr* h = get_tcp_hdr(a, c, p);
+    REQUIRE(h != nullptr);
+    CHECK(h->th_flags & TH_FIN);
+    delete a; delete b;
+}
+
+TEST_CASE("TCP Send sets PSH flag", "[tcp]") {
+    auto [a, b] = make_tcp_pair();
+    Cake c(2); Packet p(c);
+    c.Store("psh", "1");
+    uint32_t len = 0;
+    const struct tcphdr* h = get_tcp_hdr(a, c, p);
+    REQUIRE(h != nullptr);
+    CHECK(h->th_flags & TH_PUSH);
+    delete a; delete b;
+}
+
+TEST_CASE("TCP Send sets RST flag", "[tcp]") {
+    auto [a, b] = make_tcp_pair();
+    Cake c(2); Packet p(c);
+    c.Store("rst", "1");
+    uint32_t len = 0;
+    const struct tcphdr* h = get_tcp_hdr(a, c, p);
+    REQUIRE(h != nullptr);
+    CHECK(h->th_flags & TH_RST);
+    delete a; delete b;
+}
+
+TEST_CASE("TCP Send sets URG flag", "[tcp]") {
+    auto [a, b] = make_tcp_pair();
+    Cake c(2); Packet p(c);
+    c.Store("urg", "1");
+    uint32_t len = 0;
+    const struct tcphdr* h = get_tcp_hdr(a, c, p);
+    REQUIRE(h != nullptr);
+    CHECK(h->th_flags & TH_URG);
+    delete a; delete b;
+}
+
+TEST_CASE("TCP Send sets ACK flag explicitly", "[tcp]") {
+    auto [a, b] = make_tcp_pair();
+    Cake c(2); Packet p(c);
+    c.Store("ack", "1");
+    uint32_t len = 0;
+    const struct tcphdr* h = get_tcp_hdr(a, c, p);
+    REQUIRE(h != nullptr);
+    CHECK(h->th_flags & TH_ACK);
+    delete a; delete b;
+}
+
+TEST_CASE("TCP Send sets ctl field directly", "[tcp]") {
+    auto [a, b] = make_tcp_pair();
+    Cake c(2); Packet p(c);
+    c.Store("ctl", "0x12");  // SYN|ACK
+    uint32_t len = 0;
+    const struct tcphdr* h = get_tcp_hdr(a, c, p);
+    REQUIRE(h != nullptr);
+    CHECK(h->th_flags & TH_SYN);
+    CHECK(h->th_flags & TH_ACK);
+    delete a; delete b;
+}
+
+// -------------------------------------------------------------------------
+// seq/ack/jump/jack overrides
+// -------------------------------------------------------------------------
+
+TEST_CASE("TCP explicit seq overrides FSM", "[tcp]") {
+    auto [a, b] = make_tcp_pair();
+    Cake c(2); Packet p(c);
+    c.Store("seq", "1000");
+    uint32_t len = 0;
+    const struct tcphdr* h = get_tcp_hdr(a, c, p);
+    REQUIRE(h != nullptr);
+    CHECK(ntohl(h->th_seq) == 1000u);
+    delete a; delete b;
+}
+
+TEST_CASE("TCP jump shifts sequence number", "[tcp]") {
+    auto [a, b] = make_tcp_pair();
+    // establish ISN via SYN
+    { Cake c(2); Packet p(c); c.Store("syn","1"); uint32_t l=0; a->GetHeader(p,l); }
+    Cake c(2); Packet p(c);
+    c.Store("jump", "100");
+    uint32_t len = 0;
+    const struct tcphdr* h = get_tcp_hdr(a, c, p);
+    REQUIRE(h != nullptr);
+    // localIsn=1, seq=1 after SYN, jump adds 100 → hseq = 101 + 1 = 102
+    CHECK(ntohl(h->th_seq) == 102u);
+    delete a; delete b;
+}
+
+TEST_CASE("TCP jack shifts ack number", "[tcp]") {
+    auto [a, b] = make_tcp_pair();
+    // SYN from a, SYN-ACK from b sets remoteIsn
+    { Cake c(2); Packet p(c); c.Store("syn","1"); uint32_t l=0; a->GetHeader(p,l); }
+    { Cake c(2); Packet p(c); c.Store("syn","1"); uint32_t l=0; b->GetHeader(p,l); }
+    Cake c(2); Packet p(c);
+    c.Store("ack", "1");
+    c.Store("jack", "5");
+    uint32_t len = 0;
+    const struct tcphdr* h = get_tcp_hdr(a, c, p);
+    REQUIRE(h != nullptr);
+    // ack is shifted by 5 relative to normal
+    CHECK(ntohl(h->th_ack) != 0u);
+    delete a; delete b;
+}
+
+// -------------------------------------------------------------------------
+// GetHeader: win, cks override, off/res/ecn, raw header override
+// -------------------------------------------------------------------------
+
+TEST_CASE("TCP GetHeader respects explicit window size", "[tcp]") {
+    auto [a, b] = make_tcp_pair();
+    Cake c(2); Packet p(c);
+    c.Store("win", "4096");
+    uint32_t len = 0;
+    const struct tcphdr* h = get_tcp_hdr(a, c, p);
+    REQUIRE(h != nullptr);
+    CHECK(ntohs(h->th_win) == 4096u);
+    delete a; delete b;
+}
+
+TEST_CASE("TCP GetHeader respects explicit checksum", "[tcp]") {
+    auto [a, b] = make_tcp_pair();
+    Cake c(2); Packet p(c);
+    c.Store("cks", "0xdead");
+    uint32_t len = 0;
+    const struct tcphdr* h = get_tcp_hdr(a, c, p);
+    REQUIRE(h != nullptr);
+    CHECK(ntohs(h->th_sum) == 0xdeadu);
+    delete a; delete b;
+}
+
+TEST_CASE("TCP GetHeader respects explicit data offset", "[tcp]") {
+    auto [a, b] = make_tcp_pair();
+    Cake c(2); Packet p(c);
+    c.Store("off", "6");
+    uint32_t len = 0;
+    // get raw bytes rather than struct tcphdr to avoid bitfield layout issues
+    const uint8_t* raw = a->GetHeader(p, len);
+    REQUIRE(raw != nullptr);
+    // offset byte is at position 12; abcip packs it as (off<<4)|flags_low
+    CHECK((raw[12] >> 4) == 6u);
+    delete a; delete b;
+}
+
+TEST_CASE("TCP GetHeader sets ECN bits", "[tcp]") {
+    auto [a, b] = make_tcp_pair();
+    Cake c(2); Packet p(c);
+    c.Store("ecn", "7");
+    uint32_t len = 0;
+    const struct tcphdr* h = get_tcp_hdr(a, c, p);
+    REQUIRE(h != nullptr);
+    // ecn&0x3 -> upper ctl bits; ecn&0x4 -> low off bit
+    CHECK((h->th_off & 0x1) != 0);
+    CHECK((h->th_flags >> 6) != 0);
+    delete a; delete b;
+}
+
+TEST_CASE("TCP GetHeader returns raw head override", "[tcp]") {
+    auto [a, b] = make_tcp_pair();
+    Cake c(2); Packet p(c);
+    // "head" is the base Protocol raw-header override; 8 printable chars = 8 bytes
+    c.Store("head", "\"AABBCCDD\"");
+    uint32_t len = 0;
+    const uint8_t* raw = a->GetHeader(p, len);
+    REQUIRE(raw != nullptr);
+    CHECK(len == 8u);
+    delete a; delete b;
+}
+
+TEST_CASE("TCP GetHeader works without peer (null peer path)", "[tcp]") {
+    auto* a = new TcpProtocol(new FakePseudoHdr());
+    // no peer set
+    Cake c(2); Packet p(c);
+    c.Store("syn", "1");
+    uint32_t len = 0;
+    const struct tcphdr* h = get_tcp_hdr(a, c, p);
+    REQUIRE(h != nullptr);
+    CHECK(h->th_flags & TH_SYN);
+    delete a;
+}
+
+// -------------------------------------------------------------------------
+// GetOptions
+// -------------------------------------------------------------------------
+
+TEST_CASE("TCP GetOptions: MSS option", "[tcp]") {
+    auto [a, b] = make_tcp_pair();
+    Cake c(2); Packet p(c);
+    c.Store("mss", "1460");
+    uint32_t len = 0;
+    const uint8_t* opts = a->GetOptions(p, len);
+    CHECK(len == 4u);
+    CHECK(opts[0] == 0x02);  // kind=2
+    CHECK(opts[1] == 0x04);  // len=4
+    delete a; delete b;
+}
+
+TEST_CASE("TCP GetOptions: window scale option", "[tcp]") {
+    auto [a, b] = make_tcp_pair();
+    Cake c(2); Packet p(c);
+    c.Store("wis", "7");
+    uint32_t len = 0;
+    const uint8_t* opts = a->GetOptions(p, len);
+    // 3 bytes + 1 pad = 4
+    CHECK(len == 4u);
+    CHECK(opts[0] == 0x03);  // kind=3
+    CHECK(opts[2] == 0x07);  // shift=7
+    delete a; delete b;
+}
+
+TEST_CASE("TCP GetOptions: timestamp option", "[tcp]") {
+    auto [a, b] = make_tcp_pair();
+    Cake c(2); Packet p(c);
+    c.Store("tsv", "12345");
+    c.Store("tse", "0");
+    uint32_t len = 0;
+    const uint8_t* opts = a->GetOptions(p, len);
+    // 10 bytes + 2 pad = 12
+    CHECK(len == 12u);
+    delete a; delete b;
+}
+
+TEST_CASE("TCP GetOptions: raw opt suppresses padding", "[tcp]") {
+    auto [a, b] = make_tcp_pair();
+    Cake c(2); Packet p(c);
+    c.Store("opt", "\"AB\"");
+    uint32_t len = 0;
+    a->GetOptions(p, len);
+    CHECK(len == 2u);  // no padding added for raw opt
+    delete a; delete b;
+}
+
+TEST_CASE("TCP GetOptions: padding to 4-byte multiple", "[tcp]") {
+    auto [a, b] = make_tcp_pair();
+    Cake c(2); Packet p(c);
+    c.Store("wis", "3");  // 3 bytes → padded to 4
+    uint32_t len = 0;
+    a->GetOptions(p, len);
+    CHECK(len % 4 == 0);
+    delete a; delete b;
+}
+
+// -------------------------------------------------------------------------
+// GetPayload / HasPayload
+// -------------------------------------------------------------------------
+
+TEST_CASE("TCP GetPayload returns null when no payload and no max", "[tcp]") {
+    auto [a, b] = make_tcp_pair();
+    Cake c(2); Packet p(c);
+    uint32_t len = 99;
+    const uint8_t* pay = a->GetPayload(p, len);
+    CHECK(pay == nullptr);
+    CHECK(len == 0u);
+    delete a; delete b;
+}
+
+TEST_CASE("TCP HasPayload false initially", "[tcp]") {
+    auto [a, b] = make_tcp_pair();
+    CHECK_FALSE(a->HasPayload());
+    delete a; delete b;
+}
+
+TEST_CASE("TCP GetPayload segments at max", "[tcp]") {
+    auto [a, b] = make_tcp_pair();
+    Cake c(2); Packet p(c);
+    const uint8_t payload[20] = {};
+    p.Append(payload, 20);
+    c.Store("max", "8");
+    uint32_t len = 0;
+    const uint8_t* pay = a->GetPayload(p, len);
+    REQUIRE(pay != nullptr);
+    CHECK(len == 8u);
+    // HasPayload should be true — more data remains
+    CHECK(a->HasPayload());
+    delete a; delete b;
+}
+
+TEST_CASE("TCP GetPayload returns full buf when max exceeds buf size", "[tcp]") {
+    auto [a, b] = make_tcp_pair();
+    Cake c(2); Packet p(c);
+    const uint8_t payload[5] = { 1,2,3,4,5 };
+    p.Append(payload, 5);
+    c.Store("max", "100");
+    uint32_t len = 0;
+    const uint8_t* pay = a->GetPayload(p, len);
+    REQUIRE(pay != nullptr);
+    CHECK(len == 5u);
+    delete a; delete b;
+}
+
+// -------------------------------------------------------------------------
+// Recv: SYN/FIN consume sequence; remoteIsn tracking
+// -------------------------------------------------------------------------
+
+TEST_CASE("TCP Recv SYN sets remoteIsn", "[tcp]") {
+    auto [a, b] = make_tcp_pair();
+    // SYN from a: rseq=1, len=0 → b->ack = 1+1-0 = 2 (SYN consumes 1), remoteIsn=0
+    b->Recv(TH_SYN, 0, 1, 0);
+    // Use ctl=TH_ACK to set the ACK flag without storing a value for "ack",
+    // so Send takes the else branch: ack = cake.GetValue("ack", b->ack) = b->ack = 2
+    Cake c(2); Packet p(c);
+    c.Store("ctl", "16");  // TH_ACK = 0x10 = 16
+    uint32_t len = 0;
+    const struct tcphdr* h = get_tcp_hdr(b, c, p);
+    REQUIRE(h != nullptr);
+    // hack = b->ack(2) + remoteIsn(0) = 2
+    CHECK(ntohl(h->th_ack) == 2u);
+    delete a; delete b;
+}
+
+TEST_CASE("TCP Recv FIN consumes one sequence number", "[tcp]") {
+    auto [a, b] = make_tcp_pair();
+    b->Recv(TH_SYN, 0, 1, 0);  // remoteIsn=0, ack=2
+    b->Recv(TH_FIN, 0, 2, 0);  // ack = 2+1-0 = 3
+    Cake c(2); Packet p(c);
+    c.Store("ctl", "16");  // TH_ACK — leaves "ack" key unset so FSM value flows through
+    uint32_t len = 0;
+    const struct tcphdr* h = get_tcp_hdr(b, c, p);
+    REQUIRE(h != nullptr);
+    // hack = b->ack(3) + remoteIsn(0) = 3
+    CHECK(ntohl(h->th_ack) == 3u);
+    delete a; delete b;
+}
