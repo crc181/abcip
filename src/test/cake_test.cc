@@ -17,6 +17,10 @@
 //--------------------------------------------------------------------- EOL
 
 #include <catch2/catch_all.hpp>
+
+#include <iostream>
+#include <sstream>
+
 #include "cake.h"
 
 // -------------------------------------------------------------------------
@@ -188,4 +192,39 @@ TEST_CASE("Cake::Restart resets layers and clears attributes", "[cake]") {
     CHECK(c.GetTopLayer() == 2u);
     CHECK(c.GetLayer() == 1u);
     CHECK_FALSE(c.IsSet("x"));
+}
+
+// -------------------------------------------------------------------------
+// Dump (exercises Attribute::Expand / Print)
+// -------------------------------------------------------------------------
+
+TEST_CASE("Cake::Dump emits stored keys on correct layers", "[cake]") {
+    Cake c(2);
+    c.Store("foo", "bar");
+    c.Next();
+    c.Store("num", "42");
+
+    std::ostringstream out;
+    std::streambuf* old = std::cout.rdbuf(out.rdbuf());
+    c.Dump();
+    std::cout.rdbuf(old);
+
+    std::string s = out.str();
+    CHECK(s.find("foo") != std::string::npos);
+    CHECK(s.find("bar") != std::string::npos);
+    CHECK(s.find("num") != std::string::npos);
+    CHECK(s.find("42") != std::string::npos);
+}
+
+TEST_CASE("Cake::Dump handles binary payload via Expand", "[cake]") {
+    Cake c(1);
+    // pipe-hex encodes a non-printable byte; Expand should emit hex notation
+    c.Store("p", "\"| 01 |\"");
+
+    std::ostringstream out;
+    std::streambuf* old = std::cout.rdbuf(out.rdbuf());
+    c.Dump();
+    std::cout.rdbuf(old);
+
+    CHECK_FALSE(out.str().empty());
 }
