@@ -186,6 +186,9 @@ static string build_stack(const Packet* p)
         case ProtocolId::GENEVE:
             name = "geneve"; break;
 
+        case ProtocolId::VXLAN:
+            name = "vxlan"; break;
+
         // transport
         case ProtocolId::TCP:
             name = "tcp"; break;

@@ -25,7 +25,8 @@ raw.cc raw.h \
 rte6.cc rte6.h \
 tcp.cc tcp.h \
 udp.cc udp.h \
-vlan.cc vlan.h
+vlan.cc vlan.h \
+vxlan.cc vxlan.h
 
 BUILT_SOURCES = \
 prototool-inc.h \

@@ -115,4 +115,5 @@ Supported protocols are:
   tcp                 TCP
   udp                 UDP
   vlan                802.1Q VLAN
+  vxlan               VXLAN tunnel (RFC 7348)
 ````

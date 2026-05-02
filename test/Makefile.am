@@ -40,6 +40,7 @@ teredo.abc ref/teredo.pcap \
 udp-len.abc ref/udp-len.pcap \
 user-data.abc ref/user-data.pcap \
 vlan.abc ref/vlan.pcap \
+vxlan.abc ref/vxlan.pcap \
 arp.abc ref/arp.rt.abc \
 big.abc ref/big.rt.abc \
 cisco.abc ref/cisco.rt.abc \
@@ -87,7 +88,8 @@ tcp.abc ref/tcp.rt.abc \
 teredo.abc ref/teredo.rt.abc \
 udp-len.abc ref/udp-len.rt.abc \
 user-data.abc ref/user-data.rt.abc \
-vlan.abc ref/vlan.rt.abc
+vlan.abc ref/vlan.rt.abc \
+vxlan.abc ref/vxlan.rt.abc
 
 clean-local:
 	rm -rf tmp/
