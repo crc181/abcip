@@ -81,6 +81,24 @@ fi
 
 AM_CONDITIONAL([BUILD_DAQ], [test "x$enable_daq" = "xyes"])
 
+# abc snort logger
+AC_ARG_ENABLE([snort],
+    AS_HELP_STRING([--disable-snort],[disable building the abcip Snort logger plugin (default=auto)]))
+
+if test "x$enable_snort" != "xno" ; then
+    AC_CHECK_SNORT
+    if test "x$HAVE_SNORT" != "xyes"; then
+        AC_MSG_WARN([Could not find snort via pkg-config, disabling Snort logger build...])
+        enable_snort=no
+    else
+        enable_snort=yes
+        AC_SUBST([LIBSNORT_CFLAGS])
+        AC_SUBST([LIBSNORT_LIBS])
+    fi
+fi
+
+AM_CONDITIONAL([BUILD_SNORT], [test "x$enable_snort" = "xyes"])
+
 # Unit tests via Catch2
 AC_ARG_ENABLE([unit-tests],
     AS_HELP_STRING([--enable-unit-tests],[build unit tests (requires Catch2)]),
@@ -132,6 +150,7 @@ AC_CONFIG_FILES([ \
     src/protos/Makefile \
     src/app/Makefile \
     src/daq/Makefile \
+    src/loggers/Makefile \
     src/test/Makefile \
     doc/Makefile \
     test/Makefile \
@@ -155,5 +174,6 @@ AC_MSG_RESULT([
     am_ldflags:      ${AM_LDFLAGS}
     libs:            ${LIBS}
 
-    Build DAQ module : $enable_daq
+    Build DAQ module    : $enable_daq
+    Build Snort logger  : $enable_snort
 ])

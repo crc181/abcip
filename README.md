@@ -18,6 +18,18 @@ pkg-config.  Set PKG_CONFIG_PATH if needed and add --enable-daq:
     ./configure --enable-unit-tests --enable-daq
 ````
 
+To build the log_abc Snort logger plugin (read-back mode: pcap → .abc script),
+snort must be available via pkg-config.  Add --enable-snort:
+
+````
+    PKG_CONFIG_PATH=/path/to/snort/install/lib/pkgconfig \
+    ./configure --enable-snort
+````
+
+Load it in Snort with `--plugin-path /path/to/log_abc.so -A log_abc`.
+It emits an .abc script to stdout reproducing decoded traffic: one d()/c()
+preamble per new flow and an a()/b() packet command per packet.
+
 To run it, do this:
 
 abcip [options] < abc-file
