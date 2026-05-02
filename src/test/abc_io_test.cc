@@ -267,3 +267,45 @@ TEST_CASE("AbcIo redefine default context with d", "[abc_io]") {
     CHECK(io->Execute(100) == 3);
     delete io;
 }
+
+// -------------------------------------------------------------------------
+// Let statement and variable expansion
+// -------------------------------------------------------------------------
+
+TEST_CASE("AbcIo $ let command stores variable", "[abc_io]") {
+    StatusGuard sg;
+    AbcIo* io = make_io({ make_cmd("$", "", {{"mss", "1460"}}) });
+    CHECK(io->Execute(100) == 1);
+    delete io;
+}
+
+TEST_CASE("AbcIo $ variable expands in packet option value", "[abc_io]") {
+    StatusGuard sg;
+    AbcIo* io = make_io({
+        make_cmd("$", "", {{"mywin", "4096"}}),
+        make_cmd("a", "", {{"win", "$mywin"}}),
+    });
+    CHECK(io->Execute(100) == 2);
+    delete io;
+}
+
+TEST_CASE("AbcIo $ variable expands in d stack value", "[abc_io]") {
+    StatusGuard sg;
+    AbcIo* io = make_io({
+        make_cmd("$", "", {{"stk", "\"eth:ip4:tcp\""}}),
+        make_cmd("d", "", {{"stack", "$stk"}}),
+        make_cmd("a", "", {{"syn", " "}}),
+    });
+    CHECK(io->Execute(100) == 3);
+    delete io;
+}
+
+TEST_CASE("AbcIo undefined $ variable passes through unexpanded", "[abc_io]") {
+    StatusGuard sg;
+    SuppressCerr sc;
+    AbcIo* io = make_io({
+        make_cmd("a", "", {{"win", "$nosuchvar"}}),
+    });
+    CHECK(io->Execute(100) == -1);
+    delete io;
+}

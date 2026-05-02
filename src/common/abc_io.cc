@@ -27,6 +27,7 @@
 #include "abc_io.h"
 
 #include <map>
+#include <string>
 
 #include "abc_ip.h"
 #include "command.h"
@@ -41,10 +42,12 @@ using namespace std;
 #define CMD_B2A "b"
 #define CMD_CFG "c"
 #define CMD_DEF "d"
+#define CMD_LET "$"
 
 #define DEFAULT_KEY "default"
 
 typedef map<const string, AbcIp*> AbcMap;
+typedef map<const string, string> VarMap;
 
 class AbcIoImpl {
 public:
@@ -54,9 +57,11 @@ public:
 
     void Dump(Command&, unsigned n);
     bool SetVar(AbcIp*, Command&, Option*, bool);
+    void Expand(string&);
 
 public:
     AbcMap sessions;
+    VarMap vars;
     Parser* parser;
     Writer* writer;
     string stack;
@@ -102,6 +107,7 @@ AbcIp* AbcIoImpl::New (Command& cmd) {
         ssn.assign(DEFAULT_KEY);
 
     if ( opt ) {
+        Expand(opt->value);
         s = GetStack(opt);
 
         if ( !s )
@@ -178,6 +184,14 @@ void AbcIoImpl::Dump (Command& cmd, unsigned n) {
 
 //-------------------------------------------------------------------------
 
+void AbcIoImpl::Expand (string& val) {
+    if ( val.size() < 2 || val[0] != '$' )
+        return;
+    auto it = vars.find(val.substr(1));
+    if ( it != vars.end() )
+        val = it->second;
+}
+
 bool AbcIoImpl::SetVar (
     AbcIp* abc, Command& cmd, Option* opt, bool a2b
 ) {
@@ -197,6 +211,8 @@ bool AbcIoImpl::SetVar (
 
     unsigned layer = cake.GetLayer();
     const string& proto = abc->GetProtocol(layer, a2b);
+
+    Expand(opt->value);
 
     if ( ProtoTool::Validate(cmd.GetName(), proto, opt->key, opt->value) )
     {
@@ -327,6 +343,13 @@ int AbcIo::Execute (unsigned maxPkts) {
         else if ( cmd.GetName() == CMD_DEF ) {
             AbcIp* abc = my->New(cmd);
             ok = abc && status.Ok();
+        }
+        else if ( cmd.GetName() == CMD_LET ) {
+            Option* opt = cmd.GetOption(0);
+            if ( opt ) {
+                my->vars[opt->key] = opt->value;
+                ok = true;
+            }
         }
         if ( !ok )
             return -1;

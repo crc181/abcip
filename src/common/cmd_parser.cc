@@ -102,13 +102,18 @@ bool Lexer::GetToken (string& tok) {
                 state = 2;
                 continue;
             }
-            if ( ispunct(c) && !strchr("+-", c) ) {
+            if ( ispunct(c) && !strchr("+-$", c) ) {
                 if ( !tok.empty() ) {  // GCOVR_EXCL_START -- state 0 tok is always empty
                     prev = c;
                     return true;
                 }                      // GCOVR_EXCL_STOP
                 tok += c;
                 return true;
+            }
+            if ( c == '$' ) {
+                tok += c;
+                state = 7;
+                continue;
             }
             tok += tolower(c);
             state = 3;
@@ -132,6 +137,15 @@ bool Lexer::GetToken (string& tok) {
 
         case 3:  // regular
             if ( isalnum(c) || (c == '.') ) {
+                tok += tolower(c);
+            } else {
+                prev = c;
+                return true;
+            }
+            break;
+
+        case 7:  // $ sigil — accumulate name or return bare $
+            if ( isalnum(c) || c == '_' ) {
                 tok += tolower(c);
             } else {
                 prev = c;
@@ -166,7 +180,9 @@ bool Lexer::GetToken (string& tok) {
     // FIXTHIS return success/failure apart from
     // token; if last char is opening quote then
     // should return false for error.
-    return false;
+    if ( state == 4 )
+        tok += '"';
+    return !tok.empty();
 }
 
 //-------------------------------------------------------------------------
@@ -229,7 +245,17 @@ bool CommandParser::Load (Command& cmd) {
         }
         switch ( state ) {
         case 0:
-            if ( isalnum(tok[0]) ) {
+            if ( tok[0] == '$' ) {
+                string dollar = "$";
+                cmd.SetName(dollar);
+                if ( tok.length() > 1 ) {
+                    // $name=value — name is the rest of the token
+                    key = tok.substr(1);
+                    state = 20;
+                } else {
+                    state = 22;
+                }
+            } else if ( isalnum(tok[0]) ) {
                 key = tok;
                 state = 1;
             } else {
@@ -350,6 +376,27 @@ bool CommandParser::Load (Command& cmd) {
                 state = 4;
             } else {
                 err = "expected ',' or ')'";
+            }
+            break;
+
+        case 20:  // $ name — expect '='
+            if ( tok == "=" ) {
+                state = 21;
+            } else {
+                err = "expected '='";
+            }
+            break;
+
+        case 21:  // $ name = — expect value
+            cmd.AddOption(my->NewOption(0, key, tok, string()));
+            return true;
+
+        case 22:  // bare $ — expect name token (space between $ and name)
+            if ( isalpha(tok[0]) ) {
+                key = tok;
+                state = 20;
+            } else {
+                err = "expected variable name";
             }
             break;
 

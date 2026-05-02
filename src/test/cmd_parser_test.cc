@@ -378,3 +378,79 @@ TEST_CASE("CommandParser multiple commands", "[cmd_parser]") {
     CHECK_FALSE(p->Load(cmd));
     delete p;
 }
+
+// -------------------------------------------------------------------------
+// Let statement ($ name=value)
+// -------------------------------------------------------------------------
+
+TEST_CASE("CommandParser $ name=value compact form", "[cmd_parser]") {
+    StatusGuard sg;
+    CommandParser* p = make_parser("$mss=1460");
+    Command cmd;
+    CHECK(p->Load(cmd));
+    CHECK(cmd.GetName() == "$");
+    Option* o = cmd.GetOption(0);
+    REQUIRE(o != nullptr);
+    CHECK(o->key == "mss");
+    CHECK(o->value == "1460");
+    CHECK(p->Good());
+    delete p;
+}
+
+TEST_CASE("CommandParser $ name=value with spaces", "[cmd_parser]") {
+    StatusGuard sg;
+    CommandParser* p = make_parser("$ mss = 1460");
+    Command cmd;
+    CHECK(p->Load(cmd));
+    CHECK(cmd.GetName() == "$");
+    Option* o = cmd.GetOption(0);
+    REQUIRE(o != nullptr);
+    CHECK(o->key == "mss");
+    CHECK(o->value == "1460");
+    delete p;
+}
+
+TEST_CASE("CommandParser $ with string value", "[cmd_parser]") {
+    StatusGuard sg;
+    CommandParser* p = make_parser("$stk=\"eth:ip4:tcp\"");
+    Command cmd;
+    CHECK(p->Load(cmd));
+    CHECK(cmd.GetName() == "$");
+    Option* o = cmd.GetOption(0);
+    REQUIRE(o != nullptr);
+    CHECK(o->key == "stk");
+    CHECK(o->value == "\"eth:ip4:tcp\"");
+    delete p;
+}
+
+TEST_CASE("CommandParser $ followed by regular command", "[cmd_parser]") {
+    StatusGuard sg;
+    CommandParser* p = make_parser("$mss=1460\na(syn=1)");
+    Command cmd;
+    CHECK(p->Load(cmd));
+    CHECK(cmd.GetName() == "$");
+    cmd.Clear();
+    CHECK(p->Load(cmd));
+    CHECK(cmd.GetName() == "a");
+    delete p;
+}
+
+TEST_CASE("CommandParser $ missing = returns error", "[cmd_parser]") {
+    StatusGuard sg;
+    SuppressCerr sc;
+    CommandParser* p = make_parser("$mss bad");
+    Command cmd;
+    CHECK_FALSE(p->Load(cmd));
+    CHECK_FALSE(p->Good());
+    delete p;
+}
+
+TEST_CASE("CommandParser bare $ with non-alpha name returns error", "[cmd_parser]") {
+    StatusGuard sg;
+    SuppressCerr sc;
+    CommandParser* p = make_parser("$ 1=bad");
+    Command cmd;
+    CHECK_FALSE(p->Load(cmd));
+    CHECK_FALSE(p->Good());
+    delete p;
+}

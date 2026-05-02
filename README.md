@@ -53,11 +53,15 @@ See the README for more information on the abc file.
 Here is a an example abc file:
 
 ````
+# define named variables
+$ stk="eth:ip4:tcp"
+$ sport=12345
+
 # define the stack
-d ( stack="eth:ip4:tcp" )
+d ( stack=$stk )
 
 # configure tcp ports
-c ( 4:a=12345, b=80 )
+c ( 4:a=$sport, b=80 )
 
 # generate a packet from a to b
 a ( syn )
@@ -70,6 +74,9 @@ This produces 2 packets: a syn from a to b and a syn-ack from b to a.  The
 latter also has 16 bytes of payload.  The packets are both eth:ip4:tcp and
 contain default values for anything not explicitly specified, such as
 addresses.  The source port is 12345 and the destination port is 80.
+
+Variables are defined with `$ name=value` and expanded wherever `$name`
+appears as an option value.
 
 Supported protocols are:
 ````

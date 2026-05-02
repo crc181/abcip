@@ -1,0 +1,17 @@
+$ stk="eth:ip4:tcp"
+$ sport=12345
+$ dport=80
+
+d ( stack=$stk )
+c ( 4:a=$sport, b=$dport )
+
+a(syn)
+b(syn, ack)
+a(ack)
+
+a(ack, len=8)
+b(ack)
+
+a(fin,ack)
+b(fin,ack)
+a(ack)
