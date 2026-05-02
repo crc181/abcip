@@ -27,7 +27,7 @@
 
 class CommandParser : public Parser {
 public:
-    CommandParser(class Reader*, const char*);
+    CommandParser(class Reader*, const char*, bool trace = false);
     ~CommandParser() override;
 
     bool Load(Command&) override;

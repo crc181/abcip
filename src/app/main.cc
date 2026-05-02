@@ -43,7 +43,7 @@ int main (int argc, char* argv[]) {
     if (c.raw)
         parser = new DataParser(reader);
     else
-        parser = new CommandParser(reader, "a,b,c,d");
+        parser = new CommandParser(reader, "a,b,c,d", c.trace_parser);
 
     Writer* writer = c.pcap ?
         new PcapWriter(c.pcap, c.stack, c.snap) : nullptr;

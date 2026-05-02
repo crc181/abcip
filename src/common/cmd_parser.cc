@@ -46,6 +46,8 @@ public:
     bool GetToken(string&);
     void GetLocation(int& line, int& pos);
 
+    bool trace = false;
+
 private:
     Reader* sin;
     int pos, line;
@@ -75,8 +77,7 @@ bool Lexer::GetToken (string& tok) {
     tok.clear();
 
     while ( prev || *sin >> c ) {
-        //cerr << "Lexer = " << state << ", Token = '";
-        //cerr << tok << "'" << endl;
+        if ( trace ) cerr << "Lexer state=" << state << " tok='" << tok << "'" << endl;
 
         if ( prev ) {
             c = prev;
@@ -197,6 +198,7 @@ public:
     Lexer lexer;
     string commands;
     bool bad = false;
+    bool trace = false;
 };
 
 Option* CommandParserImpl::NewOption (
@@ -210,9 +212,11 @@ Option* CommandParserImpl::NewOption (
     return o;
 }
 
-CommandParser::CommandParser (Reader* in, const char* s) {
+CommandParser::CommandParser (Reader* in, const char* s, bool trace) {
     my = new CommandParserImpl(in);
     my->commands = s;
+    my->trace = trace;
+    my->lexer.trace = trace;
 }
 
 CommandParser::~CommandParser () {
@@ -235,8 +239,7 @@ bool CommandParser::Load (Command& cmd) {
     int state = 0;
 
     while ( !err && my->lexer.GetToken(tok) ) {
-        //cerr << __FUNCTION__ << " = " << state;
-        //cerr << ", Token = '" << tok << "'" << endl;
+        if ( my->trace ) cerr << "Parser state=" << state << " tok='" << tok << "'" << endl;
 
         if ( tok == ")" ) {
             int line, pos;

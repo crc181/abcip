@@ -31,7 +31,7 @@ public:
     const char* stack;
     const char* user;
     uint16_t snap;
-    bool trace, raw, done;
+    bool trace, trace_parser, raw, done;
 
 private:
     static std::ostream& get_cout();

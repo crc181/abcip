@@ -39,6 +39,7 @@ static const char* usage =
 "  --snap <len=65535> set pcap snaplen\n"
 "  --stack <protos=" DEFAULT_STACK "> sets default encapsulations\n"
 "  --trace outputs a text summary of each packet\n"
+"  --trace-parser outputs lexer and parser state transitions\n"
 "  --user <type=" DEFAULT_USER "> sets default user type\n"
 "  --full-monty to use original scene V default stream data\n"
 "  --full-dubya to use obfuscated scene V default stream data\n"
@@ -64,7 +65,7 @@ std::ostream& Conf::get_cout() { return std::cout; }
 Conf::Conf(int argc, char* argv[], ostream& out) {
     pcap = nullptr;
     snap = 65535;
-    trace = raw = done = false;
+    trace = trace_parser = raw = done = false;
     stack = DEFAULT_STACK;
     user = DEFAULT_USER;
 
@@ -80,6 +81,9 @@ Conf::Conf(int argc, char* argv[], ostream& out) {
         }
         else if ( !strcasecmp(argv[i], "--trace") ) {
             trace = true;
+        }
+        else if ( !strcasecmp(argv[i], "--trace-parser") ) {
+            trace_parser = true;
         }
         else if ( !strcasecmp(argv[i], "--raw") ) {
             raw = true;

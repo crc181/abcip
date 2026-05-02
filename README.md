@@ -42,6 +42,7 @@ Options are:
   --snap <len=65535> set pcap snaplen
   --stack <protos=eth:ip4:tcp> sets default encapsulations
   --trace outputs a text summary of each packet
+  --trace-parser outputs lexer and parser state transitions to stderr
   --user <type=user> sets default user type
   --full-monty to use original scene V default stream data
   --full-dubya to use obfuscated scene V default stream data

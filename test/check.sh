@@ -45,3 +45,13 @@ if [ $fail -gt 0 ] ; then
     exit -1
 fi
 
+# --trace-parser: verify state trace output appears on stderr
+echo -n "Testing trace-parser: "
+trace_out=$(../src/app/abcip --trace-parser --pcap /dev/null < $TOP/let.abc 2>&1 >/dev/null)
+if echo "$trace_out" | grep -q "Lexer state=" && echo "$trace_out" | grep -q "Parser state="; then
+    echo OK
+else
+    echo FAIL
+    exit -1
+fi
+
