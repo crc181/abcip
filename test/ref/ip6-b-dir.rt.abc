@@ -1,0 +1,11 @@
+d ( stack="eth:ip6:tcp" )
+c ( eth:a="02:01:02:03:04:05", eth:b="02:09:08:07:06:05", ip6:a="fc00::1", ip6:b="fc00::2", tcp:a=5555, tcp:b=80 )
+
+a ( syn, seq=1, ack=0, win=8192 )
+b ( syn, ack, seq=1, ack=2, win=8192 )
+a ( ack, seq=2, ack=2, win=8192 )
+a ( ack, seq=2, ack=2, win=8192, raw:pay="|4c 6f 72 65 6d 20 69 70 73 75 6d 20 64 6f 6c 6f 72 20 73 69 74 20 61 6d 65 74 2c 20 63 6f 6e 73|" )
+b ( ack, seq=2, ack=34, win=8192, raw:pay="|4c 6f 72 65 6d 20 69 70 73 75 6d 20 64 6f 6c 6f 72 20 73 69 74 20 61 6d 65 74 2c 20 63 6f 6e 73|" )
+a ( fin, ack, seq=34, ack=34, win=8192 )
+b ( fin, ack, seq=34, ack=35, win=8192 )
+a ( ack, seq=35, ack=35, win=8192 )

@@ -1,0 +1,9 @@
+d ( stack="eth:ip6" )
+c ( eth:a="02:01:02:03:04:05", eth:b="02:09:08:07:06:05", ip6:a="fc00::1", ip6:b="fc00::2" )
+
+a ( raw:pay="|1a 0a 00 50 00 00 00 01 00 00 00 00 50 02 20 00 7d 83 00 00|" )
+sess2:d ( stack="eth:ip6:dst6:tcp" )
+sess2:c ( eth:a="02:09:08:07:06:05", eth:b="02:01:02:03:04:05", ip6:a="fc00::2", ip6:b="fc00::1", tcp:a=80, tcp:b=6666 )
+
+sess2:a ( syn, ack, seq=1, ack=2, win=8192 )
+sess2:b ( ack, seq=2, ack=2, win=8192 )

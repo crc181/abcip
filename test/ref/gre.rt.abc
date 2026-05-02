@@ -1,0 +1,4 @@
+d ( stack="eth:ip4:gre:ip4:gre:ip6:tcp" )
+c ( eth:a="02:01:02:03:04:05", eth:b="02:09:08:07:06:05", ip6:a="fc00:1:2::a:b", ip6:b="::ffff:10.9.8.7", tcp:a=48620, tcp:b=8 )
+
+a ( syn, seq=1, ack=0, win=8192 )

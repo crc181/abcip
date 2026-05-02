@@ -1,0 +1,7 @@
+d ( stack="eth:ip4:tcp" )
+c ( eth:a="02:01:02:03:04:05", eth:b="02:09:08:07:06:05", ip4:a="10.1.2.3", ip4:b="10.9.8.7", tcp:a=48620, tcp:b=502 )
+
+a ( syn, seq=1, ack=0, win=8192 )
+b ( syn, ack, seq=1, ack=2, win=8192 )
+a ( ack, seq=2, ack=2, win=8192 )
+a ( ack, seq=2, ack=2, win=8192, raw:pay="|00 01 00 00 00 07 ff 03 03 00 04 00 01|" )

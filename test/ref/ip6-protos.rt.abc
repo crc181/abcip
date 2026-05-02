@@ -1,0 +1,24 @@
+d ( stack="eth:ip6:gre:ip4:tcp" )
+c ( eth:a="02:01:02:03:04:05", eth:b="02:09:08:07:06:05", ip4:a="10.1.2.5", ip4:b="10.9.8.7", tcp:a=1111, tcp:b=80 )
+
+a ( syn, seq=1, ack=0, win=8192 )
+b ( syn, ack, seq=1, ack=2, win=8192 )
+a ( ack, seq=2, ack=2, win=8192 )
+sess2:d ( stack="eth:ip6:ip4:tcp" )
+sess2:c ( eth:a="02:01:02:03:04:05", eth:b="02:09:08:07:06:05", ip4:a="10.1.2.4", ip4:b="10.9.8.7", tcp:a=2222, tcp:b=80 )
+
+sess2:a ( syn, seq=1, ack=0, win=8192 )
+sess2:b ( syn, ack, seq=1, ack=2, win=8192 )
+sess2:a ( ack, seq=2, ack=2, win=8192 )
+sess3:d ( stack="eth:ip6:ip6:tcp" )
+sess3:c ( eth:a="02:01:02:03:04:05", eth:b="02:09:08:07:06:05", ip6:a="fd00::1", ip6:b="fd00::2", tcp:a=3333, tcp:b=80 )
+
+sess3:a ( syn, seq=1, ack=0, win=8192 )
+sess3:b ( syn, ack, seq=1, ack=2, win=8192 )
+sess3:a ( ack, seq=2, ack=2, win=8192 )
+sess4:d ( stack="eth:ip6:raw:ip4:tcp" )
+sess4:c ( eth:a="02:01:02:03:04:05", eth:b="02:09:08:07:06:05", ip4:a="10.1.2.5", ip4:b="10.9.8.7", tcp:a=4444, tcp:b=80 )
+
+sess4:a ( syn, seq=1, ack=0, win=8192 )
+sess4:b ( syn, ack, seq=1, ack=2, win=8192 )
+sess4:a ( ack, seq=2, ack=2, win=8192 )

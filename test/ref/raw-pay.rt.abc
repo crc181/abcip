@@ -1,0 +1,8 @@
+d ( stack="eth:raw" )
+c ( eth:a="02:01:02:03:04:05", eth:b="02:09:08:07:06:05" )
+
+a ( raw:pay="|68 65 6c 6c 6f|" )
+sess2:d ( stack="eth:ip6" )
+sess2:c ( eth:a="02:01:02:03:04:05", eth:b="02:09:08:07:06:05", ip6:a="fc00::1", ip6:b="fc00::2" )
+
+sess2:a ( raw:pay="|77 6f 72 6c 64|" )

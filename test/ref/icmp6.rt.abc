@@ -1,0 +1,4 @@
+d ( stack="eth:ip6:icmp6:raw" )
+c ( eth:a="02:01:02:03:04:05", eth:b="02:09:08:07:06:05", ip6:a="::ffff:10.1.2.3", ip6:b="::ffff:10.9.8.7" )
+
+a ( icmp4:type=1, icmp4:code=0, raw:pay="|bd ec 00 08 00 00 00 00 00 00 00 00 50 00 20 00 b3 da 00 00|" )

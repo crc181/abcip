@@ -1,0 +1,4 @@
+d ( stack="eth:ip6:rte6:frag6:dst6:tcp" )
+c ( eth:a="02:01:02:03:04:05", eth:b="02:09:08:07:06:05", ip6:a="::ffff:10.1.2.3", ip6:b="::ffff:10.9.8.7", tcp:a=48620, tcp:b=8 )
+
+a ( seq=0, ack=0, win=8192, raw:pay="|41 42 43|" )
