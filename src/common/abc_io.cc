@@ -44,6 +44,12 @@ using namespace std;
 #define CMD_DEF "d"
 #define CMD_LET "$"
 
+#define CMD_A2B_L "atob"
+#define CMD_B2A_L "btoa"
+#define CMD_CFG_L "config"
+#define CMD_DEF_L "define"
+#define CMD_LET_L "let"
+
 #define DEFAULT_KEY "default"
 
 typedef map<const string, AbcIp*> AbcMap;
@@ -328,23 +334,24 @@ int AbcIo::Execute (unsigned maxPkts) {
             my->Dump(cmd, numCmds);
 
         bool ok = false;
-        if ( cmd.GetName() == CMD_A2B ) {
+        const string& name = cmd.GetName();
+        if ( name == CMD_A2B or name == CMD_A2B_L ) {
             AbcIp* abc = my->Load(cmd);
             ok = abc && abc->AtoB();
         }
-        else if ( cmd.GetName() == CMD_B2A ) {
+        else if ( name == CMD_B2A or name == CMD_B2A_L ) {
             AbcIp* abc = my->Load(cmd);
             ok = abc && abc->BtoA();
         }
-        else if ( cmd.GetName() == CMD_CFG ) {
+        else if ( name == CMD_CFG or name == CMD_CFG_L ) {
             AbcIp* abc = my->Load(cmd);
             ok = abc && abc->Configure();
         }
-        else if ( cmd.GetName() == CMD_DEF ) {
+        else if ( name == CMD_DEF or name == CMD_DEF_L ) {
             AbcIp* abc = my->New(cmd);
             ok = abc && status.Ok();
         }
-        else if ( cmd.GetName() == CMD_LET ) {
+        else if ( name == CMD_LET or name == CMD_LET_L ) {
             Option* opt = cmd.GetOption(0);
             if ( opt ) {
                 my->vars[opt->key] = opt->value;

@@ -88,8 +88,19 @@ latter also has 16 bytes of payload.  The packets are both eth:ip4:tcp and
 contain default values for anything not explicitly specified, such as
 addresses.  The source port is 12345 and the destination port is 80.
 
-Variables are defined with `$ name=value` and expanded wherever `$name`
-appears as an option value.
+Commands have both short and long forms:
+
+````
+  a | atob     packet from a to b
+  b | btoa     packet from b to a
+  c | config   configure the current flow
+  d | define   define a new flow
+  $ | let      define a variable
+  r | repeat   repeat a block of commands
+````
+
+Variables are defined with `$ name=value` (or `let name=value`) and expanded
+wherever `$name` appears as an option value.
 
 Supported protocols are:
 ````

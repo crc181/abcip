@@ -258,6 +258,9 @@ bool CommandParser::Load (Command& cmd) {
                 } else {
                     state = 22;
                 }
+            } else if ( tok == "let" ) {
+                cmd.SetName(tok);
+                state = 22;
             } else if ( isalnum(tok[0]) ) {
                 key = tok;
                 state = 1;

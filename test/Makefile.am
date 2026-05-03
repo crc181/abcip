@@ -41,6 +41,7 @@ udp-len.abc ref/udp-len.pcap \
 user-data.abc ref/user-data.pcap \
 vlan.abc ref/vlan.pcap \
 vxlan.abc ref/vxlan.pcap \
+long-form.abc ref/long-form.pcap \
 arp.abc ref/arp.rt.abc \
 big.abc ref/big.rt.abc \
 cisco.abc ref/cisco.rt.abc \

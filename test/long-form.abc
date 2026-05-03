@@ -1,0 +1,16 @@
+let stk="eth:ip4:tcp"
+let sport=12345
+
+define ( stack=$stk )
+config ( ip4:a="192.168.1.1", ip4:b="10.0.0.1", tcp:a=$sport, tcp:b=80 )
+
+atob ( syn )
+btoa ( syn, ack )
+atob ( ack )
+
+atob ( ack, len=8 )
+btoa ( ack )
+
+atob ( fin, ack )
+btoa ( fin, ack )
+atob ( ack )

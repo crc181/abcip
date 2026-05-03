@@ -47,13 +47,13 @@ ostream& operator<< (ostream& os, const Field& f) {
 }
 
 FieldType Field::GetType (const string& cmd) {
-    if ( cmd == "a" || cmd == "b" )
+    if ( cmd == "a" || cmd == "b" || cmd == "atob" || cmd == "btoa" )
         return FT_PKT;
 
-    if ( cmd == "c" )
+    if ( cmd == "c" || cmd == "config" )
         return FT_CFG;
 
-    if ( cmd == "d" )
+    if ( cmd == "d" || cmd == "define" )
         return FT_DEF;
 
     return FT_MAX;
