@@ -60,6 +60,8 @@ struct PhyImpl {
     // the Packet structure.
     uint32_t snap = 0;
     float late = 0.0;
+    double ts = -1.0;
+    double elapsed = 0.0;
     int32_t ingress_intf_id = -1;
     int32_t ingress_intf_group = -1;
     int32_t egress_intf_id = -1;
@@ -143,6 +145,11 @@ void PhyProtocol::Fetch (Cake& cake, bool a2b) {
 
     my->snap = cake.GetValue("snap", my->snap);
     my->late = cake.GetReal("sec", my->late);
+
+    if ( cake.IsSet("ts") ) {
+        my->ts = cake.GetReal("ts", my->ts);
+        my->elapsed = 0.0;
+    }
 
     if (cake.IsSet("fid"))
     {
@@ -232,6 +239,11 @@ const uint8_t* PhyProtocol::GetHeader (
     p.user_annotation = p.cake.GetValue("user");
     p.snap = my->snap;
     p.late = p.cake.GetReal("dt", my->late);
+
+    if ( my->ts >= 0 ) {
+        p.abstime = my->ts + my->elapsed;
+        my->elapsed += p.late > 0 ? p.late : 0;
+    }
     p.ingress_intf_id = my->ingress_intf_id;
     p.ingress_intf_group = my->ingress_intf_group;
     p.egress_intf_id = my->egress_intf_id;
@@ -296,6 +308,7 @@ static Field s_fields[] = {
     { FT_CFG, "snap", "u32", "set snap length" },
     { FT_CFG, "seed", "u32", "set perm seed" },
     { FT_CFG, "sec", "r32", "set latency seconds" },
+    { FT_CFG, "ts", "r32", "set absolute start time (epoch seconds)" },
 
     { FT_CFG, "a.if", "i32", "set host a interface" },
     { FT_CFG, "b.if", "i32", "set host b interface" },

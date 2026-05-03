@@ -109,6 +109,18 @@ manually.  The `+=` operator increments a field by a delta on each iteration:
 repeat(4) { atob ( ack, len=1460, tcp:seq+=1460 ) btoa ( ack ) }
 ````
 
+Use `c( phy:ts=<epoch> )` to pin a flow's start time to an absolute Unix
+timestamp (seconds since epoch, float).  Combined with `phy:sec` for
+inter-packet spacing, two flows can be emitted independently and then merged
+into chronological order with `reordercap`:
+
+````
+foo:config ( phy:ts=1746000000.0, phy:sec=0.1 )
+bar:config ( phy:ts=1746000000.05, phy:sec=0.1 )
+# emit foo packets, then bar packets, then sort:
+# reordercap out.pcap sorted.pcap
+````
+
 Supported protocols are:
 ````
   arp                 ARP

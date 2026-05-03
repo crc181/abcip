@@ -53,6 +53,7 @@ public:
     bool drop = false;
     uint32_t snap = 0;
     float late = 0.0;
+    double abstime = -1.0;
     int32_t ingress_intf_id = -1;
     int32_t ingress_intf_group = -1;
     int32_t egress_intf_id = -1;

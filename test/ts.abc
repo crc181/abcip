@@ -1,0 +1,22 @@
+# two overlapping flows with absolute start times
+# sort result with: reordercap ts.pcap ts-sorted.pcap
+
+foo:define ( stack="eth:ip4:tcp" )
+foo:config ( ip4:a="1.1.1.1", ip4:b="2.2.2.2", tcp:a=1111, tcp:b=80, phy:ts=1000.0, phy:sec=0.1 )
+foo:atob ( syn )
+foo:btoa ( syn, ack )
+foo:atob ( ack )
+foo:repeat(4) { atob ( ack, len=1460, tcp:seq+=1460 ) btoa ( ack ) }
+foo:atob ( fin, ack )
+foo:btoa ( fin, ack )
+foo:atob ( ack )
+
+bar:define ( stack="eth:ip4:tcp" )
+bar:config ( ip4:a="3.3.3.3", ip4:b="4.4.4.4", tcp:a=2222, tcp:b=80, phy:ts=1000.05, phy:sec=0.1 )
+bar:atob ( syn )
+bar:btoa ( syn, ack )
+bar:atob ( ack )
+bar:repeat(4) { atob ( ack, len=1460, tcp:seq+=1460 ) btoa ( ack ) }
+bar:atob ( fin, ack )
+bar:btoa ( fin, ack )
+bar:atob ( ack )

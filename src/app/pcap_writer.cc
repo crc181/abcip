@@ -122,27 +122,31 @@ void PcapWriter::operator<< (const Packet& p) {
 
     long ds, du;
 
-    if ( p.late ) {
-        ds = (long)p.late;
-        du = round((p.late-ds) * 1e6);
-
+    if ( p.abstime >= 0 ) {
+        h.ts.tv_sec = (long)p.abstime;
+        h.ts.tv_usec = (long)round((p.abstime - h.ts.tv_sec) * 1e6);
     } else {
-        ds = now.tv_sec - my->last.tv_sec;
-        du = now.tv_usec - my->last.tv_usec;
+        if ( p.late ) {
+            ds = (long)p.late;
+            du = round((p.late-ds) * 1e6);
 
-        if ( ds < 0 ) ds = 0;
-        if ( du < 0 ) du += 1000000;
+        } else {
+            ds = now.tv_sec - my->last.tv_sec;
+            du = now.tv_usec - my->last.tv_usec;
 
+            if ( ds < 0 ) ds = 0;
+            if ( du < 0 ) du += 1000000;
+        }
+        my->ptime.tv_sec += ds;
+        my->ptime.tv_usec += du;
+
+        if ( my->ptime.tv_usec > 1000000 ) {
+            my->ptime.tv_usec -= 1000000;
+            my->ptime.tv_sec++;
+        }
+        h.ts.tv_sec = my->ptime.tv_sec;
+        h.ts.tv_usec = my->ptime.tv_usec;
     }
-    my->ptime.tv_sec += ds;
-    my->ptime.tv_usec += du;
-
-    if ( my->ptime.tv_usec > 1000000 ) {
-        my->ptime.tv_usec -= 1000000;
-        my->ptime.tv_sec++;
-    }
-    h.ts.tv_sec = my->ptime.tv_sec;
-    h.ts.tv_usec = my->ptime.tv_usec;
 
     pcap_dump((u_char*)my->pcap, &h, p.Data());
 
