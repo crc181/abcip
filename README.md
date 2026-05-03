@@ -102,6 +102,13 @@ Commands have both short and long forms:
 Variables are defined with `$ name=value` (or `let name=value`) and expanded
 wherever `$name` appears as an option value.
 
+Use `repeat(N) { ... }` to generate bulk traffic without repeating commands
+manually.  The `+=` operator increments a field by a delta on each iteration:
+
+````
+repeat(4) { atob ( ack, len=1460, tcp:seq+=1460 ) btoa ( ack ) }
+````
+
 Supported protocols are:
 ````
   arp                 ARP

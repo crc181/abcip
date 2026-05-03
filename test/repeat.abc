@@ -1,0 +1,11 @@
+config ( ip4:a="1.2.3.4", ip4:b="5.6.7.8", tcp:a=1234, tcp:b=80 )
+
+atob ( syn )
+btoa ( syn, ack )
+atob ( ack )
+
+repeat(4) { atob ( ack, len=1460, tcp:seq+=1460 ) btoa ( ack ) }
+
+atob ( fin, ack )
+btoa ( fin, ack )
+atob ( ack )

@@ -43,10 +43,12 @@ StreamReader::StreamReader (const char* filename) {
 
 StreamReader::StreamReader (istream* is) {
     sin = is;
+    own = false;
+    *sin >> noskipws;
 }
 
 StreamReader:: ~StreamReader() {
-    if ( sin != &cin )
+    if ( own && sin != &cin )
         delete sin;
 }
 

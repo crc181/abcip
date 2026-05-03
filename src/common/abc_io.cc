@@ -27,14 +27,17 @@
 #include "abc_io.h"
 
 #include <map>
+#include <sstream>
 #include <string>
 
 #include "abc_ip.h"
+#include "cmd_parser.h"
 #include "command.h"
 #include "field.h"
 #include "parser.h"
 #include "prototool.h"
 #include "status.h"
+#include "stream_reader.h"
 
 using namespace std;
 
@@ -43,12 +46,16 @@ using namespace std;
 #define CMD_CFG "c"
 #define CMD_DEF "d"
 #define CMD_LET "$"
+#define CMD_RPT "r"
 
 #define CMD_A2B_L "atob"
 #define CMD_B2A_L "btoa"
 #define CMD_CFG_L "config"
 #define CMD_DEF_L "define"
 #define CMD_LET_L "let"
+#define CMD_RPT_L "repeat"
+
+#define MAX_REPEAT_DEPTH 8
 
 #define DEFAULT_KEY "default"
 
@@ -65,9 +72,13 @@ public:
     bool SetVar(AbcIp*, Command&, Option*, bool);
     void Expand(string&);
 
+    bool RunCmd(Command&, unsigned& numCmds);
+    int RunRepeat(Command&, int depth);
+
 public:
     AbcMap sessions;
     VarMap vars;
+    VarMap accum;
     Parser* parser;
     Writer* writer;
     string stack;
@@ -248,6 +259,23 @@ AbcIp* AbcIoImpl::Load (Command& cmd) {
     int i = 0;
     Option* opt = cmd[i++];
 
+    // resolve deltas once before the two-direction loop
+    while ( opt ) {
+        if ( opt->delta ) {
+            string akey = opt->proto.empty() ? opt->key : opt->proto + ":" + opt->key;
+            long delta = strtol(opt->value.c_str(), nullptr, 0);
+            long cur = strtol(accum[akey].c_str(), nullptr, 0);
+            cur += delta;
+            accum[akey] = to_string(cur);
+            opt->value = accum[akey];
+            opt->delta = false;
+        }
+        opt = cmd[i++];
+    }
+
+    i = 0;
+    opt = cmd[i++];
+
     abc->GetCake(true).Reset();
     abc->GetCake(false).Reset();
 
@@ -312,6 +340,86 @@ void AbcIo::Interrupt () {
 
 //-------------------------------------------------------------------------
 
+bool AbcIoImpl::RunCmd (Command& cmd, unsigned& numCmds) {
+    const string& name = cmd.GetName();
+
+    if ( name == CMD_A2B or name == CMD_A2B_L ) {
+        AbcIp* abc = Load(cmd);
+        if ( !abc || !abc->AtoB() ) return false;
+    }
+    else if ( name == CMD_B2A or name == CMD_B2A_L ) {
+        AbcIp* abc = Load(cmd);
+        if ( !abc || !abc->BtoA() ) return false;
+    }
+    else if ( name == CMD_CFG or name == CMD_CFG_L ) {
+        AbcIp* abc = Load(cmd);
+        if ( !abc || !abc->Configure() ) return false;
+    }
+    else if ( name == CMD_DEF or name == CMD_DEF_L ) {
+        AbcIp* abc = New(cmd);
+        if ( !abc || !status.Ok() ) return false;
+    }
+    else if ( name == CMD_LET or name == CMD_LET_L ) {
+        Option* opt = cmd.GetOption(0);
+        if ( !opt ) return false;
+        vars[opt->key] = opt->value;
+    }
+    else {
+        status.SetError("unknown command");
+        return false;
+    }
+    numCmds++;
+    return true;
+}
+
+int AbcIoImpl::RunRepeat (Command& cmd, int depth) {
+    if ( depth > MAX_REPEAT_DEPTH ) {
+        status.SetError("repeat nesting too deep");
+        return -1;
+    }
+    Option* cnt_opt = cmd.GetOption(0);
+    Option* body_opt = cmd.GetOption(1);
+
+    if ( !cnt_opt || !body_opt ) {
+        status.SetError("malformed repeat");
+        return -1;
+    }
+    int count = atoi(cnt_opt->value.c_str());
+    const string& body = body_opt->value;
+    const string& outer_ctx = cmd.GetContext();
+    unsigned numCmds = 0;
+
+    for ( int i = 0; i < count; i++ ) {
+        istringstream ss(body);
+        ss >> noskipws;
+        StreamReader* sr = new StreamReader(&ss);
+        CommandParser cp(sr, "a,b,c,d,atob,btoa,config,define,let,r,repeat", trace);
+        Command inner;
+
+        while ( cp.Load(inner) ) {
+            if ( trace )
+                Dump(inner, numCmds);
+
+            if ( inner.GetContext().empty() && !outer_ctx.empty() )
+                inner.SetContext(const_cast<string&>(outer_ctx));
+
+            const string& iname = inner.GetName();
+            if ( iname == CMD_RPT or iname == CMD_RPT_L ) {
+                int n = RunRepeat(inner, depth + 1);
+                if ( n < 0 ) return -1;
+                numCmds += n;
+            } else {
+                if ( !RunCmd(inner, numCmds) ) return -1;
+            }
+            inner.Clear();
+        }
+        if ( !cp.Good() ) return -1;
+    }
+    return numCmds;
+}
+
+//-------------------------------------------------------------------------
+
 int AbcIo::Execute (unsigned maxPkts) {
     Command cmd;
     unsigned numCmds = 0;
@@ -333,36 +441,17 @@ int AbcIo::Execute (unsigned maxPkts) {
         if ( my->trace )
             my->Dump(cmd, numCmds);
 
-        bool ok = false;
         const string& name = cmd.GetName();
-        if ( name == CMD_A2B or name == CMD_A2B_L ) {
-            AbcIp* abc = my->Load(cmd);
-            ok = abc && abc->AtoB();
+        if ( name == CMD_RPT or name == CMD_RPT_L ) {
+            int n = my->RunRepeat(cmd, 1);
+            if ( n < 0 ) return -1;
+            numCmds += n;
         }
-        else if ( name == CMD_B2A or name == CMD_B2A_L ) {
-            AbcIp* abc = my->Load(cmd);
-            ok = abc && abc->BtoA();
-        }
-        else if ( name == CMD_CFG or name == CMD_CFG_L ) {
-            AbcIp* abc = my->Load(cmd);
-            ok = abc && abc->Configure();
-        }
-        else if ( name == CMD_DEF or name == CMD_DEF_L ) {
-            AbcIp* abc = my->New(cmd);
-            ok = abc && status.Ok();
-        }
-        else if ( name == CMD_LET or name == CMD_LET_L ) {
-            Option* opt = cmd.GetOption(0);
-            if ( opt ) {
-                my->vars[opt->key] = opt->value;
-                ok = true;
-            }
-        }
-        if ( !ok )
+        else if ( !my->RunCmd(cmd, numCmds) ) {
             return -1;
+        }
 
         cmd.Clear();
-        numCmds++;
     }
     if ( !status.Ok() )
         return -1;

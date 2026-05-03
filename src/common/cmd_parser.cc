@@ -44,6 +44,7 @@ public:
     ~Lexer();
 
     bool GetToken(string&);
+    bool ReadBlock(string&);
     void GetLocation(int& line, int& pos);
 
     bool trace = false;
@@ -186,6 +187,24 @@ bool Lexer::GetToken (string& tok) {
     return !tok.empty();
 }
 
+bool Lexer::ReadBlock (string& block) {
+    int depth = 1;
+    char c;
+    block.clear();
+
+    while ( *sin >> c ) {
+        if ( c == '{' ) {
+            depth++;
+        } else if ( c == '}' ) {
+            if ( --depth == 0 )
+                return true;
+        }
+        block += c;
+    }
+    status.SetError("unclosed '{'", line, pos);
+    return false;
+}
+
 //-------------------------------------------------------------------------
 // parser
 //-------------------------------------------------------------------------
@@ -274,7 +293,10 @@ bool CommandParser::Load (Command& cmd) {
                 cmd.SetContext(key);
                 state = 2;
             } else if ( tok == "(" ) {
-                if ( my->commands.find(key) != string::npos ) {
+                if ( key == "r" || key == "repeat" ) {
+                    cmd.SetName(key);
+                    state = 30;
+                } else if ( my->commands.find(key) != string::npos ) {
                     cmd.SetName(key);
                     state = 4;
                 } else {
@@ -286,7 +308,10 @@ bool CommandParser::Load (Command& cmd) {
             break;
 
         case 2:
-            if ( my->commands.find(tok) != string::npos ) {
+            if ( tok == "r" || tok == "repeat" ) {
+                cmd.SetName(tok);
+                state = 3;
+            } else if ( my->commands.find(tok) != string::npos ) {
                 cmd.SetName(tok);
                 state = 3;
             } else {
@@ -296,7 +321,8 @@ bool CommandParser::Load (Command& cmd) {
 
         case 3:
             if ( tok == "(" ) {
-                state = 4;
+                string& name = cmd.GetName();
+                state = (name == "r" || name == "repeat") ? 30 : 4;
             } else {
                 err = "expected '('";
             }
@@ -360,6 +386,8 @@ bool CommandParser::Load (Command& cmd) {
                 state = 4;
             } else if ( tok == "=" ) {
                 state = 8;
+            } else if ( tok == "+" ) {
+                state = 12;
             } else {
                 err = "expected '=', ',' or ')'";
             }
@@ -370,6 +398,23 @@ bool CommandParser::Load (Command& cmd) {
             cmd.AddOption(my->NewOption(index, key, tok, proto));
             state = 9;
             break;
+
+        case 12:  // key + — expect '='
+            if ( tok == "=" ) {
+                state = 13;
+            } else {
+                err = "expected '+='";
+            }
+            break;
+
+        case 13:  // key += — expect delta value
+        {
+            Option* o = my->NewOption(index, key, tok, proto);
+            o->delta = true;
+            cmd.AddOption(o);
+            state = 9;
+            break;
+        }
 
         case 9:
             if ( tok == ")" ) {
@@ -403,6 +448,35 @@ bool CommandParser::Load (Command& cmd) {
                 state = 20;
             } else {
                 err = "expected variable name";
+            }
+            break;
+
+        case 30:  // repeat( — expect count
+            if ( isdigit(tok[0]) ) {
+                cmd.AddOption(my->NewOption(0, "count", tok, string()));
+                state = 31;
+            } else {
+                err = "expected repeat count";
+            }
+            break;
+
+        case 31:  // repeat(N — expect ')'
+            if ( tok == ")" ) {
+                state = 32;
+            } else {
+                err = "expected ')'";
+            }
+            break;
+
+        case 32:  // repeat(N) — expect '{'
+            if ( tok == "{" ) {
+                string body;
+                if ( !my->lexer.ReadBlock(body) )
+                    return false;
+                cmd.AddOption(my->NewOption(0, "body", body, string()));
+                return true;
+            } else {
+                err = "expected '{'";
             }
             break;
 

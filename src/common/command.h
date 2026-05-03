@@ -41,6 +41,7 @@ public:
     std::string proto;
     unsigned row = 0;
     unsigned col = 0;
+    bool delta = false;
 };
 
 typedef std::vector<Option*> OptVector;

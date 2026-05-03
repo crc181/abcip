@@ -37,6 +37,7 @@ public:
 
 private:
     std::istream* sin;
+    bool own = true;
 };
 
 #endif
