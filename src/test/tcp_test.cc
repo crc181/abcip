@@ -522,3 +522,36 @@ TEST_CASE("TCP Recv FIN consumes one sequence number", "[tcp]") {
     CHECK(ntohl(h->th_ack) == 3u);
     delete a; delete b;
 }
+
+// -------------------------------------------------------------------------
+// Bare ack after explicit ack=N should inherit N, not revert to auto-tracked
+// -------------------------------------------------------------------------
+
+TEST_CASE("TCP bare ack inherits preceding explicit ack value", "[tcp]") {
+    auto [a, b] = make_tcp_pair();
+
+    // SYN from a (localIsn_a=1)
+    { Cake c(2); Packet p(c); c.Store("syn","1"); uint32_t l=0; a->GetHeader(p,l); }
+    // SYN from b with seq=1000 → a.remoteIsn=999
+    { Cake c(2); Packet p(c); c.Store("syn","1"); c.Store("seq","1000"); uint32_t l=0; b->GetHeader(p,l); }
+    // RST from b with seq=722 → a auto-ack diverges from 1001
+    { Cake c(2); Packet p(c); c.Store("rst","1"); c.Store("seq","722"); uint32_t l=0; b->GetHeader(p,l); }
+
+    // explicit ack=1001 — wire ack must be 1001
+    Cake c4(2); Packet p4(c4);
+    c4.Store("ack", "1001");
+    uint32_t l4 = 0;
+    const struct tcphdr* h4 = get_tcp_hdr(a, c4, p4);
+    REQUIRE(h4 != nullptr);
+    CHECK(ntohl(h4->th_ack) == 1001u);
+
+    // bare ack — wire ack must still be 1001, not 1001+remoteIsn
+    Cake c5(2); Packet p5(c5);
+    c5.Store("ack", " ");
+    uint32_t l5 = 0;
+    const struct tcphdr* h5 = get_tcp_hdr(a, c5, p5);
+    REQUIRE(h5 != nullptr);
+    CHECK(ntohl(h5->th_ack) == 1001u);
+
+    delete a; delete b;
+}

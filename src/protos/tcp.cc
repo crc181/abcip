@@ -159,10 +159,13 @@ void TcpImpl::Send (
     ack += jump;
 
     hseq = seq + localIsn;
-    hack = lack = ack;
 
-    if ( !p.cake.GetValue("ack", 0) )
-        hack += remoteIsn;
+    uint32_t explicit_ack = p.cake.GetValue("ack", 0);
+    if ( explicit_ack )
+        ack = explicit_ack - remoteIsn;
+
+    lack = ack;
+    hack = ack + remoteIsn;
 
     if ( IsSet(ctl, TCP_SYN) ) seq++;
     if ( IsSet(ctl, TCP_FIN) ) seq++;

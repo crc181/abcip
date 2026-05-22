@@ -1,0 +1,11 @@
+# after an explicit ack=N, a bare ack should inherit N not revert to auto-tracked
+c ( 3:a="10.2.3.4", 4:a=1057, b=80 )
+
+a ( syn, win=1024 )
+b ( syn, seq=1000, ack, win=1024 )
+b ( rst, seq=722 )
+a ( ack=1001 )
+a ( ack, len=10 )
+b ( seq=1001, ack, len=20 )
+a ( fin, ack )
+b ( fin, ack )
